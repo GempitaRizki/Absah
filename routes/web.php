@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
-use Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,9 +32,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'auth
     Route::delete('categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
     // Product
-    Route::get('products', [ProductController::class, 'index']);
-    Route::get('products/create', [ProductController::class, 'create'])->name('categories.create');
-    Route::post('products', [ProductController::class, 'store'])->name('categories.create');
+    Route::get('products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('products/create', [ProductController::class, 'create']);
+    Route::post('products', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::get('products/{id}/edit', [ProductController::class, 'edit']);
+    Route::put('products/{id}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 
 });
 

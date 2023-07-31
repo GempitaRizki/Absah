@@ -14,7 +14,7 @@ use DB;
 use Session;
 
 class ProductController extends Controller
-{
+    {
     /**
      * Display a listing of the resource.
      */
@@ -57,26 +57,23 @@ class ProductController extends Controller
     {
         $params = $request->except('_token');
         $params['slug'] = Str::slug($params['name']);
-		$params['user_id'] = Auth::user()->id;
-
-        $saved = false;
-        $saved = DB::transaction(function() use ($params){
+        $params['user_id'] = Auth::user()->id;
+    
+        $saved = DB::transaction(function() use ($params) {
             $product = Product::create($params);
             $product->categories()->sync($params['category_ids']);
-
+    
             return true;
         });
-
+    
         if ($saved) {
-            Session::flash('Success', 'Product has been saved');
-        
+            Session::flash('success', 'Product has been created');
+            return redirect()->route('admin.products.index');
         } else {
-            Session::flash('error', 'Product not be saved');
-            
-            return redirect('admin/products');
+            Session::flash('error', 'Product could not be created');
+            return redirect()->back()->withInput();
         }
-
-}
+    }
 
     /**
      * Display the specified resource.
@@ -91,22 +88,57 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Category::orderBy('name', 'ASC')->get();
+
+        $this->data['categories'] = $categories->toArray();
+		$this->data['product'] = $product;
+		$this->data['productID'] = $product->id;
+        $this->data['categoryIDs'] = $product->categories->pluck('id')->toArray();
+
+        return view('admin.products.form', $this->data);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $params = $request->except('_token');
+        $params['slug'] = Str::slug($params['name']);
+    
+        $product = Product::findOrFail($id);
+        $saved = false;
+    
+        $saved = DB::transaction(function () use ($product, $params) {
+            $product->update($params);
+            $product->categories()->sync($params['category_ids']);
+    
+            return true;
+        });
+    
+        if ($saved) {
+            Session::flash('success', 'Product has been updated');
+            return redirect()->route('admin.products.index');
+        } else {
+            Session::flash('error', 'Product could not be updated');
+            return redirect()->back();
+        }
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        if ($product->delete()) {
+            return redirect('admin/products')->with('success', 'Product has been deleted');
+        }
+
+        return redirect('admin/products');
     }
 }

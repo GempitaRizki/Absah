@@ -16,11 +16,11 @@
                 <div class="card-body">
                     @include('admin.partials.flash', ['$errors' => $errors])
                     @if (!empty($product))
-                        {!! Form::model($product, ['url' => ['admin/products', $product->id], 'method' => 'PUT']) !!}
-                        {!! Form::hidden('id') !!}
-                    @else
-                        {!! Form::open(['url' => 'admin/products']) !!}
-                    @endif
+                    {!! Form::model($product, ['route' => ['admin.products.update', $product->id], 'method' => 'PUT']) !!}
+                    {!! Form::hidden('id') !!}
+                @else
+                    {!! Form::open(['route' => 'admin.products.store']) !!}
+                @endif
                         <div class="form-group">
                             {!! Form::label('sku', 'SKU') !!}
                             {!! Form::text('sku', null, ['class' => 'form-control', 'placeholder' => 'sku']) !!}
@@ -67,7 +67,7 @@
                             </div>
                         <div class="form-footer pt-5 border-top">
                             <button type="submit" class="btn btn-primary btn-default">Save</button>
-                            <a href="{{ url('admin/products') }}" class="btn btn-secondary btn-default">Back</a>
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary btn-default">Back</a>
                         </div>
                     {!! Form::close() !!}
                 </div>
