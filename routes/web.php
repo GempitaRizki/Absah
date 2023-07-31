@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
@@ -35,14 +36,26 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'auth
     Route::get('products', [ProductController::class, 'index'])->name('admin.products.index');
     Route::get('products/create', [ProductController::class, 'create']);
     Route::post('products', [ProductController::class, 'store'])->name('admin.products.store');
-    Route::get('products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('products/{id}', [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    Route::get('products/{productID}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('products/{productID}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('products/{productID}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
     //images
     Route::get('products/{productID}/images', [ProductController::class, 'images']);
     Route::get('products/{productID}/add-image', [ProductController::class, 'add_image']);
     Route::post('products/images/{productID}', [ProductController::class, 'upload_image']);
     Route::delete('products/images/{imageID}', [ProductController::class, 'remove_image']);
+
+    //Attribute
+    Route::get('attributes', [AttributeController::class, 'index'])->name('admin.attributes.index');
+    Route::get('attributes/create', [AttributeController::class, 'create']);
+    Route::post('attributes', [AttributeController::class, 'store']); 
+    Route::get('attributes/{attributeID}/edit', [AttributeController::class, 'edit']);
+    Route::put('attributes/{attributeID}', [AttributeController::class, 'update']);
+    Route::delete('attributes/{attributeID}', [AttributeController::class, 'destroy']);
+    Route::get('attributes/create', [AttributeController::class, 'create']);
+    Route::get('attributes/{attributeID}/options', [AttributeController::class, 'options']);
+    Route::post('attributes/{attributeID}/options', [AttributeController::class, 'store_option']);
+
 
 });
 
