@@ -30,7 +30,7 @@
                                         <td>{{ number_format($product->price) }}</td>
                                         <td>{{ $product->status }}</td>
                                         <td>
-                                            <a href="{{ url('admin/products/'. $product->id .'/edit') }}" class="btn btn-warning btn-sm">edit</a>
+                                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning btn-sm">edit</a>
                                             
                                                 {!! Form::open(['url' => 'admin/products/'. $product->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
