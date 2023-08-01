@@ -5,11 +5,12 @@
     <div class="card-body">
         @include('admin.partials.flash', ['$errors' => $errors])
         @if (!empty($attributeOption))
-            {!! Form::model($attributeOption, ['url' => ['admin/attributes/options', $attributeOption->id], 'method' => 'PUT']) !!}
-            {!! Form::hidden('id') !!}
-        @else
-            {!! Form::open(['url' => ['admin/attributes', $attribute->id, 'options'], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
-        @endif
+        {!! Form::model($attributeOption, ['route' => ['admin.attributes.options.update', $attributeOption->id], 'method' => 'PUT']) !!}
+        {!! Form::hidden('id', $attributeOption->id) !!}
+    @else
+        {!! Form::open(['route' => ['admin.attributes.options.store', $attribute->id], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+    @endif
+    
         {!! Form::hidden('attribute_id', $attribute->id) !!}
         <div class="form-group">
             {!! Form::label('name', 'Name') !!}

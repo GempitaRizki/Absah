@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Category;
 use App\Http\Requests\ProductImageRequest;
+use App\Models\Attribute;
 
 use Str;
 use Auth;
@@ -23,11 +24,8 @@ class ProductController extends Controller
     public function __construct()
 	{
 
-		$this->data['currentAdminMenu'] = 'catalog';
-		$this->data['currentAdminSubMenu'] = 'product';
-
 		$this->data['statuses'] = Product::statuses();
-        $this->data['types'] = [];
+		$this->data['types'] = Product::types();
 	}
     
      public function index()
@@ -43,15 +41,21 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name', 'ASC')->get();
+		$configurableAttributes = $this->getConfigurableAttributes();
 
 		$this->data['categories'] = $categories->toArray();
 		$this->data['product'] = null;
 		$this->data['productID'] = 0;
 		$this->data['categoryIDs'] = [];
+		$this->data['configurableAttributes'] = $configurableAttributes;
 
 		return view('admin.products.form', $this->data);
     }
 
+    private function getConfigurableAttributes()
+	{
+		return Attribute::where('is_configurable', true)->get();
+	}
     /**
      * Store a newly created resource in storage.
      */
@@ -182,20 +186,18 @@ class ProductController extends Controller
 
 		if ($request->has('image')) {
 			$image = $request->file('image');
-			$name = $product->slug . '_' . time();
+			$name = $product->slug .'_'. time();
 			$fileName = $name . '.' . $image->getClientOriginalExtension();
 
-            $folder = 'public/images/original';
+            $folder = '/uploads/images';
 
-			$filePath = $image->storeAs($folder . '/original', $fileName, 'public');
+			$filePath = $image->storeAs($folder, $fileName, 'public');
 
-
-			$params = array_merge(
+			$params = 
 				[
 					'product_id' => $product->id,
 					'path' => $filePath,
-				],
-			);
+                ];
 
 			if (ProductImage::create($params)) {
 				Session::flash('success', 'Image has been uploaded');

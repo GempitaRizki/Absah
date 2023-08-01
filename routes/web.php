@@ -54,8 +54,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'auth
     Route::delete('attributes/{attributeID}', [AttributeController::class, 'destroy']);
     Route::get('attributes/create', [AttributeController::class, 'create']);
     Route::get('attributes/{attributeID}/options', [AttributeController::class, 'options']);
-    Route::post('attributes/{attributeID}/options', [AttributeController::class, 'store_option']);
-
+    Route::post('attributes/options/{optionID}/edit', [AttributeController::class, 'store_option']);
+    Route::delete('attributes/{optionID}/options', [AttributeController::class, 'remove_option']);
+    Route::get('attributes/options/{optionID}/edit', [AttributeController::class, 'edit_option'])->name('admin.attributes.options.update');
+    Route::put('attributes/options/{optionID}/edit', [AttributeController::class, 'update_option'])->name('admin.attributes.options.store');
 
 });
 
