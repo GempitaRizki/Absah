@@ -69,26 +69,10 @@
 	<script src="{{ URL::asset('admin/assets/js/sleek.bundle.js') }}"></script>
 	<script src="{{ URL::asset('admin/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 	<script>
-		$('.datepicker').datepicker({
-			format: 'yyyy-mm-dd'
-		});
-
-		$(".delete").on("submit", function () {
+	$(".delete").on("submit", function () {
 			return confirm("Do you want to remove this?");
 		});
 
-		$("a.delete").on("click", function () {
-			event.preventDefault();
-			var orderId = $(this).attr('order-id');
-
-			if (confirm("Do you want to remove this?")) {
-				document.getElementById('delete-form-' + orderId ).submit();
-			}
-		});
-
-		$(".restore").on("click", function () {
-			return confirm("Do you want to restore this?");
-		});
 
 		function showHideConfigurableAttributes() {
 			var productType = $(".product-type").val();

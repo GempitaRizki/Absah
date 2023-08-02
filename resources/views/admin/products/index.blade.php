@@ -28,9 +28,9 @@
                                         <td>{{ $product->type }}</td>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ number_format($product->price) }}</td>
-                                        <td>{{ $product->status }}</td>
+                                        <td>{{ $product->statusLabel() }}</td>
                                         <td>
-                                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning btn-sm">edit</a>
+                                            <a href="{{ url('admin/products/'. $product->id .'/edit') }}" class="btn btn-warning btn-sm">edit</a>
                                             
                                                 {!! Form::open(['url' => 'admin/products/'. $product->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
@@ -47,9 +47,11 @@
                         </table>
                         {{ $products->links() }}
                     </div>
+                    @can('add_products')
                         <div class="card-footer text-right">
                             <a href="{{ url('admin/products/create') }}" class="btn btn-primary">Add New</a>
                         </div>
+                    @endcan
                 </div>
             </div>
         </div>
