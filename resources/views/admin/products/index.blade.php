@@ -30,12 +30,16 @@
                                         <td>{{ number_format($product->price) }}</td>
                                         <td>{{ $product->statusLabel() }}</td>
                                         <td>
+                                            @can('edit_products')
                                             <a href="{{ url('admin/products/'. $product->id .'/edit') }}" class="btn btn-warning btn-sm">edit</a>
-                                            
+                                            @endcan
+
+                                            @can('delete_products')
                                                 {!! Form::open(['url' => 'admin/products/'. $product->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
                                                 {!! Form::submit('remove', ['class' => 'btn btn-danger btn-sm']) !!}
                                                 {!! Form::close() !!}
+                                            @endcan
                                         </td>
                                     </tr>
                                 @empty

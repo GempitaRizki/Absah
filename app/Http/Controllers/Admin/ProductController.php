@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+// use App\Authorizable;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
@@ -21,12 +23,15 @@ use Session;
 
 class ProductController extends Controller
     {
-    /**
-     * Display a listing of the resource.
-     */
-    public function __construct()
+        // use Authorizable;
+        public function __construct()
 	{
 
+		parent::__construct();
+
+		$this->data['currentAdminMenu'] = 'catalog';
+		$this->data['currentAdminView'] = 'product';
+		
 		$this->data['statuses'] = Product::statuses();
 		$this->data['types'] = Product::types();
 	}
@@ -173,10 +178,6 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -188,6 +189,7 @@ class ProductController extends Controller
         }
     
         $product = Product::findOrFail($id);
+        $product->qty = isset($product->productInventory) ? $product->productInventory->qty : null;
         $categories = Category::orderBy('name', 'ASC')->get();
     
         $this->data['categories'] = $categories->toArray();
