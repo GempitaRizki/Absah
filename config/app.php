@@ -172,6 +172,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeneralServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+        Darryldecode\Cart\CartServiceProvider::class
 
 
     ])->toArray(),
@@ -191,6 +192,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
 		'General' => App\Helpers\General::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class
+
     ])->toArray(),
 
 ];

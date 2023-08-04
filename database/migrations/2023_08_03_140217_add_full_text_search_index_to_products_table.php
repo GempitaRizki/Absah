@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        DB::statement('ALTER TABLE products ADD FULLTEXT search(name,slug,short_description,description)');
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            //
+            $table->dropIndex('search');
         });
     }
 };

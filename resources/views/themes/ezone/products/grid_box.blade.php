@@ -23,7 +23,7 @@
 		</div>
 		<div class="product-content">
 			<h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
-			<span>{{ number_format($product->price_label()) }}</span>
+			<span>{{ number_format($product->priceLabel()) }}</span>
 		</div>
 	</div>
 </div>
