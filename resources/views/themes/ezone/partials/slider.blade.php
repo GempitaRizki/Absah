@@ -5,7 +5,7 @@
 							<div class="furniture-content fadeinup-animated">
 								<h2 class="animated">Comfort  <br>Collection.</h2>
 								<p class="animated">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-								<a class="furniture-slider-btn btn-hover animated" href="product-details.html">Shop Now</a>
+								<a class="furniture-slider-btn btn-hover animated" href="products">Shop Now</a>
 							</div>
 						</div>
 					</div>

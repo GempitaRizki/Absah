@@ -25,11 +25,6 @@ class Controller extends BaseController
     
         protected $provinces = [];
     
-        /**
-         * Create a new controller instance.
-         *
-         * @return void
-         */
         public function __construct()
         {
             $this->rajaOngkirApiKey = env('RAJAONGKIR_API_KEY');
@@ -50,28 +45,12 @@ class Controller extends BaseController
             $this->data['currentAdminSubMenu'] = '';
         }
     
-        /**
-         * Load view for particular theme
-         *
-         * @param string $view view path
-         * @param arry   $data data
-         *
-         * @return void
-         */
+
         protected function load_theme($view, $data = [])
         {
             return view('themes/'. env('APP_THEME') .'/'. $view, $data);
         }
     
-        /**
-         * Raja Ongkir Request (Shipping Cost Calculation)
-         *
-         * @param string $resource resource url
-         * @param array  $params   parameters
-         * @param string $method   request method
-         *
-         * @return json
-         */
         protected function rajaOngkirRequest($resource, $params = [], $method = 'GET')
         {
             $client = new \GuzzleHttp\Client();
@@ -94,11 +73,6 @@ class Controller extends BaseController
             return json_decode($response->getBody(), true);
         }
     
-        /**
-         * Get provinces
-         *
-         * @return array
-         */
         protected function getProvinces()
         {
             $provinceFile = 'provinces.txt';
@@ -123,13 +97,6 @@ class Controller extends BaseController
             return $provinces;
         }
     
-        /**
-         * Get cities by province ID
-         *
-         * @param int $provinceId province id
-         *
-         * @return array
-         */
         protected function getCities($provinceId)
         {
             $cityFile = 'cities_at_'. $provinceId .'.txt';
@@ -153,5 +120,11 @@ class Controller extends BaseController
     
             return $cities;
         }
+
+        private function removeConditionsByType($type)
+        {
+            $this->$type['shipping'];
+        }
+
     
 };
