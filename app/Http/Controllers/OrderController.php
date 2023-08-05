@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Darryldecode\Cart\Cart;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -194,6 +195,10 @@ class OrderController extends Controller
 		\Cart::condition($condition);
 	}
 
+	public function docheckout()
+	{
+		return view('themes.ezone.orders.payment');
+	}
 }
 
 
