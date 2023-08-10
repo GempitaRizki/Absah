@@ -352,8 +352,15 @@ class OrderController extends Controller
 			$this->data['order'] = Order::where('id', $orderId)
 				->where('user_id', \Auth::user()->id)
 				->firstOrFail();
-	
-			return $this->load_theme('orders/received', $this->data);
+
+				$this->sendEmailOrderReceived($this->data['order']);
+				return $this->load_theme('orders/received', $this->data);
+		}
+
+		private function sendEmailOrderReceived($order)
+		{
+			$message = new \App\Mail\OrderReceived($order);
+			\Mail::to(\Auth::user()->email)->send($message);
 		}
 	}
 
