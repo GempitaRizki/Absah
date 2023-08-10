@@ -36,14 +36,14 @@
 									@forelse ($items as $item)
 										@php
 											$product = isset($item->associatedModel->parent) ? $item->associatedModel->parent : $item->associatedModel;
-											$image = !empty($product->productImages->first()) ? asset('storage/'.$product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg')
+											$image = !empty($product->productImages->first()) ? asset('storage') .'/'. $product->productImages->first()->path : asset('themes/ezone/assets/img/cart/3.jpg')
 										@endphp
 										<tr>
 											<td class="product-remove">
 												<a href="{{ url('carts/remove/'. $item->id)}}" class="delete"><i class="pe-7s-close"></i></a>
 											</td>
 											<td class="product-thumbnail">
-												<a href="{{ url('product/'. $product->slug) }}"><img src="{{ $image }}" alt="{{ $product->name }}" style="width:100px"></a>
+												<a href="{{ asset('storage') . '/'. $product->slug }}"><img src="{{ $image }}" alt="{{ $product->name }}" style="width:100px"></a>
 											</td>
 											<td class="product-name"><a href="{{ url('product/'. $product->slug) }}">{{ $item->name }}</a></td>
 											<td class="product-price-cart"><span class="amount">{{ number_format($item->price) }}</span></td>

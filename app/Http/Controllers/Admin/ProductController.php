@@ -306,7 +306,7 @@ class ProductController extends Controller
 			$name = $product->slug .'_'. time();
 			$fileName = $name . '.' . $image->getClientOriginalExtension();
 
-            $folder = '/uploads/images';
+            $folder = 'uploads/images';
 
 			$filePath = $image->storeAs($folder, $fileName, 'public');
 

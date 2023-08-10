@@ -61,6 +61,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'auth
     Route::resource('products', ProductController::class);
 
     //images
+    Route::resource('products', 'ProductController');
     Route::get('products/{productID}/images', [ProductController::class, 'images']);
     Route::get('products/{productID}/add-image', [ProductController::class, 'add_image']);
     Route::post('products/images/{productID}', [ProductController::class, 'upload_image']);

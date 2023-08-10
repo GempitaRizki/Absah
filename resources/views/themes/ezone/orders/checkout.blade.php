@@ -260,4 +260,5 @@
 			{!! Form::close() !!}
 		</div>
 	</div>
+	<!-- checkout-area end -->	
 @endsection

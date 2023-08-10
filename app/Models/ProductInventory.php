@@ -24,4 +24,12 @@ class ProductInventory extends Model
 		return $this->belongsTo('App\Models\Product');
 	}
 
+	public static function reduceStock($productId, $qty)
+	{
+		$inventory = self::where('product_id', $productId)->firstOrFail();
+		$inventory->qty = $inventory->qty - $qty;
+		$inventory->save();
+	}
+
+
 }
