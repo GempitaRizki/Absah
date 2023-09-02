@@ -13,7 +13,6 @@ use App\Http\Requests\CategoryRequest;
 class CategoryController extends Controller
 {
     public function __construct() {
-        parent::__construct();
 
         $this->data['currentAdminMenu'] = 'catalog';
         $this->data['currentAdminSubMenu'] = 'category';
@@ -55,8 +54,7 @@ class CategoryController extends Controller
 
     private function generateSlug($name)
     {
-        // Implement your custom slug generation logic here
-        // For example, you can remove spaces and convert to lowercase
+  
         return str_replace(' ', '-', strtolower($name));
     }
 
@@ -76,7 +74,9 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $categories = Category::where('id', '!=', $id)->orderBy('name', 'asc')->get();
 
-        return view('admin.categories.form', compact('category', 'categories'));
+        $this->data['categories'] = $categories->toArray();
+        $this->data['category'] = $category;
+        return view('admin.categories.form', $this->data);
     }
 
     public function update(CategoryRequest $request, $id)

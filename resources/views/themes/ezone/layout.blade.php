@@ -4,11 +4,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Furniture - eCommerce HTML5 Template</title>
+        <title>Absah.id</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('themes/ezone/assets/img/favicon.png') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{url('public/assets/img')}}??">
 		
 		<!-- all css here -->
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/bootstrap.min.css') }}">
@@ -31,12 +31,12 @@
         <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        @include('themes.ezone.partials.header');
+        @include('partials.header');
+        <!-- @include('themes.ezone.partials.mini_cart') -->
 
         @yield('content')
 
-        @include('themes.ezone.partials.services');
-        @include('themes.ezone.partials.footer');
+        @include('partials.footer');
         @include('themes.ezone.partials.modals');
 
 
@@ -59,10 +59,5 @@
         <script src="{{ asset('themes/ezone/assets/js/plugins.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/main.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/app.js') }}"></script>
-        <script>
-            $(".delete").on("click", function () {
-                return confirm("Do you want to remove this?");
-            });
-        </script>
     </body>
 </html>

@@ -48,7 +48,7 @@ class Controller extends BaseController
 
         protected function load_theme($view, $data = [])
         {
-            return view('themes/'. env('APP_THEME') .'/'. $view, $data);
+            return view('themes.'. env('APP_THEME') .'.'. $view, $data);
         }
     
         protected function rajaOngkirRequest($resource, $params = [], $method = 'GET')

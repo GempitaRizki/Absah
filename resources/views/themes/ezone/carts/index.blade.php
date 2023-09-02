@@ -2,13 +2,12 @@
 
 @section('content')
 	<!-- header end -->
-	<div class="breadcrumb-area pt-205 breadcrumb-padding pb-210" style="background-image: url({{ asset('themes/ezone/assets/img/bg/breadcrumb.jpg') }})">
+	<img src="{{ url('/assets/img/logo/Absah-logo.png') }}" alt="Logo" style="display: block; margin: 40px auto 0; max-width: 150%; height: auto;">
 		<div class="container">
 			<div class="breadcrumb-content text-center">
-				<h2>cart page</h2>
+				<h2>Keranjang</h2>
 				<ul>
-					<li><a href="{{ url('/') }}">home</a></li>
-					<li> cart page</li>
+					<li><a href="{{ url('/') }}">Home</a></li>
 				</ul>
 			</div>
 		</div>
@@ -18,7 +17,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<h1 class="cart-heading">Cart</h1>
+					<h1 class="cart-heading">Keranjang</h1>
 					{!! Form::open(['url' => 'carts/update']) !!}
 						<div class="table-content table-responsive">
 							<table>

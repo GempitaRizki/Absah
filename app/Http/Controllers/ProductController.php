@@ -6,14 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\Category;
+use App\Models\ProductImage;
+use App\Models\Price;
 use Str;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
     public function __construct()
     {
         parent::__construct();
@@ -31,7 +29,7 @@ class ProductController extends Controller
         public function index(Request $request)
         {
             $products = Product::active();
-        
+            
             if ($q = $request->query('q')) {
                 $q = str_replace('-', ' ', Str::slug($q));
         
@@ -76,11 +74,6 @@ class ProductController extends Controller
             return $this->load_theme('products.index', $this->data);
         }
         
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function show($slug)
 	{
 		$product = Product::active()->where('slug', $slug)->first();

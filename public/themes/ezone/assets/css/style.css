@@ -8650,7 +8650,17 @@ a.bundle-btn {
 
 .slider-area {
     position: relative;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
+
+.slider-area .single-slider-4 {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .slider-social {
     bottom: 150px;
     display: flex;
