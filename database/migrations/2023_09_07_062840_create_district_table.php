@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->smallInteger('status')->nullable();
-            $table->foreign('id')->references('id')->on('province');
+            $table->unsignedBigInteger('province_id'); 
             $table->string('id_intan')->nullable();
             $table->string('zona_kumer')->nullable();
             $table->string('id_dikbud')->nullable();
             $table->string('url_gambar')->nullable();
             $table->timestamps();
+
+            $table->foreign('province_id')->references('id')->on('province');
         });
     }
 
@@ -32,3 +34,4 @@ return new class extends Migration
         Schema::dropIfExists('district');
     }
 };
+

@@ -9,9 +9,21 @@ class Price extends Model
 {
     use HasFactory;
 
-    protected $fillable= [
-        'id',
-        'price',
-        'zona_id'
-    ];
+    protected $fillable = ['price', 'zona_id'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($price) {
+            if ($price->isDirty('price')) {
+                $price->product->update(['price' => $price->price]);
+            }
+        });
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

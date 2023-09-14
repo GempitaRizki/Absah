@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->smallInteger('status');
-            $table->foreign('id')->references('id')->on('district');
+            $table->unsignedBigInteger('district_id');
             $table->string('id_intan')->nullable();
             $table->string('id_dikbud')->nullable();
             $table->timestamps();
+
+            $table->foreign('district_id')->references('id')->on('district');
         });
     }
 
@@ -30,3 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('sub_district');
     }
 };
+

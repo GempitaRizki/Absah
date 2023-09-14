@@ -86,5 +86,4 @@
 			</div>
 		</div>
 	</div>
-	<!-- shopping-cart-area end -->
 @endsection

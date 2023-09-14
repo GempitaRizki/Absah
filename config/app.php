@@ -169,6 +169,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Laravolt\Indonesia\ServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeneralServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,

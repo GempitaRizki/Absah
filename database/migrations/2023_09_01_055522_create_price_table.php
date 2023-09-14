@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('price', function (Blueprint $table) {
-            $table->id();
-            $table->string('price')->nullable();
-            $table->unsignedBigInteger('zona_id')->nullable();
+        Schema::create('prices', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->decimal('price', 15, 2)->nullable();
+            $table->unsignedBigInteger('zona_id');
             $table->timestamps();
 
             $table->foreign('zona_id')->references('id')->on('zona');

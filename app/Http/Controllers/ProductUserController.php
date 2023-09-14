@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use App\Models\Category;
+use App\Http\Requests\ProductRequest;
+use App\Models\Cart;
 use Str;
 
 class ProductUserController extends Controller
@@ -16,77 +18,99 @@ class ProductUserController extends Controller
 
         $this->data['q'] = null;
 
-		$this->data['categories'] = Category::parentCategories()
-			->orderBy('name', 'asc')
-			->get();
-    
-            $this->data['minPrice'] = Product::min('price');
-            $this->data['maxPrice'] = Product::max('price');
-    
-        }
-        public function index(Request $request)
-        {
-            $products = Product::active();
-            
-            if ($q = $request->query('q')) {
-                $q = str_replace('-', ' ', Str::slug($q));
-        
-                $products = $products->whereRaw('MATCH(name, slug, short_description, description) AGAINST (? IN NATURAL LANGUAGE MODE)', [$q]);
-        
-                $this->data['q'] = $q;
-            }
-        
-            if ($categorySlug = $request->query('category')) {
-                $category = Category::where('slug', $categorySlug)->firstOrFail();
-                $childIds = Category::childIds($category->id);
-                $categoryIds = array_merge([$category->id], $childIds);
-        
-                $products = $products->whereHas('categories', function ($query) use ($categoryIds) {
-                    $query->whereIn('categories.id', $categoryIds);
-                });
-            }
-        
-            $lowPrice = null;
-            $highPrice = null;
-        
-            if ($priceSlider = $request->query('price')) {
-                $prices = explode('-', $priceSlider);
-        
-                $lowPrice = !empty($prices[0]) ? (float)$prices[0] : $this->data['minPrice'];
-                $highPrice = !empty($prices[1]) ? (float)$prices[1] : $this->data['maxPrice'];
-        
-                if ($lowPrice && $highPrice) {
-                    $products = $products->where('price', '>=', $lowPrice)
-                        ->where('price', '<=', $highPrice)
-                        ->orWhereHas('variants', function ($query) use ($lowPrice, $highPrice) {
-                            $query->where('price', '>=', $lowPrice)
-                                ->where('price', '<=', $highPrice);
-                        });
+        $this->data['categories'] = Category::parentCategories()
+            ->orderBy('name', 'asc')
+            ->get();
 
-                    $this->data['minPrice'] = $lowPrice;
-                    $this->data['maxPrice'] = $highPrice;
-                }
-            }
-        
-            $this->data['products'] = $products->paginate(9);
-            return $this->load_theme('products.index', $this->data);
+        $this->data['minPrice'] = Product::min('price');
+        $this->data['maxPrice'] = Product::max('price');
+    }
+    public function index(Request $request)
+    {
+        $products = Product::active();
+
+        if ($q = $request->query('q')) {
+            $q = str_replace('-', ' ', Str::slug($q));
+
+            $products = $products->whereRaw('MATCH(name, slug, short_description, description) AGAINST (? IN NATURAL LANGUAGE MODE)', [$q]);
+
+            $this->data['q'] = $q;
         }
-        
+
+        if ($categorySlug = $request->query('category')) {
+            $category = Category::where('slug', $categorySlug)->firstOrFail();
+            $childIds = Category::childIds($category->id);
+            $categoryIds = array_merge([$category->id], $childIds);
+
+            $products = $products->whereHas('categories', function ($query) use ($categoryIds) {
+                $query->whereIn('categories.id', $categoryIds);
+            });
+        }
+
+        $lowPrice = null;
+        $highPrice = null;
+
+        if ($priceSlider = $request->query('price')) {
+            $prices = explode('-', $priceSlider);
+
+            $lowPrice = !empty($prices[0]) ? (float)$prices[0] : $this->data['minPrice'];
+            $highPrice = !empty($prices[1]) ? (float)$prices[1] : $this->data['maxPrice'];
+
+            if ($lowPrice && $highPrice) {
+                $products = $products->where('price', '>=', $lowPrice)
+                    ->where('price', '<=', $highPrice)
+                    ->orWhereHas('variants', function ($query) use ($lowPrice, $highPrice) {
+                        $query->where('price', '>=', $lowPrice)
+                            ->where('price', '<=', $highPrice);
+                    });
+
+                $this->data['minPrice'] = $lowPrice;
+                $this->data['maxPrice'] = $highPrice;
+            }
+        }
+
+        $this->data['products'] = $products->paginate(9);
+        return $this->load_theme('products.index', $this->data);
+    }
+
     public function show($slug)
-	{
-		$product = Product::active()->where('slug', $slug)->first();
+    {
+        $product = Product::active()->where('slug', $slug)->first();
 
-		if (!$product) {
-			return redirect('products');
-		}
+        if (!$product) {
+            return redirect('products');
+        }
 
-		if ($product->configurable()) {
-			$this->data['colors'] = ProductAttributeValue::getAttributeOptions($product, 'color')->pluck('text_value', 'text_value');
-			$this->data['sizes'] = ProductAttributeValue::getAttributeOptions($product, 'size')->pluck('text_value', 'text_value');
-		}
+        if ($product->configurable()) {
+            $this->data['colors'] = ProductAttributeValue::getAttributeOptions($product, 'color')->pluck('text_value', 'text_value');
+            $this->data['sizes'] = ProductAttributeValue::getAttributeOptions($product, 'size')->pluck('text_value', 'text_value');
+        }
 
-		$this->data['product'] = $product;
+        $this->data['product'] = $product;
 
-		return $this->load_theme('products.show', $this->data);
-	}
+        return $this->load_theme('products.show', $this->data);
+    }
+
+    public function storeToDatabase(ProductRequest $request)
+    {
+        // $user_id = auth()->user()->id;
+        $product_id = $request->input('id');
+        // $price = $request->input('price');
+        // $quantity = $request->input('qty'); 
+        $product = $request->input('name');
+        $product = $request->input('price');
+
+        Cart::create([
+            // 'user_id' => $user_id,
+            'product_id' => $product_id,
+            // 'price' => $price,
+            // 'quantity' => $quantity,
+            'name' => $product,
+            'price' => $product,
+        ]);
+
+        \Session::flash('success', 'Product ' . $name_product . ' berhasil dimasukkan ke dalam keranjang.');
+
+        return redirect('/carts');
+    }
 }

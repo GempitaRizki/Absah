@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ProductImage;
+use App\Models\Cart;
 
 class Product extends Model
 {
@@ -232,4 +233,16 @@ class Product extends Model
 	{
 		return $this->type == 'simple';
 	}
+
+	//HARGA PRODUCT
+	public function price()
+	{
+		return $this->belongsTo(Price::class);
+	}
+
+	public function cart()
+	{
+		return $this->belongsTo(Cart::class);
+	}
+	
 }

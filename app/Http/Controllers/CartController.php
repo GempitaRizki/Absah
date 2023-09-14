@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Favorite;
 use Illuminate\Http\Request;
-use App\Models\Product; 
-
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection\links;
 
 class CartController extends Controller
 {
@@ -13,19 +14,26 @@ class CartController extends Controller
 		parent::__construct();
 	}
 
+
+	
 	public function index()
 	{
 		$items = \Cart::getContent();
 		$this->data['items'] =  $items;
 
+		$favorites = Favorite::all();
+		$this->data['favorites'] = $favorites;
+
 		return $this->load_theme('carts.index', $this->data);
+
+		
 	}
 
 
 	public function store(Request $request)
 	{
 		$params = $request->except('_token');
-		
+
 		$product = Product::findOrFail($params['product_id']);
 		$slug = $product->slug;
 
@@ -64,7 +72,7 @@ class CartController extends Controller
 
 		$itemQuantity =  $this->_getItemQuantity(md5($product->id)) + $params['qty'];
 		$this->_checkProductInventory($product, $itemQuantity);
-		
+
 		$item = [
 			'id' => md5($product->id),
 			'name' => $product->name,
@@ -76,8 +84,8 @@ class CartController extends Controller
 
 		\Cart::add($item);
 
-		\Session::flash('success', 'Product '. $item['name'] .' has been added to cart');
-		return redirect('/product/'. $slug);
+		\Session::flash('success', 'Product ' . $item['name'] . ' has been added to cart');
+		return redirect('/product/' . $slug);
 	}
 
 
@@ -100,7 +108,7 @@ class CartController extends Controller
 	private function _checkProductInventory($product, $itemQuantity)
 	{
 		if ($product->productInventory->qty < $itemQuantity) {
-			throw new \App\Exceptions\OutOfStockException('The product '. $product->sku .' is out of stock');
+			throw new \App\Exceptions\OutOfStockException('The product ' . $product->sku . ' is out of stock');
 		}
 	}
 

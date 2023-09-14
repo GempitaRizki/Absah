@@ -15,10 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id'); 
             $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('price')->nullable();
             $table->timestamps();
     
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('store_id')->references('id')->on('stores');
+            $table->foreign('product_id')->references('id')->on('products'); 
+            $table->foreign('price')->references('id')->on('prices'); 
+
         });
     }
 
@@ -27,6 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cart');
+        Schema::dropIfExists('carts'); // Mengubah 'cart' menjadi 'carts'
     }
 };
+

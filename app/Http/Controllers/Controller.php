@@ -13,6 +13,8 @@ class Controller extends BaseController
     
         protected $data = [];
         protected $uploadsFolder = 'uploads/';
+
+        protected $redirectTo = '/info-sekolah';
     
         public function __construct()
         {
@@ -36,6 +38,11 @@ class Controller extends BaseController
         protected function load_theme($view, $data = [])
         {
             return view('themes.'. env('APP_THEME') .'.'. $view, $data);
+        }
+
+        protected function loadTheme($view, $data = [])
+        {
+            return view('themes/'. env('APP_THEME') .'/'. $view, $data);
         }
 
 };

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NpwpDinas;
 
 class Sekolah extends Model
 {
@@ -11,36 +12,35 @@ class Sekolah extends Model
 
     protected $fillable = [
         'data_sekolah',
-        'data_pengguna',
-        'sekolah',
-        'alamat',
-        'bendahara_bos',
+        // 'data_pengguna',
+        // 'sekolah',
+        // 'alamat',
         'bentuk_pendidikan',
-        'bujur',
-        'kelurahan',
-        'email',
-        'kota',
-        'kd_kab',
-        'kecamatan',
+        // 'bujur',
+        // 'kelurahan',
+        'email_sekolah',
+        // 'kota',
+        // 'kabupaten',
+        // 'kecamatan',
         'kepala_sekolah',
-        'kode_pos',
-        'lintang',
-        'nama_sekolah',
+        // 'kode_pos',
+        // 'lintang',
+        // 'nama_sekolah',
         'nip_bendahara_bos',
         'nip_kepala_sekolah',
         'no_sekolah',
         'npsn',
-        'npwp',
-        'provinsi',
-        'sekolah_id',
+        // 'provinsi',
+        // 'sekolah_id',
         'status',
-        'zona',
-        'jenjang'
+        // 'zona',
+        'npwp_dinas',
+        'bendahara_bos'
+        
     ];
 
-    public function npwp_dinas()
+    public function NpwpDinas()
     {
-        return $this->hasMany('App\Models\npwp_dinas');
+        return $this->hasOne(NpwpDinas::class);
     }
-
 };

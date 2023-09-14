@@ -20,7 +20,7 @@
 					<ul>
 						@guest
 							<li>Get Access: <a href="{{ url('login') }}">Login</a></li>
-							<li><a href="{{ route('register.form') }}">Register</a></li>
+							<li><a href="{{ url('/register') }}">Register</a></li>
 						@else
 							<li>Selamat Datang <a href="{{ url('profile') }}">{{ Auth::user()->name }}</a></li>
 							<a href="{{ route('logout') }}"
@@ -42,6 +42,11 @@
 							<i class="ti-search"></i>
 						</button>
 					</form>
+				</div>
+				<div class="furniture-wishlist">
+					<ul>
+						<li><a href="{{ url('favorites') }}"><i class="ti-heart"></i> Favorites</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>

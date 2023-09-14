@@ -16,6 +16,7 @@ use App\Models\AttributeOption;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductInventory;
 use Illuminate\Support\Facades\Session;
+use App\Models\Price;
 
 use Str;
 use Auth;
@@ -51,7 +52,7 @@ class ProductController extends Controller
 
 		$this->data['categories'] = $categories->toArray();
 		$this->data['product'] = null;
-		$this->data['productID'] = 0;
+		$this->data['productID'] = null;
 		$this->data['categoryIDs'] = [];
 		$this->data['configurableAttributes'] = $configurableAttributes;
 
@@ -153,6 +154,10 @@ class ProductController extends Controller
 		$params['slug'] = Str::slug($params['name']);
 		$params['user_id'] = Auth::user()->id;
 
+		$price = Product::updateOrCreate(['product_id' => 0], ['price' => $params['price']]);
+
+		$params['price'] = $price->price;
+
 		$product = DB::transaction(function () use ($params) {
 			$categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
 			$product = Product::create($params);
@@ -207,6 +212,14 @@ class ProductController extends Controller
 	{
 		$params = $request->except('_token');
 		$params['slug'] = Str::slug($params['name']);
+
+		$params['price'] = $request->input('price');
+
+
+		$price = Product::updateOrCreate(['product_id' => $id], ['price' => $params['price']]);
+
+		$params['price'] = $price->price;
+
 
 		$product = Product::findOrFail($id);
 		$saved = false;

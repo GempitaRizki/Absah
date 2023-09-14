@@ -26,15 +26,18 @@ return new class extends Migration
             $table->string('short_description')->nullable();
             $table->string('about_us')->nullable();
             $table->timestamps();
+
+            $table->foreign('province_id')->references('id')->on('province');
+            $table->foreign('district_id')->references('id')->on('district');
+            $table->foreign('subdistrict_id')->references('id')->on('sub_district');
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('store');
+        Schema::dropIfExists('stores');
     }
 };

@@ -24,11 +24,7 @@ class UserController extends Controller
         $this->data['currentAdminMenu'] = 'role-user';
         $this->data['currentAdminSubMenu'] = 'user';
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $this->data['users'] = User::latest()->paginate(10);

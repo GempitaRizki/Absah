@@ -27,7 +27,7 @@
                                         <td>{{ $product->sku }}</td>
                                         <td>{{ $product->type }}</td>
                                         <td>{{ $product->name }}</td>
-                                        <td>{{ number_format($product->price) }}</td>
+                                        <td>{{ number_format($product->price, 2) }}</td>
                                         <td>{{ $product->statusLabel() }}</td>
                                         <td>
                                             <a href="{{ url('admin/products/'. $product->id .'/edit') }}" class="btn btn-warning btn-sm">edit</a>

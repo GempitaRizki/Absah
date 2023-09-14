@@ -14,9 +14,9 @@ class UserstableSeeder extends Seeder
     public function run(): void
     {
         $adminUser = [ 
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('admin'),
+            'name' => 'Gempita',
+            'email' => 'gempita@gmail.com',
+            'password' => bcrypt('Gempita05'),
         ];
     
         if (!User::where('email', $adminUser['email'])->exists()) {

@@ -140,10 +140,11 @@ class CategoryController extends Controller
 
     }
 
-    // public function upload_image(CategoryImageRequest $request, $id )
+    // public function categoryindex()
     // {
-    //     $category = Category::findOrFail($id);
-
+    //     $categories = Category::all();
+    //     return view('partials.category', compact('categories'));
     // }
 
 }
+

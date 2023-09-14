@@ -34,8 +34,8 @@
 						<span>Rp. {{number_format($product->priceLabel()) }}</span>
 					</div>
 				</div>
-				@endforeach
-			</div>
+			@endforeach
+		</div>
 		</div>
 	</div>
 </div>

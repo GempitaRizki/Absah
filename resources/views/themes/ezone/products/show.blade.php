@@ -82,56 +82,41 @@
 									{!! Form::number('qty', 1, ['class' => 'cart-plus-minus-box', 'placeholder' => 'qty', 'min' => 1]) !!}
 								</div>
 								<div class="quickview-btn-cart">
-									<button type="submit" class="submit contact-btn btn-hover">add to cart</button>
+									<button type="submit" class="submit contact-btn btn-hover">Masukan Keranjang</button>
 								</div>
 								<div class="quickview-btn-wishlist">
-									<a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
+									<a class="btn-hover" href="{{route('favorites.add')}}"><i class="pe-7s-like"></i></a>
 								</div>
 							</div>
 						{!! Form::close() !!}
-						<div class="product-details-cati-tag mt-35">
-							<ul>
-								<li class="categories-title">Categories :</li>
-								@foreach ($product->categories as $category)
-									<li><a href="{{ url('products/category/'. $category->slug ) }}">{{ $category->name }}</a></li>
-								@endforeach
-							</ul>
+						<div class="container-fluid">
+							<div class="product-share" style="margin-top:20%">
+								<ul>
+									<li class="categories-title">Share :</li>
+									<li>
+										<a href="#">
+											<i class="icofont icofont-social-facebook"></i>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="icofont icofont-social-twitter"></i>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="icofont icofont-social-pinterest"></i>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="icofont icofont-social-flikr"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</div>
-						<div class="product-details-cati-tag mtb-10">
-							<ul>
-								<li class="categories-title">Tags :</li>
-								<li><a href="#">fashion</a></li>
-								<li><a href="#">electronics</a></li>
-								<li><a href="#">toys</a></li>
-								<li><a href="#">food</a></li>
-								<li><a href="#">jewellery</a></li>
-							</ul>
-						</div>
-						<div class="product-share">
-							<ul>
-								<li class="categories-title">Share :</li>
-								<li>
-									<a href="#">
-										<i class="icofont icofont-social-facebook"></i>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<i class="icofont icofont-social-twitter"></i>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<i class="icofont icofont-social-pinterest"></i>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<i class="icofont icofont-social-flikr"></i>
-									</a>
-								</li>
-							</ul>
-						</div>
+
 					</div>
 				</div>
 			</div>
