@@ -9,11 +9,20 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function showmenu()
+
+    public function __construct()
+    {
+        $this->data['currentUserMenu'] = 'categories';
+        $this->data['currentUserSubMenu'] = 'category';
+        
+    }
+
+    public function index()
     {
         $categories = Category::all()->where('parent_id', 0);
         $products = Product::all();
+        
+        return view('dashboard.index', compact('categories', 'products'));
+    }  
 
-        return view('dashboard.index', compact(['categories', 'products']));
-    }
 }

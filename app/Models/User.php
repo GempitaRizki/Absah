@@ -14,18 +14,22 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-		'first_name', 'last_name', 'email', 'phone', 'password', 'company', 'address1', 'address2', 'province_id', 'city_id', 'postcode',
+		'name', 'email', 'password', 'phone', 'jabatan', 'NIP', 'NIK',
 	];
 
 	protected $hidden = [
-		'password', 'remember_token',
+		'password',
+		'id_login',
 	];
 
+	protected $attributes = [
+		'id_login' => 0,
+	];
 
 	protected $casts = [
 		'email_verified_at' => 'datetime',
+		'password' =>'hashed'
 	];
-
 
 	public function products()
 	{

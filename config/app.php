@@ -167,7 +167,7 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        Laravolt\Indonesia\ServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeneralServiceProvider::class,

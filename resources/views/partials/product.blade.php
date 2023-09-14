@@ -1,10 +1,10 @@
 <!-- product area start -->
 @if ($products)
-<div class="popular-product-area wrapper-padding-3 pt-115 pb-115">
+<div class="product-style-area gray-bg-4 pb-105">
 	<div class="container-fluid">
-		<div class="section-title-6 text-center mb-50">
+		<div class="section-title-furits bg-shape text-center mb-80">
+			<img src="{{url('assets/img/icon-img/absah.png')}}" alt="">
 			<h2>Product Terbaru</h2>
-			<p>#test saja</p>
 		</div>
 		<div class="product-style">
 			<div class="popular-product-active owl-carousel">
@@ -13,7 +13,7 @@
 				$product = $product->parent ?: $product;
 				@endphp
 				<div class="product-wrapper">
-					<div class="product-img">
+					<div class="section-title-furits bg-shape text-center mb-80">
 						<a href="{{ url('product/'. $product->slug) }}">
 							@if ($product->productImages->first())
 							<img src="{{ $product->productImages->first()->image_url }}">
@@ -23,16 +23,11 @@
 
 						</a>
 						<div class="product-action">
-							<a class="animate-left add-to-fav" title="Wishlist" product-slug="{{ $product->slug }}" href="">
-								<i class="pe-7s-like"></i>
-							</a>
-							<a class="animate-top add-to-card" title="Add To Cart" href="" product-id="{{ $product->id }}" product-type="{{ $product->type }}" product-slug="{{ $product->slug }}">
-								<i class="pe-7s-cart"></i>
-							</a>
-							<a class="animate-right quick-view" title="Quick View" product-slug="{{ $product->slug }}" href="">
+							<a class="animate-right quick-view" title="Quick View" product-slug="{{ $product->slug }}" href="{{ url('product/'. $product->slug) }}">
 								<i class="pe-7s-look"></i>
 							</a>
 						</div>
+
 					</div>
 					<div class="funiture-product-content text-center">
 						<h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
@@ -46,3 +41,4 @@
 </div>
 <!-- product area end -->
 @endif
+<!-- product area end -->

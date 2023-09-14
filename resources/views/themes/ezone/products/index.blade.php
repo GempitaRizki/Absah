@@ -1,17 +1,7 @@
 @extends('themes.ezone.layout')
 
 @section('content')
-	<div class="breadcrumb-area pt-205 breadcrumb-padding pb-210" style="background-image: url({{ asset('themes/ezone/assets/img/bg/breadcrumb.jpg') }})">
-		<div class="container-fluid">
-			<div class="breadcrumb-content text-center">
-				<h2>shop grid 3 column</h2>
-				<ul>
-					<li><a href="#">home</a></li>
-					<li>shop grid 3 column</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+<img src="{{ url('/assets/img/logo/Absah-logo.png') }}" alt="Logo" style="display: block; margin: 40px auto 0; max-width: 150%; height: auto;">
 	<div class="shop-page-wrapper shop-page-padding ptb-100">
 		<div class="container-fluid">
 			<div class="row">
@@ -31,9 +21,6 @@
 									<div class="shop-tab nav" role=tablist>
 										<a class="active" href="#grid-sidebar3" data-toggle="tab" role="tab" aria-selected="false">
 											<i class="ti-layout-grid4-alt"></i>
-										</a>
-										<a href="#grid-sidebar4" data-toggle="tab" role="tab" aria-selected="true">
-											<i class="ti-menu"></i>
 										</a>
 									</div>
 								</div>

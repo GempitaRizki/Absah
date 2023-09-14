@@ -80,7 +80,7 @@
         <div class="col-md-12">
           <div class="copyright-text">
             <p>© 2023
-              <a href="#">Absah.id</a>. All rights reserved. Created by
+              <a href="#">Absah.id</a>. All rights reserved. Created by @GempitaRizki
             </p>
           </div>
         </div>

@@ -16,7 +16,6 @@ use App\Models\AttributeOption;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductInventory;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 
 use Str;
 use Auth;
@@ -28,10 +27,8 @@ class ProductController extends Controller
 	public function __construct()
 	{
 
-		parent::__construct();
-
-		$this->data['currentAdminMenu'] = 'catalog';
-		$this->data['currentAdminView'] = 'product';
+        $this->data['currentAdminMenu'] = 'catalog';
+        $this->data['currentAdminSubMenu'] = 'product';
 
 		$this->data['statuses'] = Product::statuses();
 		$this->data['types'] = Product::types();
@@ -197,6 +194,7 @@ class ProductController extends Controller
 		$this->data['product'] = $product;
 		$this->data['productID'] = $product->id;
 		$this->data['categoryIDs'] = $product->categories->pluck('id')->toArray();
+		//05/09/2023 Gempita Rizki, fitur multi categories menggunakan pluck  
 
 		return view('admin.products.form', $this->data);
 	}

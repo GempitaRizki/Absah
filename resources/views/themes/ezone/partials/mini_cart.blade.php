@@ -32,7 +32,7 @@
 				</div>
 			</li>
 			<li class="cart-btn-wrapper">
-				<a class="cart-btn btn-hover" href="{{ url('carts') }}">view cart</a>
+				<a class="cart-btn btn-hover" href="{{ url('carts') }}">kerajang</a>
 				<a class="cart-btn btn-hover" href="{{ url('orders/checkout') }}">checkout</a>
 			</li>
 		</ul>

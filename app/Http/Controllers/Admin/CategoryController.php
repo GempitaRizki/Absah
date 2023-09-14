@@ -6,17 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\CategoryImageRequest;
 // use App\Authorizable;
 
 
 
 class CategoryController extends Controller
 {
+
     public function __construct() {
 
         $this->data['currentAdminMenu'] = 'catalog';
         $this->data['currentAdminSubMenu'] = 'category';
     }
+    
     public function index()
     {
         $this->data['categories'] = Category::orderBy('name', 'ASC')->paginate(10);
@@ -44,6 +47,7 @@ class CategoryController extends Controller
         $params = $request->except('_token');
         $params['slug'] = $this->generateSlug($params['name']);
         $params['parent_id'] = (int) $params['parent_id'];
+        // $category = Category::create($params);//class test Gempita
 
         if (Category::create($params)) {
             return redirect('admin/categories')->with('success', 'Category has been saved');
@@ -104,4 +108,42 @@ class CategoryController extends Controller
 
         return redirect('admin/categories');
     }
+
+    public function images($id)
+    {
+        if(empty($id)) {
+            return redirect('admin/categories/create');
+
+            $category = Category::findOrFail($id);
+
+            $this->data['CategoryID'] = $category->id;
+            $this->data['category'] = $category;
+
+            return view('admin.categories.images', $this->data);
+        }
+    }
+    
+    public function add_image($id)
+    {
+        if(empty($id)) {
+            return redirect('admin/categories');
+
+            $category = Category::findOrFal($id);
+
+            $this->data['CategoryID'] = $category->id;
+            $this->data['category'] = $category;
+
+
+            return view('admin.categories.image_form', $this->data);
+
+        }
+
+    }
+
+    // public function upload_image(CategoryImageRequest $request, $id )
+    // {
+    //     $category = Category::findOrFail($id);
+
+    // }
+
 }

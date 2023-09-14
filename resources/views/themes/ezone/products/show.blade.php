@@ -1,17 +1,7 @@
 @extends('themes.ezone.layout')
 
 @section('content')
-	<div class="breadcrumb-area pt-205 pb-210" style="background-image: url({{ asset('themes/ezone/assets/img/bg/breadcrumb.jpg') }})">
-		<div class="container">
-			<div class="breadcrumb-content text-center">
-				<h2>product details</h2>
-				<ul>
-					<li><a href="/">home</a></li>
-					<li> product details </li>
-				</ul>
-			</div>
-		</div>
-	</div>
+<img src="{{ url('/assets/img/logo/Absah-logo.png') }}" alt="Logo" style="display: block; margin: 40px auto 0; max-width: 150%; height: auto;">
 	<div class="product-details ptb-100 pb-90">
 		<div class="container">
 			<div class="row">
@@ -69,7 +59,7 @@
 					<div class="product-details-content">
 						<h3>{{ $product->name }}</h3>
 						<div class="details-price">
-							<span>{{ number_format($product->priceLabel()) }}</span>
+							<span>Rp. {{ number_format($product->priceLabel()) }}</span>
 						</div>
 						<p>{{ $product->short_description }}</p>
 						{!! Form::open(['url' => 'carts']) !!}

@@ -37,9 +37,11 @@
                             {!! Form::label('name', 'Name') !!}
                             {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'name']) !!}
                         </div>
+                        <div class="container fluid">
                         <div class="form-group">
                             {!! Form::label('category_ids', 'Category') !!}
                             {!! General::selectMultiLevel('category_ids[]', $categories, ['class' => 'form-control', 'multiple' => true, 'selected' => !empty(old('category_ids')) ? old('category_ids') : $categoryIDs, 'placeholder' => '-- Choose Category --']) !!}
+                        </div>
                         </div>
                         <div class="configurable-attributes">
                             @if (!empty($configurableAttributes) && empty($product))
