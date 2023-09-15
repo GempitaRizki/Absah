@@ -90,27 +90,4 @@ class ProductUserController extends Controller
 
         return $this->load_theme('products.show', $this->data);
     }
-
-    public function storeToDatabase(ProductRequest $request)
-    {
-        // $user_id = auth()->user()->id;
-        $product_id = $request->input('id');
-        // $price = $request->input('price');
-        // $quantity = $request->input('qty'); 
-        $product = $request->input('name');
-        $product = $request->input('price');
-
-        Cart::create([
-            // 'user_id' => $user_id,
-            'product_id' => $product_id,
-            // 'price' => $price,
-            // 'quantity' => $quantity,
-            'name' => $product,
-            'price' => $product,
-        ]);
-
-        \Session::flash('success', 'Product ' . $name_product . ' berhasil dimasukkan ke dalam keranjang.');
-
-        return redirect('/carts');
-    }
 }

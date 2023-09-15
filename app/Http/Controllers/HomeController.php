@@ -30,16 +30,21 @@ class HomeController extends Controller
      */
     public function userHome()
     {
-        return view('home', ['msg'=>'ini adalah role user']);
+        return redirect()->route('dashboard.index');
     }
 
     public function sellerHome()
     {
-        return view('home', ['msg'=>'ini adalah role seller']);
+        return view('home', ['msg'=>'ini adalah role seller, disini adalah cms Seller']);
     }
 
     public function mitraHome()
     {
-        return view('home', ['msg'=>'ini adalah role mitra']);
+        return view('home', ['msg'=>'ini adalah role mitra, disini adalah cms mitra']);
+    }
+
+    public function AdminHome()
+    {
+        return view('admin.products.index');
     }
 }

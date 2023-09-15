@@ -25,15 +25,15 @@ use App\Http\Controllers\FavoriteController;
 //     return view('welcome');
 // });
 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 //call image storage
 //? Masih Bug//01/09/2023 22:04 Done storage./ path
 
 
 //Route Keranjang
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/carts', [CartController::class, 'index']);
+Route::group(['middleware' => 'auth', 'role:user'] , function () {
+    Route::get('/carts', [CartController::class, 'index'])->name('cart.show');
     Route::get('/carts/remove/{cartID}', [CartController::class, 'destroy']);
     Route::post('/carts', [CartController::class, 'store']);
     Route::post('/carts/update', [CartController::class, 'update']);
@@ -77,7 +77,7 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
 
 // User route // ini nanti buat cms user
 Route::middleware(['auth','role:user'])->group(function () {
-    Route::get('/home', [HomeController::class, 'userHome'])->name('home');
+    Route::get('/', [HomeController::class, 'userHome'])->name('home'); //redirect home to access cms -> next time 
 
 });
 
@@ -92,11 +92,19 @@ Route::middleware(['auth', 'role:mitra'])->group(function () {
 
 });
 
+// Mitra route// ini nanti buat cms mitra
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/home', [HomeController::class, 'AdminHome'])->name('admin.mitra');
+
+});
+
 //favorite
     Route::resource('favorites', 'FavoriteController');
     Route::get('favorite', [FavoriteController::class, 'store'])->name('favorites.add');
 
-//Cart
+//Cart Ajax in aja 
+// Route::delete('carts/remove', [CartController::class, 'remove']);
 
 
 
+Route::delete('carts/remove/{id}', [CartController::class, 'destroy'])->name('carts.remove');

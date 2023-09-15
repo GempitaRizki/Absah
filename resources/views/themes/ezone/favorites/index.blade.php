@@ -1,14 +1,11 @@
 @extends('themes.ezone.layout')
 
 @section('content')
-	<div class="breadcrumb-area pt-205 breadcrumb-padding pb-210" style="background-image: url({{ asset('themes/ezone/assets/img/logo/Absah-logo.png') }})">
+<img src="{{ url('/assets/img/logo/Absah-logo.png') }}" alt="Logo" style="display: block; margin: 40px auto 0; max-width: 150%; height: auto;">
+	<div class="product-details ptb-100 pb-90">
 		<div class="container-fluid">
 			<div class="breadcrumb-content text-center">
 				<h2>My Favorites</h2>
-				<ul>
-					<li><a href="{{ url('/') }}">home</a></li>
-					<li>my favorites</li>
-				</ul>
 			</div>
 		</div>
 	</div>
@@ -36,13 +33,13 @@
 										@php
 											$product = $favorite->product;
 											$product = isset($product->parent) ?: $product;
-											$image = !empty($product->productImages->first()) ? asset('storage/'.$product->productImages->first()->small) : asset('themes/ezone/assets/img/cart/3.jpg')
+											$image = !empty($product->productImages->first()) ? asset('storage/'.$product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg');
 										@endphp
 										<tr>
 											<td class="product-remove">
 												{!! Form::open(['url' => 'favorites/'. $favorite->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
-                                                <button type="submit" style="background-color: transparent; border-color: #FFF;">X</button>
+                                                <button type="submit">X</button>
                                                 {!! Form::close() !!}
 											</td>
 											<td class="product-thumbnail">

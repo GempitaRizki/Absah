@@ -3,7 +3,7 @@
 	<div class="sidebar-categories">
 		<ul>
 			<li><a href="{{ url('profile') }}">Profile</a></li>
-			<li><a href="{{ url('orders') }}">Orders</a></li>
+			<li><a href="{{ url('carts') }}">Cart</a></li>
 			<li><a href="{{ url('favorites') }}">Favorites</a></li>
 		</ul>
 	</div>

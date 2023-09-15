@@ -3,36 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Cart extends Model
 {
+    protected $table = 'cart';
+
     protected $fillable = [
-        'id',
+        'user_id',
         'store_id',
-        'product_id',
-        'price',
-        'quantity',
-        'name',
-        'total_price',
+        'status',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongTo(User::class, 'user_id');
     }
 
     public function store()
     {
-        return $this->belongsTo(Store::class);
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function price()
-    {
-        return $this->belongsTo(Price::class);
+        return $this->belongsTo(Store::class, 'store_id');
     }
 }

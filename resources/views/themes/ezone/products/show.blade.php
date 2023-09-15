@@ -82,7 +82,7 @@
 									{!! Form::number('qty', 1, ['class' => 'cart-plus-minus-box', 'placeholder' => 'qty', 'min' => 1]) !!}
 								</div>
 								<div class="quickview-btn-cart">
-									<button type="submit" class="submit contact-btn btn-hover">Masukan Keranjang</button>
+									<button type="submit" class="submit contact-btn btn-hover">Add to Cart</button>
 								</div>
 								<div class="quickview-btn-wishlist">
 									<a class="btn-hover" href="{{route('favorites.add')}}"><i class="pe-7s-like"></i></a>

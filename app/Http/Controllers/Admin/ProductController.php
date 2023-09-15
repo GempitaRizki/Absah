@@ -42,6 +42,12 @@ class ProductController extends Controller
 		return view('admin.products.index', $this->data);
 	}
 
+	public function showProduct()
+	{
+		$products = Product::all();
+        return view('themes.ezone.carts.index', compact('products'));
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 */
@@ -216,7 +222,7 @@ class ProductController extends Controller
 		$params['price'] = $request->input('price');
 
 
-		$price = Product::updateOrCreate(['product_id' => $id], ['price' => $params['price']]);
+		$price = Product::updateOrCreate(['id' => $id], ['price' => $params['price']]);
 
 		$params['price'] = $price->price;
 

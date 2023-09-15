@@ -6,6 +6,9 @@ use App\Models\Favorite;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection\links;
+use App\Models\Cart;
+use App\Models\CartItem;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -14,79 +17,66 @@ class CartController extends Controller
 		parent::__construct();
 	}
 
-
-	
 	public function index()
 	{
-		$items = \Cart::getContent();
-		$this->data['items'] =  $items;
-
+		$user = auth()->user(); 
+	
+		if ($user) {
+			$items = CartItem::whereHas('cart', function ($query) use ($user) {
+				$query->where('user_id', $user->id);
+			})->get();
+		} else {
+			$items = [
+				
+			];
+		}
+	
 		$favorites = Favorite::all();
-		$this->data['favorites'] = $favorites;
-
-		return $this->load_theme('carts.index', $this->data);
-
-		
+		$products = Product::all();
+		$class = Cart::all();
+	
+		return view('themes.ezone.carts.index', compact('items', 'favorites', 'products', 'class'));
 	}
-
 
 	public function store(Request $request)
-	{
-		$params = $request->except('_token');
+	{ 
+		{
+			$params = $request->except('_token');
 
-		$product = Product::findOrFail($params['product_id']);
-		$slug = $product->slug;
+			$product = Product::findOrFail($params['product_id']);
+			$user_id = auth()->user()->id;
 
-		$attributes = [];
-		if ($product->configurable()) {
-			$product = Product::from('products as p')
-				->whereRaw(
-					"p.parent_id = :parent_product_id
-				and (select pav.text_value 
-						from product_attribute_values pav
-						join attributes a on a.id = pav.attribute_id
-						where a.code = :size_code
-						and pav.product_id = p.id
-						limit 1
-					) = :size_value
-				and (select pav.text_value 
-						from product_attribute_values pav
-						join attributes a on a.id = pav.attribute_id
-						where a.code = :color_code
-						and pav.product_id = p.id
-						limit 1
-					) = :color_value
-					",
-					[
-						'parent_product_id' => $product->id,
-						'size_code' => 'size',
-						'size_value' => $params['size'],
-						'color_code' => 'color',
-						'color_value' => $params['color'],
-					]
-				)->firstOrFail();
+			$slug = $product->slug;
+			$store_id = null;
 
-			$attributes['size'] = $params['size'];
-			$attributes['color'] = $params['color'];
+			$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
+
+			if (!$cart) {
+				$cart = Cart::create([
+					'user_id' => $user_id,
+					'store_id' => $store_id,
+					'status' => 1,
+				]);
+			}
+
+			$existingCartItem = CartItem::where('cart_id', $cart->id)->where('product_id', $product->id)->first();
+			if ($existingCartItem) {
+				$existingCartItem->quantity += $params['qty'];
+				$existingCartItem->save();
+			} else {
+				CartItem::create([
+					'quantity' => $params['qty'],
+					'cart_id' => $cart->id,
+					'product_id' => $product->id,
+					'price' => $product->price
+				]);
+			}
+
+			Session::flash('success', 'Product ' . $product->name . ' has been added to cart');
+			return redirect()->route('cart.show', ['slug' => $slug]);
 		}
-
-		$itemQuantity =  $this->_getItemQuantity(md5($product->id)) + $params['qty'];
-		$this->_checkProductInventory($product, $itemQuantity);
-
-		$item = [
-			'id' => md5($product->id),
-			'name' => $product->name,
-			'price' => $product->price,
-			'quantity' => $params['qty'],
-			'attributes' => $attributes,
-			'associatedModel' => $product,
-		];
-
-		\Cart::add($item);
-
-		\Session::flash('success', 'Product ' . $item['name'] . ' has been added to cart');
-		return redirect('/product/' . $slug);
 	}
+
 
 
 	private function _getItemQuantity($itemId)
@@ -115,7 +105,7 @@ class CartController extends Controller
 
 	private function _getCartItem($cartID)
 	{
-		$items = \Cart::getContent();
+		$items = CartItem::getContent();
 
 		return $items[$cartID];
 	}
@@ -149,8 +139,23 @@ class CartController extends Controller
 
 	public function destroy($id)
 	{
-		\Cart::remove($id);
+		$user = auth()->user();
+	
+		if ($user) {
+			$cartItem = CartItem::where('id', $id)->first();
+	
+			if ($cartItem && $cartItem->cart->user_id === $user->id) {
+				$cartItem->delete();
+	
+				Session::flash('success', 'Item removed from cart successfully.');
+			} else {
+				Session::flash('error', 'Unable to remove item from cart.');
+			}
+		} else {
 
+		}
+	
 		return redirect('carts');
 	}
+
 }
