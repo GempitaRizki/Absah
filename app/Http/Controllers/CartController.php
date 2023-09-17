@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Favorite;
 use Illuminate\Http\Request;
+
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Collection\links;
+use App\Models\ProductInventory;
 use App\Models\Cart;
 use App\Models\CartItem;
-use Illuminate\Support\Facades\Session;
+use App\Models\ProductImage;
 
 class CartController extends Controller
 {
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -19,143 +20,109 @@ class CartController extends Controller
 
 	public function index()
 	{
-		$user = auth()->user(); 
-	
-		if ($user) {
-			$items = CartItem::whereHas('cart', function ($query) use ($user) {
-				$query->where('user_id', $user->id);
-			})->get();
-		} else {
-			$items = [
-				
+		$user_id = auth()->user()->id;
+		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
+
+		if (!$cart) {
+			$cart = new Cart();
+			$cart->user_id = $user_id;
+			$cart->status = 1;
+			$cart->save();
+		}
+
+		$items = CartItem::where('cart_id', $cart->id)->get();
+
+		$cartItems = [];
+		$cartSubtotal = 0;
+
+		$cartItems = [];
+
+		foreach ($items as $item) {
+			$product = Product::findOrFail($item->product_id);
+			$image = ProductImage::where('product_id', $product->id)->first();
+			$total = $product->price * $item->quantity;
+
+			$cartItems[] = [
+				'item_id' => $item->id,
+				'slug' => $product->slug,
+				'image' => $image->path,
+				'product_name' => $product->name,
+				'price' => $product->price,
+				'quantity' => $item->quantity,
+				'total' => $total,
 			];
-		}
-	
-		$favorites = Favorite::all();
-		$products = Product::all();
-		$class = Cart::all();
-	
-		return view('themes.ezone.carts.index', compact('items', 'favorites', 'products', 'class'));
-	}
 
-	public function store(Request $request)
-	{ 
-		{
-			$params = $request->except('_token');
-
-			$product = Product::findOrFail($params['product_id']);
-			$user_id = auth()->user()->id;
-
-			$slug = $product->slug;
-			$store_id = null;
-
-			$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
-
-			if (!$cart) {
-				$cart = Cart::create([
-					'user_id' => $user_id,
-					'store_id' => $store_id,
-					'status' => 1,
-				]);
-			}
-
-			$existingCartItem = CartItem::where('cart_id', $cart->id)->where('product_id', $product->id)->first();
-			if ($existingCartItem) {
-				$existingCartItem->quantity += $params['qty'];
-				$existingCartItem->save();
-			} else {
-				CartItem::create([
-					'quantity' => $params['qty'],
-					'cart_id' => $cart->id,
-					'product_id' => $product->id,
-					'price' => $product->price
-				]);
-			}
-
-			Session::flash('success', 'Product ' . $product->name . ' has been added to cart');
-			return redirect()->route('cart.show', ['slug' => $slug]);
-		}
-	}
-
-
-
-	private function _getItemQuantity($itemId)
-	{
-		$items = \Cart::getContent();
-		$itemQuantity = 0;
-		if ($items) {
-			foreach ($items as $item) {
-				if ($item->id == $itemId) {
-					$itemQuantity = $item->quantity;
-					break;
-				}
-			}
+			$cartSubtotal += $total;
 		}
 
-		return $itemQuantity;
+		$cartTotal = $cartSubtotal;
+
+		return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart'));
 	}
 
-	private function _checkProductInventory($product, $itemQuantity)
+	public function store(Request $request, $id)
 	{
-		if ($product->productInventory->qty < $itemQuantity) {
-			throw new \App\Exceptions\OutOfStockException('The product ' . $product->sku . ' is out of stock');
+		$product = Product::findOrFail($id);
+
+		$user_id = auth()->user()->id;
+
+		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
+
+		if (!$cart) {
+			$cart = new Cart();
+			$cart->user_id = $user_id;
+			$cart->status = 1;
+			$cart->save();
 		}
-	}
 
+		$cartItem = CartItem::where('cart_id', $cart->id)->where('product_id', $id)->first();
 
-	private function _getCartItem($cartID)
-	{
-		$items = CartItem::getContent();
-
-		return $items[$cartID];
-	}
-
-
-	public function update(Request $request)
-	{
-		$params = $request->except('_token');
-
-		if ($items = $params['items']) {
-			foreach ($items as $cartID => $item) {
-				$cartItem = $this->_getCartItem($cartID);
-				$this->_checkProductInventory($cartItem->associatedModel, $item['quantity']);
-
-				\Cart::update(
-					$cartID,
-					[
-						'quantity' => [
-							'relative' => false,
-							'value' => $item['quantity'],
-						],
-					]
-				);
-			}
-
-			\Session::flash('success', 'The cart has been updated');
-			return redirect('carts');
-		}
-	}
-
-
-	public function destroy($id)
-	{
-		$user = auth()->user();
-	
-		if ($user) {
-			$cartItem = CartItem::where('id', $id)->first();
-	
-			if ($cartItem && $cartItem->cart->user_id === $user->id) {
-				$cartItem->delete();
-	
-				Session::flash('success', 'Item removed from cart successfully.');
-			} else {
-				Session::flash('error', 'Unable to remove item from cart.');
-			}
+		if ($cartItem) {
+			$cartItem->quantity++;
+			$cartItem->save();
 		} else {
-
+			$cartItem = new CartItem();
+			$cartItem->cart_id = $cart->id;
+			$cartItem->product_id = $id;
+			$cartItem->quantity = 1;
+			$cartItem->price = $product->price;
+			$cartItem->save();
 		}
-	
-		return redirect('carts');
+
+		return redirect()->back()->with('success', 'Product added to cart successfully!');
 	}
 
+    public function update(Request $request)
+    {
+        if ($request->ajax()) {
+            foreach ($request->input('items') as $itemId => $quantity) {
+                $cartItem = CartItem::find($itemId);
+                if ($cartItem) {
+                    $cartItem->quantity = $quantity;
+                    $cartItem->total = $cartItem->product->price * $quantity;
+                    $cartItem->save();
+                }
+            }
+
+            // Jika diperlukan, Anda dapat mengirim respons JSON kembali ke klien
+            return response()->json(['message' => 'Cart has been updated']);
+        }
+
+        // Jika ini bukan permintaan Ajax, Anda dapat mengembalikan respons lain atau melakukan tindakan yang sesuai
+        return response()->json(['message' => 'Invalid request']);
+    }
+
+
+
+
+
+
+
+
+	public function remove($itemId)
+    {
+        CartItem::destroy($itemId);
+
+        return redirect()->route('cart.show')->with('success', 'Item has been removed from the cart');
+    }
 }

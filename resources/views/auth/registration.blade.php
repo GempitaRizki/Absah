@@ -23,11 +23,11 @@
                             <form method="POST" action="#">
                                 @csrf
                                 <div class="form-group row">
-                                    <label for="name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
+                                    <label for="username" class="col-md-4 col-form-label text-md-end text-start">Name</label>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ Session::get('userData.name') }}">
-                                        @if ($errors->has('name'))
-                                        <span class="text-danger">{{ $errors->first('name') }}</span>
+                                        <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ Session::get('userData.username') }}">
+                                        @if ($errors->has('username'))
+                                        <span class="text-danger">{{ $errors->first('username') }}</span>
                                         @endif
                                     </div>
                                 </div>

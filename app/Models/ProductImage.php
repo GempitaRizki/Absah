@@ -29,10 +29,5 @@ class ProductImage extends Model
     {
         return $this->belongsTo('App\Models\Product');
     }
-
-    public function getImageUrlAttribute()
-    {
-        return asset('storage' . '/' . $this->path);
-    }
     
 }

@@ -17,11 +17,11 @@ class Cart extends Model
 
     public function user()
     {
-        return $this->belongTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function store()
+    public function items()
     {
-        return $this->belongsTo(Store::class, 'store_id');
+        return $this->hasMany(CartItem::class, 'cart_id');
     }
 }

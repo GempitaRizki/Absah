@@ -32,13 +32,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 
 //Route Keranjang
-Route::group(['middleware' => 'auth', 'role:user'] , function () {
+Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/carts', [CartController::class, 'index'])->name('cart.show');
-    Route::get('/carts/remove/{cartID}', [CartController::class, 'destroy']);
-    Route::post('/carts', [CartController::class, 'store']);
-    Route::post('/carts/update', [CartController::class, 'update']);
+    Route::get('/carts/remove/{itemId}', 'CartController@remove')->name('cart.remove');
+    Route::post('/cart/store/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/carts/update', 'CartController@update')->name('cart.update');
+
+
     //menampilkan gambar pertama pada database
     Route::get('image/{id}', [ImageController::class, 'show']);
+    
 });
 
 //product Controller dari user / Di definisikan sebagai ControllersProductController // 05/09/2023 change to UserControllerProduct
@@ -47,15 +50,6 @@ Route::controller(ProductUserController::class)->group(function () {
     Route::get('/product/{slug}', [ProductUserController::class, 'show']);
     Route::get('/products/quick-view/{slug}', [ProductUserController::class, 'quickView']);
 });
-//register option change
-Route::get('/register/user', [UserRegisterController::class, 'FormOneRegistrationUser'])->name('register.buyer');
-Route::get('/seller/register', [SellerRegisterController::class, 'showRegistrationForm'])->name('register.seller');
-
-
-// // livewire 
-// Route::view('/register/user','register')->name('register.buyer');
-// Route::view('/seller/register','livewire.registration-success')->name('register.seller');
-
 
 Auth::routes();
 
@@ -77,7 +71,7 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
 
 // User route // ini nanti buat cms user
 Route::middleware(['auth','role:user'])->group(function () {
-    Route::get('/', [HomeController::class, 'userHome'])->name('home'); //redirect home to access cms -> next time 
+    Route::get('/', [HomeController::class, 'userHome'])->name('home'); 
 
 });
 
@@ -102,9 +96,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('favorites', 'FavoriteController');
     Route::get('favorite', [FavoriteController::class, 'store'])->name('favorites.add');
 
-//Cart Ajax in aja 
-// Route::delete('carts/remove', [CartController::class, 'remove']);
+//register option change
+Route::get('/seller/register', [SellerRegisterController::class, 'showRegistrationForm'])->name('register.seller');
+
+//
+Route::get('/register/user', [UserRegisterController::class, 'FormOneRegistrationUser'])->name('register.buyer');
+Route::post('/register/user', [UserRegisterController::class, 'storageUser']);
 
 
-
+//Cart Delete 
 Route::delete('carts/remove/{id}', [CartController::class, 'destroy'])->name('carts.remove');
