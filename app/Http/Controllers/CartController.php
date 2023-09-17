@@ -63,34 +63,38 @@ class CartController extends Controller
 	public function store(Request $request, $id)
 	{
 		$product = Product::findOrFail($id);
-
+	
 		$user_id = auth()->user()->id;
-
+	
 		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
-
+	
 		if (!$cart) {
 			$cart = new Cart();
 			$cart->user_id = $user_id;
 			$cart->status = 1;
 			$cart->save();
 		}
-
+	
+		$quantity = $request->input('quantity', 1);
+	
 		$cartItem = CartItem::where('cart_id', $cart->id)->where('product_id', $id)->first();
-
+	
 		if ($cartItem) {
-			$cartItem->quantity++;
+			$cartItem->quantity += $quantity;
 			$cartItem->save();
 		} else {
 			$cartItem = new CartItem();
 			$cartItem->cart_id = $cart->id;
 			$cartItem->product_id = $id;
-			$cartItem->quantity = 1;
+			$cartItem->quantity = $quantity;
 			$cartItem->price = $product->price;
 			$cartItem->save();
 		}
-
-		return redirect()->back()->with('success', 'Product added to cart successfully!');
+	
+		return response('Product added to cart successfully!', 200);
 	}
+	
+	
 
     public function update(Request $request)
     {

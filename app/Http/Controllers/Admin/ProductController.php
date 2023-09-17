@@ -151,46 +151,35 @@ class ProductController extends Controller
 		return $result;
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 */
 	public function store(ProductRequest $request)
 	{
 		$params = $request->except('_token');
 		$params['slug'] = Str::slug($params['name']);
 		$params['user_id'] = Auth::user()->id;
 
-		$price = Product::updateOrCreate(['product_id' => 0], ['price' => $params['price']]);
+		$product = DB::transaction(
+			function () use ($params) {
+				$categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
+				$product = Product::create($params);
+				$product->categories()->sync($categoryIds);
 
-		$params['price'] = $price->price;
+				if ($params['type'] == 'configurable') {
+					$this->_generateProductVariants($product, $params);
+				}
 
-		$product = DB::transaction(function () use ($params) {
-			$categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
-			$product = Product::create($params);
-			$product->categories()->sync($params['category_ids']);
-
-			if ($params['type'] == 'configurable') {
-				$this->generateProductVariants($product, $params);
+				return $product;
 			}
-
-			return $product;
-		});
+		);
 
 		if ($product) {
-			Session::flash('success', 'Product has been created');
+			Session::flash('success', 'Product has been saved');
 		} else {
-			Session::flash('error', 'Product could not be created');
+			Session::flash('error', 'Product could not be saved');
 		}
-		return redirect('admin/products/' . $product->id . '/edit');
+
+		return redirect('admin/products/'. $product->id .'/edit/');
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
-
-	/**
-	 * Show the form for editing the specified resource.
-	 */
 	public function edit(string $id)
 	{
 		if (empty($id)) {

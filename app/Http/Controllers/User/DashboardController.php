@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Price;
 use Illuminate\Http\Request;
+use App\Models\ProductImage;
 
 class DashboardController extends Controller
 {
@@ -20,10 +21,14 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $categories = Category::all()->where('parent_id', 0);
-        $products = Product::all();
+        $categories = Category::where('parent_id', 0)->get(); 
+        $products = Product::all(); 
+    
+        $productImages = ProductImage::whereIn('product_id', $products->pluck('id'))->get();
         
-        return view('dashboard.index', compact('categories', 'products'));
-    }  
+        return view('dashboard.index', compact('categories', 'products', 'productImages'));
+    }
+    
+     
 
 }

@@ -45,7 +45,7 @@
 				</div>
 				<div class="furniture-wishlist">
 					<ul>
-						<li><a href="{{ url('favorites') }}"><i class="ti-heart"></i> Favorites</a></li>
+						<li><a href="{{ route('favorites.index') }}"><i class="ti-heart"></i> Favorites</a></li>
 					</ul>
 				</div>
 			</div>

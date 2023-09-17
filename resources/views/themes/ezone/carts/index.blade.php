@@ -51,6 +51,7 @@
                                             </td>
                                             <td class="product-price-cart"><span
                                                     class="amount">{{ number_format($cartItem['price']) }}</span></td>
+                                            <input type="hidden" class="product_id" value="{{ $cartItem['item_id'] }}" >
                                             <td class="product-quantity">
                                                 <input type="number" name="items[{{ $cartItem['item_id'] }}][quantity]"
                                                     value="{{ $cartItem['quantity'] }}" min="1" required>

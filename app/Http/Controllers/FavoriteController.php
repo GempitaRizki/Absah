@@ -31,29 +31,29 @@ class FavoriteController extends Controller
 	
 	public function store(Request $request)
 	{
-		$request->validate(
-			[
-				'product_slug' => 'required',
-			]
-		);
-
-		$product = Product::where('slug', $request->get('product_slug'))->firstOrFail();
-		
-		$favorite = Favorite::where('user_id', \Auth::user()->id)
+		$request->validate([
+			'product_slug' => 'required|string', 
+		]);
+	
+		$product = Product::where('slug', $request->product_slug)->first();
+			if (!$product) {
+			return response('Product not found', 404);
+		}
+	
+		$existingFavorite = Favorite::where('user_id', \Auth::user()->id)
 			->where('product_id', $product->id)
 			->first();
-		if ($favorite) {
-			return response('You have added this product to your favorite before', 422);
+	
+		if ($existingFavorite) {
+			return response('You have added this product to your favorites before', 422);
 		}
-
-		Favorite::create(
-			[
-				'user_id' => \Auth::user()->id,
-				'product_id' => $product->id,
-			]
-		);
-
-		return response('The product has been added to your favorite', 200);
+	
+		Favorite::create([
+			'user_id' => \Auth::user()->id,
+			'product_id' => $product->id,
+		]);
+	
+		return response('Product has been added to the favorites menu!', 200);
 	}
 
 	

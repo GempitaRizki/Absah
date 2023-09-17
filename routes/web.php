@@ -93,8 +93,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 //favorite
-    Route::resource('favorites', 'FavoriteController');
-    Route::get('favorite', [FavoriteController::class, 'store'])->name('favorites.add');
+Route::post('favorites/add', [FavoriteController::class, 'store'])->name('favorites.add');
+Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+
+
 
 //register option change
 Route::get('/seller/register', [SellerRegisterController::class, 'showRegistrationForm'])->name('register.seller');
