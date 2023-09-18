@@ -9,6 +9,7 @@ use App\Models\ProductInventory;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductImage;
+use App\Models\User;
 
 class CartController extends Controller
 {
@@ -22,26 +23,24 @@ class CartController extends Controller
 	{
 		$user_id = auth()->user()->id;
 		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
-
+	
 		if (!$cart) {
 			$cart = new Cart();
 			$cart->user_id = $user_id;
 			$cart->status = 1;
 			$cart->save();
 		}
-
+	
 		$items = CartItem::where('cart_id', $cart->id)->get();
-
+	
 		$cartItems = [];
 		$cartSubtotal = 0;
-
-		$cartItems = [];
-
+	
 		foreach ($items as $item) {
 			$product = Product::findOrFail($item->product_id);
 			$image = ProductImage::where('product_id', $product->id)->first();
 			$total = $product->price * $item->quantity;
-
+	
 			$cartItems[] = [
 				'item_id' => $item->id,
 				'slug' => $product->slug,
@@ -51,82 +50,122 @@ class CartController extends Controller
 				'quantity' => $item->quantity,
 				'total' => $total,
 			];
-
+	
 			$cartSubtotal += $total;
 		}
-
+	
 		$cartTotal = $cartSubtotal;
-
-		return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart'));
+	
+		$cartTotalQuantity = 0;
+		foreach ($items as $item) {
+			$cartTotalQuantity += $item->quantity;
+		}
+	
+		return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
 	}
+	
 
-	public function store(Request $request, $id)
+	public function store(Request $request, $product)
 	{
-		$product = Product::findOrFail($id);
-	
+		$product = Product::findOrFail($product);
+
+		$request->validate([
+			'qty' => 'required|integer|min:1',
+		]);
+
 		$user_id = auth()->user()->id;
-	
+
 		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
-	
+
 		if (!$cart) {
 			$cart = new Cart();
 			$cart->user_id = $user_id;
 			$cart->status = 1;
 			$cart->save();
 		}
-	
-		$quantity = $request->input('quantity', 1);
-	
-		$cartItem = CartItem::where('cart_id', $cart->id)->where('product_id', $id)->first();
-	
+
+		$cartItem = CartItem::where('cart_id', $cart->id)
+			->where('product_id', $product->id)
+			->first();
+
 		if ($cartItem) {
-			$cartItem->quantity += $quantity;
+			$cartItem->quantity += $request->input('qty');
 			$cartItem->save();
 		} else {
 			$cartItem = new CartItem();
 			$cartItem->cart_id = $cart->id;
-			$cartItem->product_id = $id;
-			$cartItem->quantity = $quantity;
-			$cartItem->price = $product->price;
+			$cartItem->product_id = $product->id;
+			$cartItem->quantity = $request->input('qty');
 			$cartItem->save();
 		}
-	
-		return response('Product added to cart successfully!', 200);
+
+
+		return redirect()->route('cart.show')
+			->with('success', 'Product added to cart successfully!');
 	}
-	
-	
 
-    public function update(Request $request)
+	public function update(Request $request)
+	{
+		$items = $request->input('items');
+
+		if (!empty($items)) {
+			foreach ($items as $itemId => $data) {
+				$quantity = $data['quantity'];
+				$cartItem = CartItem::find($itemId);
+
+				if ($cartItem && $quantity > 0) {
+					$cartItem->quantity = $quantity;
+					$cartItem->save();
+				}
+			}
+		}
+
+		return redirect()->route('cart.show')->with('success', 'Cart updated successfully');
+	}
+
+	public function destroy($itemId)
+	{
+		CartItem::destroy($itemId);
+
+		return redirect()->route('cart.show')->with('success', 'Item has been removed from the cart');
+	}
+
+	public function show()
+	{
+		$cartItems = Cart::getContent();
+		$cartData = [];
+
+		foreach ($cartItems as $item) {
+			$product = isset($item->associatedModel->parent) ? $item->associatedModel->parent : $item->associatedModel;
+			$image = !empty($product->productImages->first()) ? asset('storage/' . $product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg');
+			$total = $item->price * $item->quantity;
+
+			$cartData[] = [
+				'image' => $image,
+				'product_name' => $item->name,
+				'price' => $item->price,
+				'quantity' => $item->quantity,
+				'total' => $total,
+			];
+		}
+
+        $cartTotalQuantity = $this->getCartTotalQuantity();
+		$cartSubtotal = Cart::getSubTotal();
+
+        return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
+	}
+
+	private function getCartTotalQuantity()
     {
-        if ($request->ajax()) {
-            foreach ($request->input('items') as $itemId => $quantity) {
-                $cartItem = CartItem::find($itemId);
-                if ($cartItem) {
-                    $cartItem->quantity = $quantity;
-                    $cartItem->total = $cartItem->product->price * $quantity;
-                    $cartItem->save();
-                }
-            }
+        $cart = Cart::getContent();
+        $totalQuantity = 0;
 
-            // Jika diperlukan, Anda dapat mengirim respons JSON kembali ke klien
-            return response()->json(['message' => 'Cart has been updated']);
+        if ($cart) {
+            foreach ($cart as $item) {
+                $totalQuantity += $item->quantity;
+            }
         }
 
-        // Jika ini bukan permintaan Ajax, Anda dapat mengembalikan respons lain atau melakukan tindakan yang sesuai
-        return response()->json(['message' => 'Invalid request']);
-    }
-
-
-
-
-
-
-
-
-	public function remove($itemId)
-    {
-        CartItem::destroy($itemId);
-
-        return redirect()->route('cart.show')->with('success', 'Item has been removed from the cart');
+        return $totalQuantity;
     }
 }

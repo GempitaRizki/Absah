@@ -1,4 +1,4 @@
-    // Update Cart Data
+// Update Cart Data
     $(document).ready(function () {
 
         $('.changeQuantity').click(function (e) {

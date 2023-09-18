@@ -18,31 +18,21 @@ use App\Http\Controllers\Auth\MenuRegisterController;
 use App\Http\Controllers\Auth\SellerRegisterController;
 use App\Http\Controllers\FavoriteController;
 
-//Jika ingin merubah controller yang di import dapat untuk melakukan perintah
-//php artisan route:cache , php artisan route:clear dan composer dumpautoload -o 
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
-//call image storage
-//? Masih Bug//01/09/2023 22:04 Done storage./ path
-
 
 //Route Keranjang
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/carts', [CartController::class, 'index'])->name('cart.show');
-    Route::get('/carts/remove/{itemId}', 'CartController@remove')->name('cart.remove');
+    Route::get('/carts/remove/{itemId}', [CartController::class, 'destroy'])->name('cart.remove');
     Route::post('/cart/store/{product}', [CartController::class, 'store'])->name('cart.store');
-    Route::post('/carts/update', 'CartController@update')->name('cart.update');
-
-
-    //menampilkan gambar pertama pada database
-    Route::get('image/{id}', [ImageController::class, 'show']);
-    
+    Route::post('/carts', [CartController::class, 'update'])->name('cart.update');
+    Route::post('update-to-cart',[CartController::class, 'updatetocart']);
+    Route::get('/mini-cart', [CartController::class, 'show'])->name('mini_cart.show');
 });
+
+//menampilkan gambar pertama pada database
+Route::get('image/{id}', [ImageController::class, 'show']);
+
 
 //product Controller dari user / Di definisikan sebagai ControllersProductController // 05/09/2023 change to UserControllerProduct
 Route::controller(ProductUserController::class)->group(function () {
@@ -58,21 +48,20 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
     Route::resource('attributes', AttributeController::class);
-    Route::resource('roles', RoleController::class);
+    // Route::resource('roles', RoleController::class);
     Route::resource('user', UserController::class);
-    
+
     // Route Image
     Route::get('products/{productID}/images', [ProductController::class, 'images']);
     Route::get('products/{productID}/add-image', [ProductController::class, 'add_image']);
     Route::post('products/images/{productID}', [ProductController::class, 'upload_image']);
-    Route::delete('products/images/{imageID}', [ProductController::class, 'remove_image']); 
+    Route::delete('products/images/{imageID}', [ProductController::class, 'remove_image']);
 });
 
 
 // User route // ini nanti buat cms user
-Route::middleware(['auth','role:user'])->group(function () {
-    Route::get('/', [HomeController::class, 'userHome'])->name('home'); 
-
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/', [HomeController::class, 'userHome'])->name('home');
 });
 
 // Seller route// ini nanti buat cms seller
@@ -83,20 +72,14 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
 // Mitra route// ini nanti buat cms mitra
 Route::middleware(['auth', 'role:mitra'])->group(function () {
     Route::get('/mitra/home', [HomeController::class, 'mitraHome'])->name('home.mitra');
-
 });
 
 // Mitra route// ini nanti buat cms mitra
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, 'AdminHome'])->name('admin.mitra');
-
 });
-
-//favorite
-Route::post('favorites/add', [FavoriteController::class, 'store'])->name('favorites.add');
-Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
-
-
+//favorite resource
+Route::resource('favorites', FavoriteController::class);
 
 //register option change
 Route::get('/seller/register', [SellerRegisterController::class, 'showRegistrationForm'])->name('register.seller');
@@ -104,7 +87,3 @@ Route::get('/seller/register', [SellerRegisterController::class, 'showRegistrati
 //
 Route::get('/register/user', [UserRegisterController::class, 'FormOneRegistrationUser'])->name('register.buyer');
 Route::post('/register/user', [UserRegisterController::class, 'storageUser']);
-
-
-//Cart Delete 
-Route::delete('carts/remove/{id}', [CartController::class, 'destroy'])->name('carts.remove');

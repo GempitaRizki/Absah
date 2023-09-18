@@ -3,7 +3,7 @@
 @section('content')
     <img src="{{ url('/assets/img/logo/Absah-logo.png') }}" alt="Logo"
         style="display: block; margin: 40px auto 0; max-width: 100%; height: auto;">
-    <script type="module" src="{{ asset('js/cart.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <div class="container">
         <div class="breadcrumb-content text-center">
@@ -20,8 +20,8 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h1 class="cart-heading">Cart</h1>
                     @if (!empty($cartItems))
-                        {!! Form::open(['url' => 'carts/update']) !!}
-                        <div class="table-content table-responsive">
+                    {!! Form::open(['route' => 'cart.update', 'method' => 'POST']) !!}
+                    <div class="table-content table-responsive">
                             <table>
                                 <thead>
                                     <tr>
@@ -34,8 +34,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($cartItems as $cartItem)
-                                        <tr>
+                                    @forelse ($cartItems as $cartItem)
+                                        <tr class="cartpage">
                                             <td class="product-remove">
                                                 <a href="{{ route('cart.remove', $cartItem['item_id']) }}" class="delete"><i
                                                         class="pe-7s-close"></i></a>
@@ -51,17 +51,30 @@
                                             </td>
                                             <td class="product-price-cart"><span
                                                     class="amount">{{ number_format($cartItem['price']) }}</span></td>
-                                            <input type="hidden" class="product_id" value="{{ $cartItem['item_id'] }}" >
                                             <td class="product-quantity">
                                                 <input type="number" name="items[{{ $cartItem['item_id'] }}][quantity]"
                                                     value="{{ $cartItem['quantity'] }}" min="1" required>
                                             </td>
                                             <td class="product-subtotal">{{ number_format($cartItem['total']) }}</td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="6">Cart is Empty!</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="coupon-all">
+                                    <div class="coupon2">
+                                        <input class="button" name="update_cart" value="Update cart" type="submit">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
                         <div class="row">
                             <div class="col-md-5 ml-auto">
                                 <div class="cart-page-total">
@@ -74,7 +87,6 @@
                                 </div>
                             </div>
                         </div>
-                        {!! Form::close() !!}
                     @else
                         <div class="empty-cart">
                             <p>Your cart is currently empty.</p>
@@ -85,5 +97,5 @@
             </div>
         </div>
     </div>
-    <!-- shopping-cart-area end -->
+
 @endsection

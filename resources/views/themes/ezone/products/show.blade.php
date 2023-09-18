@@ -91,27 +91,17 @@
                             </div>
                         @endif
                         <div class="quickview-plus-minus">
-                            <div class="cart-plus-minus">
-                                {!! Form::number('qty', 1, [
-                                    'class' => 'cart-plus-minus-box',
-                                    'placeholder' => 'qty',
-                                    'min' => 1,
-                                    'required' => true,
-                                ]) !!}
+                            <div class="quickview-plus-minus">
+                                {!! Form::number('qty', 1, ['class' => 'cart-plus-minus', 'placeholder' => 'qty']) !!}
                             </div>
                             <div class="quickview-btn-cart">
-                                <button type="button" class="submit contact-btn btn-hover add-to-cart"
-                                    data-product-slug="{{ $product->slug }}" data-quantity="1"
-                                    data-product-name="{{ $product->name }}">Add to Cart</button>
+                                <button type="submit" class="submit contact-btn btn-hover">add to cart</button>
                             </div>
                             <div class="quickview-btn-wishlist">
-                                <a class="btn-hover" href="{{ route('favorites.add', ['product' => $product->id]) }}"><i
-                                        class="pe-7s-like"></i></a>
+                                <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
                             </div>
                         </div>
-                        <div id="cart-success-popup" style="display: none;">
-                         <span id="cart-success-product-name"></span> Has been added to your cart!
-                        </div>
+
                         {!! Form::close() !!}
                         <div class="container-fluid">
                             <div class="product-share" style="margin-top:20%">
@@ -167,73 +157,4 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).on('click', '.add-to-favorites', function(e) {
-            e.preventDefault();
-
-            var productSlug = $(this).data('product-slug');
-
-            $.ajax({
-                url: '{{ route('favorites.add') }}',
-                method: 'POST',
-                data: {
-                    product_slug: productSlug
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    displaySuccessMessage('The product has been added to your favorites');
-                },
-                error: function(xhr, status, error) {
-                    displayErrorMessage('You have added this product to your favorites before');
-                }
-            });
-        });
-
-        function displaySuccessMessage(message) {
-            alert(message);
-        }
-
-        function displayErrorMessage(message) {
-            alert(message);
-        }
-    </script>
-    <script>
-        $(document).on('click', '.add-to-cart', function(e) {
-            e.preventDefault();
-    
-            var productSlug = $(this).data('product-slug');
-            var quantity = $(this).data('quantity');
-            var productName = $(this).data('product-name');
-    
-            $.ajax({
-                url: '{{ route('cart.store', ['product' => $product->id]) }}',
-                method: 'POST',
-                data: {
-                    product_slug: productSlug,
-                    quantity: quantity
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    displaySuccessPopup(productName);
-                },
-                error: function(xhr, status, error) {
-                    alert(xhr.responseJSON.message);
-                }
-            });
-        });
-    
-        function displaySuccessPopup(productName) {
-            $('#cart-success-product-name').text(productName);
-            $('#cart-success-popup').show();
-    
-        }
-    </script>
-    
 @endsection

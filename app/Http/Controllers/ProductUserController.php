@@ -8,6 +8,8 @@ use App\Models\ProductAttributeValue;
 use App\Models\Category;
 use App\Http\Requests\ProductRequest;
 use App\Models\Cart;
+use App\Models\ProductImage;
+use App\Models\CartItem;
 use Str;
 
 class ProductUserController extends Controller
@@ -76,6 +78,7 @@ class ProductUserController extends Controller
     public function show($slug)
     {
         $product = Product::active()->where('slug', $slug)->first();
+        $productImages = ProductImage::whereIn('product_id', $product->pluck('id'))->get();
 
         if (!$product) {
             return redirect('products');
@@ -87,7 +90,9 @@ class ProductUserController extends Controller
         }
 
         $this->data['product'] = $product;
+        $this->data['productImages'] = $productImages;
 
         return $this->load_theme('products.show', $this->data);
     }
+
 }

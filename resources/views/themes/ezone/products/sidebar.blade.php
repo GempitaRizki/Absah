@@ -6,8 +6,8 @@
 				<div id="slider-range"></div>
 				<div class="price_slider_amount">
 					<div class="label-input">
-						<label>Harga : </label>
-						<input type="text" id="amount" name="price" placeholder="Masukan range harga" style="width:170px" />
+						<label>Price : </label>
+						<input type="text" id="amount" name="price" placeholder="Insert the range price" style="width:170px" />
 						<input type="hidden" id="productMinPrice" value="{{ $minPrice }}" />
 						<input type="hidden" id="productMaxPrice" value="{{ $maxPrice }}" />
 					</div>

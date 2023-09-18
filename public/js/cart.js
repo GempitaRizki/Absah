@@ -1,12 +1,11 @@
-import 'jquery'
-import $ from 'jquery'
+import $ from 'jquery';
 
-jQuery(document).ready(function() {
-    jQuery('input[name^="items["]').on('input', function() {
-        var itemId = jQuery(this).data('item-id');
-        var quantity = jQuery(this).val();
+$(document).ready(function() {
+    $('input[name^="items["]').on('input', function() {
+        var itemId = $(this).data('item-id');
+        var quantity = $(this).val();
         
-        jQuery.ajax({
+        $.ajax({
             url: '/api/carts/update', 
             method: 'POST',
             data: {
