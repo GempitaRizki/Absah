@@ -8,8 +8,8 @@ use App\Models\ProductImage;
 class ImageController extends Controller
 {
     public function show($id)
-{
-    $image = ProductImage::findOrFail($id);
-    return response()->json(['image_url' => $image->image_url]);
-}
+    {
+        $image = ProductImage::findOrFail($id);
+        return response()->json(['image_url' => $image->image_url]);
+    }
 }

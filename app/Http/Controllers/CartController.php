@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -23,24 +24,24 @@ class CartController extends Controller
 	{
 		$user_id = auth()->user()->id;
 		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
-	
+
 		if (!$cart) {
 			$cart = new Cart();
 			$cart->user_id = $user_id;
 			$cart->status = 1;
 			$cart->save();
 		}
-	
+
 		$items = CartItem::where('cart_id', $cart->id)->get();
-	
+
 		$cartItems = [];
 		$cartSubtotal = 0;
-	
+
 		foreach ($items as $item) {
 			$product = Product::findOrFail($item->product_id);
 			$image = ProductImage::where('product_id', $product->id)->first();
 			$total = $product->price * $item->quantity;
-	
+
 			$cartItems[] = [
 				'item_id' => $item->id,
 				'slug' => $product->slug,
@@ -50,20 +51,21 @@ class CartController extends Controller
 				'quantity' => $item->quantity,
 				'total' => $total,
 			];
-	
+
 			$cartSubtotal += $total;
 		}
-	
-		$cartTotal = $cartSubtotal;
-	
+
+
 		$cartTotalQuantity = 0;
 		foreach ($items as $item) {
 			$cartTotalQuantity += $item->quantity;
 		}
-	
+		$cartTotal = $cartSubtotal;
+
+
 		return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
 	}
-	
+
 
 	public function store(Request $request, $product)
 	{
@@ -99,9 +101,7 @@ class CartController extends Controller
 			$cartItem->save();
 		}
 
-
-		return redirect()->route('cart.show')
-			->with('success', 'Product added to cart successfully!');
+		return redirect()->back()->with('message', 'Has Been Save !');
 	}
 
 	public function update(Request $request)
@@ -123,49 +123,39 @@ class CartController extends Controller
 		return redirect()->route('cart.show')->with('success', 'Cart updated successfully');
 	}
 
+
 	public function destroy($itemId)
-	{
-		CartItem::destroy($itemId);
-
-		return redirect()->route('cart.show')->with('success', 'Item has been removed from the cart');
-	}
-
-	public function show()
-	{
-		$cartItems = Cart::getContent();
-		$cartData = [];
-
-		foreach ($cartItems as $item) {
-			$product = isset($item->associatedModel->parent) ? $item->associatedModel->parent : $item->associatedModel;
-			$image = !empty($product->productImages->first()) ? asset('storage/' . $product->productImages->first()->path) : asset('themes/ezone/assets/img/cart/3.jpg');
-			$total = $item->price * $item->quantity;
-
-			$cartData[] = [
-				'image' => $image,
-				'product_name' => $item->name,
-				'price' => $item->price,
-				'quantity' => $item->quantity,
-				'total' => $total,
-			];
-		}
-
-        $cartTotalQuantity = $this->getCartTotalQuantity();
-		$cartSubtotal = Cart::getSubTotal();
-
-        return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
-	}
-
-	private function getCartTotalQuantity()
     {
-        $cart = Cart::getContent();
-        $totalQuantity = 0;
+        CartItem::destroy($itemId);
 
-        if ($cart) {
-            foreach ($cart as $item) {
-                $totalQuantity += $item->quantity;
-            }
+        $user_id = auth()->user()->id;
+        $cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
+        $items = CartItem::where('cart_id', $cart->id)->get();
+
+        $remainingItemsCount = $items->count();
+
+        if ($remainingItemsCount === 0) {
+            $cart->status = 0;
+            $cart->save();
         }
 
-        return $totalQuantity;
+        return redirect()->route('cart.show')->with('success', 'Item has been removed from the cart');
+    }
+
+    public function destroyAll()
+    {
+        $user_id = auth()->user()->id;
+        $cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
+
+        if ($cart) {
+            CartItem::where('cart_id', $cart->id)->delete();
+
+            $cart->status = 0;
+            $cart->save();
+        }
+
+        return redirect()->route('cart.show')->with('success', 'All items have been removed from the cart');
     }
 }
+	
+

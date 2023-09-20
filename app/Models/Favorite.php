@@ -9,6 +9,7 @@ class Favorite extends Model
 {
 	protected $guarded = [
 		'id',
+		'prduct_id',
 		'created_at',
 		'updated_at',
 	];

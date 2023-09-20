@@ -16,7 +16,6 @@ use App\Models\AttributeOption;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductInventory;
 use Illuminate\Support\Facades\Session;
-use App\Models\Price;
 
 use Str;
 use Auth;
@@ -28,8 +27,8 @@ class ProductController extends Controller
 	public function __construct()
 	{
 
-        $this->data['currentAdminMenu'] = 'catalog';
-        $this->data['currentAdminSubMenu'] = 'product';
+		$this->data['currentAdminMenu'] = 'catalog';
+		$this->data['currentAdminSubMenu'] = 'product';
 
 		$this->data['statuses'] = Product::statuses();
 		$this->data['types'] = Product::types();
@@ -42,12 +41,6 @@ class ProductController extends Controller
 		return view('admin.products.index', $this->data);
 	}
 
-	public function showProduct()
-	{
-		$products = Product::all();
-        return view('themes.ezone.carts.index', compact('products'));
-	}
-
 	/**
 	 * Show the form for creating a new resource.
 	 */
@@ -58,7 +51,7 @@ class ProductController extends Controller
 
 		$this->data['categories'] = $categories->toArray();
 		$this->data['product'] = null;
-		$this->data['productID'] = null;
+		$this->data['productID'] = 0;
 		$this->data['categoryIDs'] = [];
 		$this->data['configurableAttributes'] = $configurableAttributes;
 
@@ -151,35 +144,42 @@ class ProductController extends Controller
 		return $result;
 	}
 
+	/**
+	 * Store a newly created resource in storage.
+	 */
 	public function store(ProductRequest $request)
 	{
 		$params = $request->except('_token');
 		$params['slug'] = Str::slug($params['name']);
 		$params['user_id'] = Auth::user()->id;
 
-		$product = DB::transaction(
-			function () use ($params) {
-				$categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
-				$product = Product::create($params);
-				$product->categories()->sync($categoryIds);
+		$product = DB::transaction(function () use ($params) {
+			$categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
+			$product = Product::create($params);
+			$product->categories()->sync($params['category_ids']);
 
-				if ($params['type'] == 'configurable') {
-					$this->_generateProductVariants($product, $params);
-				}
-
-				return $product;
+			if ($params['type'] == 'configurable') {
+				$this->generateProductVariants($product, $params);
 			}
-		);
+
+			return $product;
+		});
 
 		if ($product) {
-			Session::flash('success', 'Product has been saved');
+			Session::flash('success', 'Product has been created');
 		} else {
-			Session::flash('error', 'Product could not be saved');
+			Session::flash('error', 'Product could not be created');
 		}
-
-		return redirect('admin/products/'. $product->id .'/edit/');
+		return redirect('admin/products/' . $product->id . '/edit');
 	}
 
+	/**
+	 * Display the specified resource.
+	 */
+
+	/**
+	 * Show the form for editing the specified resource.
+	 */
 	public function edit(string $id)
 	{
 		if (empty($id)) {
@@ -207,14 +207,6 @@ class ProductController extends Controller
 	{
 		$params = $request->except('_token');
 		$params['slug'] = Str::slug($params['name']);
-
-		$params['price'] = $request->input('price');
-
-
-		$price = Product::updateOrCreate(['id' => $id], ['price' => $params['price']]);
-
-		$params['price'] = $price->price;
-
 
 		$product = Product::findOrFail($id);
 		$saved = false;
@@ -304,32 +296,32 @@ class ProductController extends Controller
 	}
 
 	public function upload_image(ProductImageRequest $request, $id)
-{
-    $product = Product::findOrFail($id);
+	{
+		$product = Product::findOrFail($id);
 
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $name = $product->slug . '_' . time();
-        $fileName = $name . '.' . $image->getClientOriginalExtension();
+		if ($request->hasFile('image')) {
+			$image = $request->file('image');
+			$name = $product->slug . '_' . time();
+			$fileName = $name . '.' . $image->getClientOriginalExtension();
 
-        $folder = ProductImage::UPLOAD_DIR; 
+			$folder = ProductImage::UPLOAD_DIR;
 
-        $filePath = $image->storeAs($folder, $fileName, 'public');
+			$filePath = $image->storeAs($folder, $fileName, 'public');
 
-        $params = [
-            'product_id' => $product->id,
-            'path' => $filePath,
-        ];
+			$params = [
+				'product_id' => $product->id,
+				'path' => $filePath,
+			];
 
-        if (ProductImage::create($params)) {
-            Session::flash('success', 'Image has been uploaded');
-        } else {
-            Session::flash('error', 'Image could not be uploaded');
-        }
+			if (ProductImage::create($params)) {
+				Session::flash('success', 'Image has been uploaded');
+			} else {
+				Session::flash('error', 'Image could not be uploaded');
+			}
 
-        return redirect('admin/products/' . $id . '/images');
-    }
-}
+			return redirect('admin/products/' . $id . '/images');
+		}
+	}
 
 
 

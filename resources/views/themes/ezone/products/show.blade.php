@@ -95,10 +95,10 @@
                                 {!! Form::number('qty', 1, ['class' => 'cart-plus-minus', 'placeholder' => 'qty']) !!}
                             </div>
                             <div class="quickview-btn-cart">
-                                <button type="submit" class="submit contact-btn btn-hover">add to cart</button>
+                                <button type="submit" class="submit contact-btn btn-hover">Add to Cart</button>
                             </div>
                             <div class="quickview-btn-wishlist">
-                                <a class="btn-hover" href="#"><i class="pe-7s-like"></i></a>
+                                <a class="btn-hover" typehref="{{Route('favorites.store')}}"><i class="pe-7s-like"></i></a>
                             </div>
                         </div>
 

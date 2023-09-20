@@ -4,7 +4,6 @@
     <img src="{{ url('/assets/img/logo/Absah-logo.png') }}" alt="Logo"
         style="display: block; margin: 40px auto 0; max-width: 100%; height: auto;">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <div class="container">
         <div class="breadcrumb-content text-center">
             <h2>Keranjang</h2>
@@ -13,20 +12,19 @@
             </ul>
         </div>
     </div>
-    <!-- shopping-cart-area start -->
     <div class="cart-main-area pt-95 pb-100">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h1 class="cart-heading">Cart</h1>
                     @if (!empty($cartItems))
-                    {!! Form::open(['route' => 'cart.update', 'method' => 'POST']) !!}
-                    <div class="table-content table-responsive">
+                        {!! Form::open(['route' => 'cart.update', 'method' => 'POST']) !!}
+                        <div class="table-content table-responsive">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>remove</th>
-                                        <th>images</th>
+                                        <th>Remove</th>
+                                        <th>Images</th>
                                         <th>Product</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
@@ -38,12 +36,11 @@
                                         <tr class="cartpage">
                                             <td class="product-remove">
                                                 <a href="{{ route('cart.remove', $cartItem['item_id']) }}" class="delete"><i
-                                                        class="pe-7s-close"></i></a>
+                                                        class="pe-7s-close"></i>
                                             </td>
                                             <td class="product-thumbnail">
                                                 <img src="{{ asset('storage/' . $cartItem['image']) }}"
                                                     alt="{{ $cartItem['product_name'] }}" style="width:100px">
-                                                </a>
                                             </td>
 
                                             <td class="product-name"><a
@@ -67,9 +64,17 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="coupon-all">
+                                <div class="col-md-5 ml-auto">
                                     <div class="coupon2">
-                                        <input class="button" name="update_cart" value="Update cart" type="submit">
+                                        <input class="btn btn-success" name="update_cart" value="Update cart"
+                                            type="submit">
+                                    </div>
+                                    <div class="coupon-all">
+                                        <div class="coupon2">
+                                            <a class="btn btn-warning" href='{{ url('carts/remove') }}'
+                                                wire:click.prevent="destroyAll()" style="background-color: red">Clear
+                                                Shopping Cart</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -97,5 +102,4 @@
             </div>
         </div>
     </div>
-
 @endsection

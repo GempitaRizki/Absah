@@ -37,7 +37,7 @@
 				</div>
 				<div class="furniture-search">
 					<form action="{{ url('products') }}" method="GET">
-						<input placeholder="Cari Kebutuhan Sekolah..." type="text" name="q" value="{{ isset($q) ? $q : null }}">
+						<input placeholder="Search something..." type="text" name="q" value="{{ isset($q) ? $q : null }}">
                         <button>
 							<i class="ti-search"></i>
 						</button>

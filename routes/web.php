@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductUserController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\UserRegisterController;
@@ -26,8 +25,10 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/carts/remove/{itemId}', [CartController::class, 'destroy'])->name('cart.remove');
     Route::post('/cart/store/{product}', [CartController::class, 'store'])->name('cart.store');
     Route::post('/carts', [CartController::class, 'update'])->name('cart.update');
-    Route::post('update-to-cart',[CartController::class, 'updatetocart']);
+    Route::post('update-to-cart',[CartController::class, 'updatetocart'])->name('updatetocart');
     Route::get('/mini-cart', [CartController::class, 'show'])->name('mini_cart.show');
+    // Route::get('/cart/destroy-all', [CartController::class, 'destroyAll'])->name('cart.destroy-all');
+    Route::get('carts/remove', [CartController::class, 'destroyAll'])->name('cart.destroy-all');
 });
 
 //menampilkan gambar pertama pada database
@@ -79,8 +80,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, 'AdminHome'])->name('admin.mitra');
 });
 //favorite resource
-Route::resource('favorites', FavoriteController::class);
-
+    Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('favorites', [FavoriteController::class, 'store'])->name('favorites.store');
 //register option change
 Route::get('/seller/register', [SellerRegisterController::class, 'showRegistrationForm'])->name('register.seller');
 

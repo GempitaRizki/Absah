@@ -5,14 +5,12 @@
             <span class="shop-count-furniture green">{{ $cartTotalQuantity }}</span>
         @endif
     </a>
-    @if (!empty($cartItems))
         <ul class="cart-dropdown">
+            @if (!empty($cartItems))
             @foreach ($cartItems as $item)
                 <li class="single-product-cart">
                     <div class="cart-img">
-                        <img src="{{ asset('storage/' . $cartItem['image']) }}" alt="{{ $cartItem['product_name'] }}"
-                            style="width:50px">
-                        </a>
+                        <img src="{{ asset('storage/' .  $item['image']) }}" alt="{{ $item['product_name'] }}" style="width: 100px">
                     </div>
                     <div class="cart-title">
                         <h5><a href="{{ url('product/' . $item['slug']) }}">{{ $item['product_name'] }}</a></h5>
@@ -20,7 +18,7 @@
                     </div>
                     <div class="cart-delete">
                         <a href="{{ url('carts/remove/' . $item['item_id']) }}" class="delete"><i
-                                class="ti-trash"></i></a>
+                            class="ti-trash"></i></a>
                     </div>
                 </li>
             @endforeach
@@ -37,5 +35,5 @@
                 <a class="cart-btn btn-hover" href="{{ url('orders/checkout') }}">Checkout</a>
             </li>
         </ul>
-    @endif
+        @endif
 </div>
