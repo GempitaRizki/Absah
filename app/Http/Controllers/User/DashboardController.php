@@ -9,6 +9,7 @@ use App\Models\ProductImage;
 use App\Http\Controllers\CartController;
 use App\Models\Cart;
 use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $user_id = auth()->user()->id;
+        $user_id = Auth::id();
         $cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
     
         if (!$cart) {

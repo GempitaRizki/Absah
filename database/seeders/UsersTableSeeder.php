@@ -14,8 +14,8 @@ class UserstableSeeder extends Seeder
     public function run(): void
     {
         $adminUser = [ 
-            'name' => 'Gempita',
-            'email' => 'gempita@gmail.com',
+            'username' => 'Rizki',
+            'email' => 'Rizki@gmail.com',
             'password' => bcrypt('Gempita05'),
         ];
     

@@ -10,6 +10,8 @@ use App\Models\ProductAttributeValue;
 use App\Http\Requests\ProductRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
+
 
 use Str;
 
@@ -37,8 +39,7 @@ class ProductUserController extends Controller
     
         $this->data['products'] = $products->paginate(9);
     
-        // Menambahkan kode yang diberikan
-        $user_id = auth()->user()->id;
+        $user_id = Auth::id();
         $cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
     
         if (!$cart) {
@@ -94,9 +95,8 @@ class ProductUserController extends Controller
             $this->data['colors'] = ProductAttributeValue::getAttributeOptions($product, 'color')->pluck('text_value', 'text_value');
             $this->data['sizes'] = ProductAttributeValue::getAttributeOptions($product, 'size')->pluck('text_value', 'text_value');
         }
-    
-        // Menambahkan kode yang diberikan
-        $user_id = auth()->user()->id;
+
+        $user_id = Auth::id();
         $cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
     
         if (!$cart) {

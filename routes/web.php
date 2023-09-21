@@ -27,7 +27,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/carts', [CartController::class, 'update'])->name('cart.update');
     Route::post('update-to-cart',[CartController::class, 'updatetocart'])->name('updatetocart');
     Route::get('/mini-cart', [CartController::class, 'show'])->name('mini_cart.show');
-    // Route::get('/cart/destroy-all', [CartController::class, 'destroyAll'])->name('cart.destroy-all');
     Route::get('carts/remove', [CartController::class, 'destroyAll'])->name('cart.destroy-all');
 });
 

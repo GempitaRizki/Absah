@@ -1,20 +1,13 @@
- <!--
-	====================================
-	——— LEFT SIDEBAR WITH FOOTER
-	=====================================
--->
+
 <aside class="left-sidebar bg-sidebar">
 	<div id="sidebar" class="sidebar sidebar-with-footer">
-		<!-- Aplication Brand -->
 		<div class="app-brand">
 			<a href="{{ url('admin/dashboard') }}">
 			<span class="brand-name">Absah Dashboard</span>
 			</a>
 		</div>
-		<!-- begin sidebar scrollbar -->
 		<div class="sidebar-scrollbar">
 
-			<!-- sidebar menu -->
 			<ul class="nav sidebar-inner" id="sidebar-menu">
 				<li  class="has-sub  {{ ($currentAdminMenu == 'catalog') ? 'expand active' : ''}}" >
 					<a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#catalog"

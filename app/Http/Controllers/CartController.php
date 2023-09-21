@@ -11,6 +11,7 @@ use App\Models\CartItem;
 use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -22,7 +23,7 @@ class CartController extends Controller
 
 	public function index()
 	{
-		$user_id = auth()->user()->id;
+        $user_id = Auth::id();
 		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
 
 		if (!$cart) {
@@ -75,8 +76,7 @@ class CartController extends Controller
 			'qty' => 'required|integer|min:1',
 		]);
 
-		$user_id = auth()->user()->id;
-
+        $user_id = Auth::id();
 		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
 
 		if (!$cart) {
@@ -144,7 +144,7 @@ class CartController extends Controller
 
     public function destroyAll()
     {
-        $user_id = auth()->user()->id;
+        $user_id = Auth::id();
         $cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
 
         if ($cart) {
@@ -158,4 +158,3 @@ class CartController extends Controller
     }
 }
 	
-
