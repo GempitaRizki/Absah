@@ -14,6 +14,7 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Seller\AuthSellerController;
+use App\Http\Controllers\Seller\Uploads\UploadDataRegister;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -96,3 +97,11 @@ Route::get('register/seller/form/location', [AuthSellerController::class, 'Index
 Route::post('register/seller/form/location', [AuthSellerController::class, 'IndexLocationStore'])->name('IndexSellerLocationStore');
 Route::get('/register/seller/form/bank', [AuthSellerController::class, 'IndexBank'])->name('indexBank');
 Route::post('/register/seller/form/bank', [AuthSellerController::class, 'IndexBankStore'])->name('submitBankInfo');
+Route::get('register/registration-summary', [AuthSellerController::class, 'summary'])->name('registrationSummary');
+
+//Seller Register Upload Data 
+Route::get('/upload-data', [UploadDataRegister::class, 'index'])->name('uploadDataRegister');
+Route::post('/upload-data',[UploadDataRegister::class, 'store'])->name('uploadDataRegisterImage');
+
+
+

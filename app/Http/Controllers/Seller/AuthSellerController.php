@@ -96,6 +96,7 @@ class AuthSellerController extends Controller
             'npwp' => $request->input('npwp'),
             'tdp' => $request->input('tdp'),
             'kbli' => $request->input('kbli'),
+            // 'kekayaan_bersih' => $request->input('kekayaan_bersih'),
 
         ];
 
@@ -203,6 +204,11 @@ class AuthSellerController extends Controller
 
         // dd($bankSession);
 
-        return redirect()->route('indexBank');
+        return redirect()->route('registrationSummary');
+    }
+
+    public function Summary()
+    {
+        return view('seller.registration_summary'); 
     }
 }
