@@ -20,7 +20,7 @@
                 <div class="login">
                     <div class="login-form-container">
                         <div class="login-form">
-                            <form method="POST" action="{{ route('info.sekolah.submit') }}">
+                            <form method="POST" action="{{ route('store.buyer') }}">
                                 @csrf
                                 <div class="form-group row">
                                     <label for="name" class="col-md-4 col-form-label text-md-end text-start">Name</label>

@@ -35,7 +35,7 @@
                             <center>
                                 <img src="{{url('assets/img/logo/penyedia.png')}}" alt="penyedia.png" width="50px" height="50px">
                                 <br>
-                                <a href="##">Register Penjual</a>
+                                <a href="{{route('index.seller')}}">Register Penjual</a>
                             </center>
                         </div>
                     </a>

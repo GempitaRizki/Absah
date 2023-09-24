@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/img/favicon.ico')}}??">
+    <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/img/favicon.png')}}??">
 
     <!-- all css here -->
     <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/bootstrap.min.css') }}">
@@ -37,9 +37,9 @@
 
     @yield('content')
 
-    <div class="register-footer">
+    {{-- <div class="register-footer">
         @include('partials.footer');
-    </div>
+    </div> --}}
     @include('themes.ezone.partials.modals');
 
 

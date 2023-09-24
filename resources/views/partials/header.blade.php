@@ -22,8 +22,8 @@
 							<li>Get Access: <a href="{{ url('login') }}">Login</a></li>
 							<li><a href="{{ url('/register') }}">Register</a></li>
 						@else
-							<li>Selamat Datang <a href="{{ url('profile') }}">{{ Auth::user()->username }}</a></li>
-							<a href="{{ route('logout') }}"
+						<li>Welcome <a href="{{ url('profile') }}">{{ Auth::user()->name }}</a></li>
+						<a href="{{ route('logout') }}"
 								onclick="event.preventDefault();
 											document.getElementById('logout-form').submit();">
 								{{ __('Logout') }}

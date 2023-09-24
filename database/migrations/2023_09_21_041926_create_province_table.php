@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sumber_dana', function (Blueprint $table) {
+        Schema::create('province', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->unsignedBigInteger('status')->nullable();
+            $table->unsignedInteger('id_intan')->nullable();
+            $table->string('id_dikbud')->nullable();
+            $table->unsignedInteger('location_id')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sumber_dana');
+        Schema::dropIfExists('province');
     }
 };

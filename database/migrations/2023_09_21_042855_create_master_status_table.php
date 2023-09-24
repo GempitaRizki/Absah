@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('master_status', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+            $table->string('name_alias')->nullable();
+            $table->text('descriptions')->nullable();
+            $table->unsignedBigInteger('label_status')->nullable();
+            $table->unsignedBigInteger('is_status')->nullable();
+            $table->unsignedBigInteger('is_visible')->nullable();
+            
             $table->timestamps();
         });
     }

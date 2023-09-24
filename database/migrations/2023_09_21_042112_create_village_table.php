@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zona', function (Blueprint $table) {
+        Schema::create('village', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('zona_id');
-            $table->integer('districts_id');
+            $table->string('name')->nullable();
+            $table->smallInteger('status')->nullable();
+            $table->unsignedBigInteger('subdistrict_id');
+            $table->string('id_intan')->nullable();
+            $table->string('id_dikbud')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('zona');
+        Schema::dropIfExists('village');
     }
 };

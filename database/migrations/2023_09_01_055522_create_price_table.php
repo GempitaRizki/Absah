@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('price', 15, 2)->nullable();
-            $table->unsignedBigInteger('zona_id');
+            $table->unsignedBigInteger('price')->nullable();
+            $table->unsignedBigInteger('zona_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('zona_id')->references('id')->on('zona');
 
         });
     }
