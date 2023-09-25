@@ -51,33 +51,17 @@ class AuthSellerController extends Controller
 
         $request->validate([
             'store_name' => 'required',
-            'web_name' => 'required',
             'public_email' => 'required',
             'phone_number' => 'required',
-            'short_description' => 'required',
-            'about_us' => 'required',
-            'fb_name' => 'required',
-            'tw_name' => 'required',
-            'linked_name' => 'required',
-            'inst_name' => 'required',
-            'yt_name' => 'required',
-            'nib' => 'required',
-            'skb' => 'required',
+            'pkp' => 'required',
             'kekayaan_bersih' => 'required',
-            'akta' => 'required',
-            'akta_perusahaan' => 'required',
             'npwp' => 'required',
-            'tdp' => 'required',
-            'kbli' => 'required',
-            'siup' => 'required',
+            'kategori_usaha' => 'required'
         ]);
 
         //session baru
         $storeFormSession = [
-            'store_name' => $request->input('store_name'), // SEHARUSNYA  BISA MENGGUNAKAN
-            //SESSION SEBELUMNYA  PADA KODE 'store_name' => $session('storeSession)  tetapi ada kendala pada  
-            //parameter array harus menggunakan 2 parameter
-
+            'store_name' => $request->input('store_name'), 
             'web_name' => $request->input('web_name'),
             'public_email' => $request->input('public_email'),
             'phone_number' => $request->input('phone_number'),
@@ -96,7 +80,8 @@ class AuthSellerController extends Controller
             'npwp' => $request->input('npwp'),
             'tdp' => $request->input('tdp'),
             'kbli' => $request->input('kbli'),
-            // 'kekayaan_bersih' => $request->input('kekayaan_bersih'),
+            'kekayaan_bersih' => $request->input('kekayaan_bersih'),
+            'pkp' => $request->input('pkp')
 
         ];
 
@@ -132,7 +117,8 @@ class AuthSellerController extends Controller
             'jabatan' => 'required',
             'NIK' => 'required',
             'NPWP' => 'required',
-            'phone_number' => 'required'
+            'phone_number' => 'required',
+
         ]);
 
         $ownerSession = [
@@ -211,4 +197,5 @@ class AuthSellerController extends Controller
     {
         return view('seller.registration_summary'); 
     }
+
 }

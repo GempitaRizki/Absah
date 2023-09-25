@@ -1,90 +1,98 @@
-@extends('layouts.app')
-
-@section('title', 'Pendaftaran')
+@extends('seller.layout')
 
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-12">
-            <div class="ps-page__header text-center" style="padding-bottom: 0px !important;">
-                <a class="ps-logo" href="https://absah.id/">
-                    <img src="https://absah.id/storage/web/logoip.png" class="img img-reponsive" style="width: 250px;">
-                </a>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <!-- Tambahkan link CSS dan script JS dari Bootstrap dan FileInput -->
+        <!-- ... -->
+
+        <style type="text/css">
+            /* Tambahkan gaya kustom Anda di sini */
+            /* ... */
+        </style>
+    </head>
+
+    <body>
+        {!! csrf_field() !!}
+        <div class="form-group">
+            <div class="file-loading">
+                <div class="file-box">
+                    <label for="file-1" class="text-center">Logo</label>
+                    <input id="file-1" type="file" name="file" multiple class="file"
+                        data-overwrite-initial="false" data-min-file-count="2">
+                </div>
+                <!-- Tambahkan file-box lain sesuai dengan kebutuhan -->
             </div>
+        </div>
 
-            <hr>
-            <h2 style="text-align: center">Form Pendaftaran Sekolah</h2>
+        <div class="form-group{{ $errors->has('terms') ? ' has-error' : '' }}">
+            <div class="text-right">
+                <input type="checkbox" class="form-check-input" name="terms" value="1" id="termsCheckbox" />
+                <label class="form-check-label" for="termsCheckbox">
+                    <a href="#" data-toggle="modal" data-target="#termsModal">Saya Mengerti dan Setuju</a>
+                </label>
+            </div>
+        
+            <div class="col-md-4">
+                @if ($errors->has('terms'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('terms') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
 
-            <div class="register-area ptb-100">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12 col-12 col-lg-12 col-xl-6 ml-auto mr-auto">
-                            <div class="login">
-                                <div class="login-form-container">
-                                    <div class="login-form">
-                                        <form method="POST" action="{{ route('store.seller') }}">
-                                            @csrf
-                                            <div class="form-group row">
-                                                <label for="surel"
-                                                    class="col-md-4 col-form-label text-md-end text-start">Surel</label>
-                                                <div class="col-md-6">
-                                                    <input type="text"
-                                                        class="form-control @error('surel') is-invalid @enderror"
-                                                        id="surel" name="surel"
-                                                        value="{{ Session::get('sellerData.surel') }}">
-                                                    @if ($errors->has('surel'))
-                                                        <span class="text-danger">{{ $errors->first('surel') }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="password"
-                                                    class="col-md-4 col-form-label text-md-end text-start">Password</label>
-                                                <div class="col-md-6">
-                                                    <input type="text"
-                                                        class="form-control @error('password') is-invalid @enderror"
-                                                        id="password" name="password"
-                                                        value="{{ Session::get('sellerData.password') }}">
-                                                    @if ($errors->has('password'))
-                                                        <span class="text-danger">{{ $errors->first('password') }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="seller_type"
-                                                    class="col-md-4 col-form-label text-md-end text-start">Type</label>
-                                                <div class="col-md-6">
-                                                    <input type="text"
-                                                        class="form-control @error('seller_type') is-invalid @enderror"
-                                                        id="seller_type" name="seller_type"
-                                                        value="{{ Session::get('sellerData.seller_type') }}">
-                                                    @if ($errors->has('seller_type'))
-                                                        <span class="text-danger">{{ $errors->first('seller_type') }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="store_name"
-                                                    class="col-md-4 col-form-label text-md-end text-start">Nama Toko</label>
-                                                <div class="col-md-6">
-                                                    <input type="text"
-                                                        class="form-control @error('store_name') is-invalid @enderror"
-                                                        id="store_name" name="store_name"
-                                                        value="{{ Session::get('sellerData.store_name') }}">
-                                                    @if ($errors->has('store_name'))
-                                                        <span class="text-danger">{{ $errors->first('seller_type') }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Simpan">
-                                            </div>
-                                        </form>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- Modal Terms -->
+        <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="termsModalLabel">Syarat dan Ketentuan</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Isi dari Syarat dan Ketentuan di sini -->
+                        <!-- ... -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     </div>
                 </div>
-            @endsection
+            </div>
+        </div>
+
+        <!-- Tambahkan link JS untuk jQuery, Bootstrap, dan FileInput di sini -->
+        <!-- ... -->
+
+        <script type="text/javascript">
+            $(".file-loading input").each(function() {
+                var id = $(this).attr('id');
+                $("#" + id).fileinput({
+                    theme: 'fa',
+                    uploadUrl: "{{ route('upload.file') }}", // Sesuaikan dengan rute untuk mengunggah file
+                    uploadExtraData: function() {
+                        return {
+                            _token: $("input[name='_token']").val(),
+                            id: $("#id").val(), // Ganti dengan cara Anda mendapatkan ID
+                            store_id: $("#store_id").val(), // Ganti dengan cara Anda mendapatkan store_id
+                            file_category: $("#file_category").val() // Ganti dengan cara Anda mendapatkan kategori file
+                        };
+                    },
+                    allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf'], // Sesuaikan dengan ekstensi file yang diizinkan
+                    overwriteInitial: false,
+                    maxFileSize: 2000,
+                    maxFilesNum: 10,
+                    slugCallback: function(filename) {
+                        return filename.replace('(', '_').replace(']', '_');
+                    }
+                });
+            });
+        </script>
+    </body>
+
+    </html>
+@endsection

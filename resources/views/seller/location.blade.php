@@ -1,9 +1,15 @@
-@extends('themes.ezone.footer')
+@extends('seller.topbar')
 
 @section('content')
+    <style>
+        .required-label::after {
+            content: " *";
+            color: red;
+        }
+    </style>
     <div class="container mt-5" style="margin-bottom: 100px;">
         <form method="POST" action="{{ route('IndexSellerLocationStore') }}">
-            @csrf 
+            @csrf
             <div class="tab-pane" role="tabpanel" id="step4">
                 <h3>Alamat Toko</h3>
                 <hr>
@@ -30,14 +36,14 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="province">Provinsi</label>
+                            <label for="province" class="col-md-4 col-form-label text-md-end text-start required-label">Provinsi</label> 
                             <select class="form-control" id="province" name="province" value="province" required>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="districts">Kabupaten</label>
+                            <label for="districts" class="col-md-4 col-form-label text-md-end text-start required-label">Kabupaten</label>
                             <select class="form-control" id="districts" name="districts" value="districts" required>
                                 <option>Pilih Kabupaten</option>
                             </select>
@@ -48,7 +54,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="subdistricts">Kecamatan</label>
+                            <label for="subdistricts" class="col-md-4 col-form-label text-md-end text-start required-label">Kecamatan</label>
                             <select class="form-control" id="subdistricts" name="subdistricts" required>
                                 <option value="subdistricts">Pilih Kecamatan</option>
                             </select>
@@ -56,8 +62,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="village">Kelurahan / Desa</label>
-                            <select class="form-control" id="village" name="village">
+                            <label for="village" class="col-md-4 col-form-label text-md-end text-start required-label">Kelurahan / Desa</label>
+                            <select class="form-control" id="village" name="village" reuired>
                                 <option value="village">Pilih Kelurahan / Desa</option>
                             </select>
                         </div>
@@ -65,16 +71,17 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-8">
                         <div class="form-group">
-                            <label for="address">Nama Jalan</label>
-                            <input type="text" class="form-control" id="address" name="address" maxlength="255" required>
+                            <label for="address" class="col-md-4 col-form-label text-md-end text-start required-label">Nama Jalan</label>
+                            <input type="text" class="form-control" id="address" name="address" maxlength="255"
+                                required>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="postal_code">Kode Pos</label>
-                            <input type="text" class="form-control" id="postal_code" name="postal_code" maxlength="10">
+                            <label for="postal_code" class="col-md-4 col-form-label text-md-end text-start required-label">Kode Pos</label>
+                            <input type="text" class="form-control" id="postal_code" name="postal_code" maxlength="10" required>
                         </div>
                     </div>
                 </div>
@@ -103,10 +110,10 @@
     </script>
     <script>
         const selectProvince = document.getElementById('province');
-    
+
         selectProvince.addEventListener('change', (e) => {
             var province = e.target.options[e.target.selectedIndex].getAttribute('data-reg');
-    
+
             fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/regencies/${province}.json`)
                 .then(response => response.json())
                 .then(districts => {
@@ -123,12 +130,12 @@
                 })
                 .catch(error => console.error('Error fetching Data:', error));
         });
-    
+
         const selectDistricts = document.getElementById('districts');
-    
+
         selectDistricts.addEventListener('change', (e) => {
             var districts = e.target.options[e.target.selectedIndex].getAttribute('data-dist');
-    
+
             fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/districts/${districts}.json`)
                 .then(response => response.json())
                 .then(DistrictData => {
@@ -144,12 +151,12 @@
                 })
                 .catch(error => console.error('Error fetching data:', error));
         });
-    
+
         const selectSubdistricts = document.getElementById('subdistricts');
-    
+
         selectSubdistricts.addEventListener('change', (e) => {
             var subdistricts = e.target.options[e.target.selectedIndex].getAttribute('data-vill');
-    
+
             fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/villages/${subdistricts}.json`)
                 .then(response => response.json())
                 .then(village => {
@@ -163,5 +170,4 @@
                 .catch(error => console.error('Error fetching data:', error));
         });
     </script>
-    
 @endsection

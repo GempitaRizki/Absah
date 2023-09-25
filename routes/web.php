@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Seller\AuthSellerController;
 use App\Http\Controllers\Seller\Uploads\UploadDataRegister;
+use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -87,21 +88,19 @@ Route::post('/register/user', [UserRegisterController::class, 'storageUser'])->n
 
 
 //Seller Register
-Route::get('register/seller', [AuthSellerController::class, 'index'])->name('index.seller');
-Route::post('register/seller', [AuthSellerController::class, 'IndexStore'])->name('StoreSellerSession');
-Route::get('register/seller/form', [AuthSellerController::class, 'form'])->name('sellerIndexForm');
-Route::post('register/seller/form', [AuthSellerController::class, 'FormStore'])->name('StoreSellerIndex');
-Route::get('register/seller/form/info-ttd', [AuthSellerController::class, 'indexForm'])->name('indexForm.info-ttd');
-Route::post('register/seller/form/info-ttd', [AuthSellerController::class, 'IndexFormStore'])->name('StoreSellerIndexForm');
-Route::get('register/seller/form/location', [AuthSellerController::class, 'IndexLocation'])->name('IndexSellerLocation');
-Route::post('register/seller/form/location', [AuthSellerController::class, 'IndexLocationStore'])->name('IndexSellerLocationStore');
+Route::get('/register/seller', [AuthSellerController::class, 'index'])->name('index.seller');
+Route::post('/register/seller', [AuthSellerController::class, 'IndexStore'])->name('StoreSellerSession');
+Route::get('/register/seller/form', [AuthSellerController::class, 'form'])->name('sellerIndexForm');
+Route::post('/register/seller/form', [AuthSellerController::class, 'FormStore'])->name('StoreSellerIndex');
+Route::get('/register/seller/form/info-ttd', [AuthSellerController::class, 'indexForm'])->name('indexForm.info-ttd');
+Route::post('/register/seller/form/info-ttd', [AuthSellerController::class, 'IndexFormStore'])->name('StoreSellerIndexForm');
+Route::get('/register/seller/form/location', [AuthSellerController::class, 'IndexLocation'])->name('IndexSellerLocation');
+Route::post('/register/seller/form/location', [AuthSellerController::class, 'IndexLocationStore'])->name('IndexSellerLocationStore');
 Route::get('/register/seller/form/bank', [AuthSellerController::class, 'IndexBank'])->name('indexBank');
 Route::post('/register/seller/form/bank', [AuthSellerController::class, 'IndexBankStore'])->name('submitBankInfo');
-Route::get('register/registration-summary', [AuthSellerController::class, 'summary'])->name('registrationSummary');
+Route::get('/register/seller/registration-summary', [AuthSellerController::class, 'summary'])->name('registrationSummary');
 
 //Seller Register Upload Data 
-Route::get('/upload-data', [UploadDataRegister::class, 'index'])->name('uploadDataRegister');
-Route::post('/upload-data',[UploadDataRegister::class, 'store'])->name('uploadDataRegisterImage');
-
-
+Route::get('register/seller/registration-summary/upload-data', [UploadDataRegisterController::class, 'index'])->name('uploadDataRegister');
+Route::post('register/seller/registration-summary/upload-data',[UploadDataRegisterController::class, 'uploadFile'])->name('upload.file');
 

@@ -39,7 +39,7 @@
         <li><strong>NPWP:</strong> {{ session('storeFormSession.npwp') }}</li>
         <li><strong>TDP:</strong> {{ session('storeFormSession.tdp') }}</li>
         <li><strong>KBLI:</strong> {{ session('storeFormSession.kbli') }}</li>
-        {{-- <li><strong>Kekayaan Bersih:</strong> {{ session('storeFormSession.kekayaan_bersih') }}</li> --}}
+        <li><strong>Kekayaan Bersih:</strong> Rp. {{ number_format(session('storeFormSession.kekayaan_bersih'), 0, ',', '.') }}</li>
         <li><strong>Kategori Usaha:</strong> {{ session('storeFormSession.kategori_usaha') }}</li>
 
     </ul>

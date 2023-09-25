@@ -1,32 +1,38 @@
-@extends('themes.ezone.footer')
+@extends('seller.topbar')
 
 @section('content')
+    <style>
+        .required-label::after {
+            content: " *";
+            color: red;
+        }
+    </style>
     <div class="container mt-5" style="margin-bottom: 100px;">
         <div class="row">
             <div class="col-lg-12">
-                <h3>Informasi Toko</h3>
+                <h2 style="text-align: center">Informasi Toko</h2>
                 <hr>
             </div>
         </div>
-        <form method="POST" action="{{route('StoreSellerIndex')}}">
+        <form method="POST" action="{{ route('StoreSellerIndex') }}">
             @csrf
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="store_name">Store Name</label>
-                        <input type="text" class="form-control" name="store_name" id="store_name"
-                            value="{{ old('store_name', session('sellerData.store_name')) }}" placeholder="Store Name">
+                        <label for="store_name" class="col-md-4 col-form-label text-md-end text-start required-label">Nama Toko</label>
+                        <input type="text" class="form-control" name="store_name" id="store_name" required
+                            value="{{ old('store_name', session('storeSession.store_name')) }}" placeholder="Store Name">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="web_name">Web Name</label>
+                        <label for="web_name">Laman Website</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">https://</span>
                             </div>
                             <input type="text" class="form-control" name="web_name" id="web_name"
-                                value="{{ old('web_name', session('sellerData.web_name')) }}" placeholder="Web Name">
+                                value="{{ old('web_name', session('sellerData.web_name')) }}" placeholder="Laman Website">
                         </div>
                     </div>
                 </div>
@@ -35,18 +41,18 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="public_email">Public Email</label>
-                        <input type="text" class="form-control" name="public_email" id="public_email"
+                        <label for="public_email" class="col-md-4 col-form-label text-md-end text-start required-label">Email Public</label>
+                        <input type="text" class="form-control" name="public_email" id="public_email" required
                             value="{{ old('public_email', session('sellerData.public_email')) }}"
-                            placeholder="Public Email">
+                            placeholder="Email Publik">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="phone_number">Phone Number</label>
-                        <input type="text" class="form-control" name="phone_number" id="phone_number"
+                        <label for="phone_number" class="col-md-4 col-form-label text-md-end text-start required-label">No Hp</label>
+                        <input type="text" class="form-control" name="phone_number" id="phone_number" required
                             value="{{ old('phone_number', session('sellerData.phone_number')) }}"
-                            placeholder="Phone Number">
+                            placeholder="Nomor Telepon">
                     </div>
                 </div>
             </div>
@@ -133,21 +139,20 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <!-- Empty column -->
                 </div>
             </div>
-
+            <hr>
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Informasi Toko Detail</h3>
-                    <hr>
+                    <h2 style="text-align: center">Informasi Toko Detail</h2>
+                    <br><br>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="nib">NIB</label>
-                        <input type="text" class="form-control" name="nib" id="nib"
+                        <label for="nib" class="col-md-4 col-form-label text-md-end text-start required-label">NIB</label>
+                        <input type="text" class="form-control" name="nib" id="nib" required
                             value="{{ old('nib') }}" placeholder="NIB">
                     </div>
                 </div>
@@ -174,17 +179,17 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="pkp">Jenis PKP</label>
-                        <select class="form-control" name="pkp" id="pkp">
-                            <option value="PKP" {{ old('pkp') === 'PKP' ? 'selected' : '' }}>PKP</option>
-                            <option value="Non_Pkp" {{ old('pkp') === 'Non_Pkp' ? 'selected' : '' }}>Non PKP</option>
-                        </select>
+                        <label for="pkp" class="col-md-4 col-form-label text-md-end text-start required-label">PKP</label>
+                        <select class="form-control" name="pkp" id="pkp" required>
+                            <option value="PKP" {{ old('pkp') === 'pkp' ? 'selected' : '' }}>PKP</option>
+                            <option value="Non PKP" {{ old('pkp') === 'pkp' ? 'selected' : '' }}>Non PKP</option>
+                        </select>     
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
-                    <select name="kekayaan_bersih" id="kekayaan_bersih_dropdown">
+                <div class="col-md-6">
+                    <select name="kekayaan_bersih" id="kekayaan_bersih_dropdown" required>
                         <option value="">Range Kekayaan Bersih</option>
                         <option value="50000000">Kurang dari Rp. 50.000.000</option>
                         <option value="500000000">Rp. 50.000.000 - Rp. 500.000.000</option>
@@ -199,7 +204,7 @@
                         <option value="Menengah">Menengah</option>
                     </select>
                 </div>
-            </div>
+            </div>            
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -208,7 +213,7 @@
                             value="{{ old('akta') }}" placeholder="Akta">
                     </div>
                 </div>
-                 <div class="col-lg-6">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="akta_perusahaan">Akta Perusahaan</label>
                         <input type="text" class="form-control" name="akta_perusahaan" id="akta_perusahaan"
@@ -220,12 +225,12 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="npwp">NPWP</label>
-                        <input type="text" class="form-control" name="npwp" id="npwp"
+                        <label for="npwp" class="col-md-4 col-form-label text-md-end text-start required-label">NPWP</label>
+                        <input type="text" class="form-control" name="npwp" id="npwp" required
                             value="{{ old('npwp') }}" placeholder="NPWP">
                     </div>
                 </div>
-               <div class="col-lg-6">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="siup">SIUP</label>
                         <input type="text" class="form-control" name="siup" id="siup"
@@ -258,32 +263,24 @@
         </form>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var kekayaanBersihDropdown = document.getElementById("kekayaan_bersih_dropdown");
-            var kategoriUsahaDropdown = document.getElementById("kategori_usaha_dropdown");
-
-            kekayaanBersihDropdown.addEventListener("change", function() {
-                var kekayaanBersih = parseInt(kekayaanBersihDropdown.value);
-                var kategoriUsaha = "";
-
-                if (kekayaanBersih < 50000000) {
-                    kategoriUsaha = "Mikro";
-                } else if (kekayaanBersih >= 50000000 && kekayaanBersih <= 500000000) {
-                    kategoriUsaha = "Kecil";
-                } else if (kekayaanBersih > 500000000 && kekayaanBersih <= 10000000000) {
-                    kategoriUsaha = "Menengah";
-                }
-
-                for (var i = 0; i < kategoriUsahaDropdown.options.length; i++) {
-                    kategoriUsahaDropdown.options[i].removeAttribute("selected");
-                }
-
-                var selectedOption = document.querySelector("#kategori_usaha_dropdown option[value='" +
-                    kategoriUsaha + "']");
-                selectedOption.setAttribute("selected", "selected");
-
-                kategoriUsahaDropdown.disabled = true;
-            });
+        var kekayaanBersihDropdown = document.getElementById('kekayaan_bersih_dropdown');
+        var kategoriUsahaDropdown = document.getElementById('kategori_usaha_dropdown');
+    
+        kekayaanBersihDropdown.addEventListener('change', function() {
+            var selectedValue = this.value;
+    
+            var kategoriUsaha = '';
+            if (selectedValue === '50000000') {
+                kategoriUsaha = 'Mikro';
+            } else if (selectedValue === '500000000') {
+                kategoriUsaha = 'Kecil';
+            } else if (selectedValue === '10000000000') {
+                kategoriUsaha = 'Menengah';
+            }
+    
+            kategoriUsahaDropdown.value = kategoriUsaha;
+            kategoriUsahaDropdown.disabled = false;
         });
     </script>
+    
 @endsection
