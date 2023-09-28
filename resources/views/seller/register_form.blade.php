@@ -19,7 +19,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="store_name" class="col-md-4 col-form-label text-md-end text-start required-label">Nama Toko</label>
+                        <label for="store_name" class="col-md-4 col-form-label text-md-end text-start required-label">Nama
+                            Toko</label>
                         <input type="text" class="form-control" name="store_name" id="store_name" required
                             value="{{ old('store_name', session('storeSession.store_name')) }}" placeholder="Store Name">
                     </div>
@@ -41,7 +42,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="public_email" class="col-md-4 col-form-label text-md-end text-start required-label">Email Public</label>
+                        <label for="public_email"
+                            class="col-md-4 col-form-label text-md-end text-start required-label">Email Public</label>
                         <input type="text" class="form-control" name="public_email" id="public_email" required
                             value="{{ old('public_email', session('sellerData.public_email')) }}"
                             placeholder="Email Publik">
@@ -49,7 +51,8 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="phone_number" class="col-md-4 col-form-label text-md-end text-start required-label">No Hp</label>
+                        <label for="phone_number" class="col-md-4 col-form-label text-md-end text-start required-label">No
+                            Hp</label>
                         <input type="text" class="form-control" name="phone_number" id="phone_number" required
                             value="{{ old('phone_number', session('sellerData.phone_number')) }}"
                             placeholder="Nomor Telepon">
@@ -151,7 +154,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="nib" class="col-md-4 col-form-label text-md-end text-start required-label">NIB</label>
+                        <label for="nib"
+                            class="col-md-4 col-form-label text-md-end text-start required-label">NIB</label>
                         <input type="text" class="form-control" name="nib" id="nib" required
                             value="{{ old('nib') }}" placeholder="NIB">
                     </div>
@@ -179,11 +183,12 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="pkp" class="col-md-4 col-form-label text-md-end text-start required-label">PKP</label>
+                        <label for="pkp"
+                            class="col-md-4 col-form-label text-md-end text-start required-label">PKP</label>
                         <select class="form-control" name="pkp" id="pkp" required>
                             <option value="PKP" {{ old('pkp') === 'pkp' ? 'selected' : '' }}>PKP</option>
                             <option value="Non PKP" {{ old('pkp') === 'pkp' ? 'selected' : '' }}>Non PKP</option>
-                        </select>     
+                        </select>
                     </div>
                 </div>
             </div>
@@ -204,7 +209,7 @@
                         <option value="Menengah">Menengah</option>
                     </select>
                 </div>
-            </div>            
+            </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -225,7 +230,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="npwp" class="col-md-4 col-form-label text-md-end text-start required-label">NPWP</label>
+                        <label for="npwp"
+                            class="col-md-4 col-form-label text-md-end text-start required-label">NPWP</label>
                         <input type="text" class="form-control" name="npwp" id="npwp" required
                             value="{{ old('npwp') }}" placeholder="NPWP">
                     </div>
@@ -238,7 +244,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -265,10 +270,10 @@
     <script>
         var kekayaanBersihDropdown = document.getElementById('kekayaan_bersih_dropdown');
         var kategoriUsahaDropdown = document.getElementById('kategori_usaha_dropdown');
-    
+
         kekayaanBersihDropdown.addEventListener('change', function() {
             var selectedValue = this.value;
-    
+
             var kategoriUsaha = '';
             if (selectedValue === '50000000') {
                 kategoriUsaha = 'Mikro';
@@ -277,10 +282,16 @@
             } else if (selectedValue === '10000000000') {
                 kategoriUsaha = 'Menengah';
             }
-    
+
             kategoriUsahaDropdown.value = kategoriUsaha;
             kategoriUsahaDropdown.disabled = false;
         });
     </script>
-    
+    <script>
+        function formatNpwp(npwp) {
+            if (typeof npwp === 'string') {
+                return npwp.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/, '$1.$2.$3.$4-$5.$6');
+            }
+        }
+    </script>
 @endsection

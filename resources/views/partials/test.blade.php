@@ -1,98 +1,178 @@
-@extends('seller.layout')
+<?php
 
-@section('content')
-    <!DOCTYPE html>
-    <html lang="en">
+use common\models\Province;
+use kartik\depdrop\DepDrop;
+use kartik\form\ActiveForm;
+use kartik\helpers\Html;
+use kartik\select2\Select2;
+$this->registerJs("$('#npwp').mask('00.000.000.0-000.000');");
+$this->registerJs("
+    $('#npsn').bind('keyup paste', function(){
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+    
+    $('#no_telepon').bind('keyup paste', function(){
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
 
-    <head>
-        <!-- Tambahkan link CSS dan script JS dari Bootstrap dan FileInput -->
-        <!-- ... -->
+    $('#nip_bendahara_bos').bind('keyup paste', function(){
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
 
-        <style type="text/css">
-            /* Tambahkan gaya kustom Anda di sini */
-            /* ... */
-        </style>
-    </head>
+    $('#nip_kepala_sekolah').bind('keyup paste', function(){
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+");
 
-    <body>
-        {!! csrf_field() !!}
-        <div class="form-group">
-            <div class="file-loading">
-                <div class="file-box">
-                    <label for="file-1" class="text-center">Logo</label>
-                    <input id="file-1" type="file" name="file" multiple class="file"
-                        data-overwrite-initial="false" data-min-file-count="2">
-                </div>
-                <!-- Tambahkan file-box lain sesuai dengan kebutuhan -->
+$form = ActiveForm::begin(['id' => 'register-form']); ?>
+
+<div class="container mt-5" style="margin-bottom: 100px;">
+    <div class="tab-pane" role="tabpanel" id="step4">
+        <h3>Sekolah</h3>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($modelSekolah, 'nama_sekolah')->textInput(['maxlength' => true])->label('Nama Sekolah') ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'npsn')->textInput(['maxlength' => true, 'id' => 'npsn']) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'npwp')->textInput(['maxlength' => true, 'id' => 'npwp']) ?>
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('terms') ? ' has-error' : '' }}">
-            <div class="text-right">
-                <input type="checkbox" class="form-check-input" name="terms" value="1" id="termsCheckbox" />
-                <label class="form-check-label" for="termsCheckbox">
-                    <a href="#" data-toggle="modal" data-target="#termsModal">Saya Mengerti dan Setuju</a>
-                </label>
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'bentuk_pendidikan')->dropdownList([
+                    'MI' => 'MI',
+                    'MTS' => 'MTs',
+                    'MA' => 'MA'
+                ])->label('Jenjang'); ?>
             </div>
-        
-            <div class="col-md-4">
-                @if ($errors->has('terms'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('terms') }}</strong>
-                    </span>
-                @endif
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'status')->dropdownList([
+                    'Negeri' => 'Negeri',
+                    'Swasta' => 'Swasta',
+                ])->label('Status'); ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'email')->textInput(['maxlength' => true])->label('Email Sekolah') ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'no_telepon')->textInput(['maxlength' => true, 'id' => 'no_telepon'])->label('No Telepon Sekolah') ?>
+            </div>
+        </div>
+        <div class="row">
+            <?php
+            $dataUser = Yii::$app->session->get('dataUser');
+
+            if ($dataUser['jabatan'] == 'Kepala Sekolah') {
+                $namaKepsek = $dataUser['nama'];
+                $nipKepsek = $dataUser['nip'];
+
+                $namaBendahara = '';
+                $nipBendahara = '';
+            } else {
+                $namaKepsek = '';
+                $nipKepsek = '';
+
+                $namaBendahara = $dataUser['nama'];
+                $nipBendahara = $dataUser['nip'];
+            }
+
+            ?>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'kepala_sekolah')->textInput(['maxlength' => true, 'value' => $namaKepsek]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'nip_kepala_sekolah')->textInput(['maxlength' => true, 'id' => 'nip_kepala_sekolah', 'value' => $nipKepsek])->label('NIP / NIY Kepala Sekolah') ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'bendahara_bos')->textInput(['maxlength' => true, 'value' => $namaBendahara]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'nip_bendahara_bos')->textInput(['maxlength' => true, 'id' => 'nip_bendahara_bos', 'value' => $nipBendahara])->label('NIP / NIY Bendahara') ?>
             </div>
         </div>
 
-        <!-- Modal Terms -->
-        <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="termsModalLabel">Syarat dan Ketentuan</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Isi dari Syarat dan Ketentuan di sini -->
-                        <!-- ... -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($modelSekolah, 'kd_prov')->widget(Select2::classname(), [
+                    'data' =>  Province::getListProvince(),
+                    'options' => [
+                        'placeholder' => \Yii::t('app', 'Province'),
+                        'class' => 'form-control',
+                        'requried' => 'required',
+                        'id' => 'province_id',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])->label('Provinsi'); ?>
+
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($modelSekolah, 'kd_kab')->widget(DepDrop::classname(), [
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'options' => ['id' => 'districts_id', 'placeholder' => 'Select Districts'],
+                    'pluginOptions' => [
+                        'depends' => ['province_id'],
+                        'placeholder' => \Yii::t('app', 'Districts'),
+                        'url' => \yii\helpers\Url::to(['/cmregions/default/show-district']),
+                    ]
+                ])->label(\Yii::t('common', 'Kabupaten'));
+                ?>
+
+
             </div>
         </div>
 
-        <!-- Tambahkan link JS untuk jQuery, Bootstrap, dan FileInput di sini -->
-        <!-- ... -->
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($modelSekolah, 'kd_kec')->widget(DepDrop::classname(), [
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'options' => ['id' => 'subdistricts_id', 'placeholder' => 'Select Districts'],
+                    'pluginOptions' => [
+                        'depends' => ['districts_id'],
+                        'placeholder' => \Yii::t('app', 'Districts'),
+                        'url' => \yii\helpers\Url::to(['/cmregions/default/show-subdistrict']),
+                    ]
+                ])->label(\Yii::t('common', 'Kecamatan'));
+                ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($modelDesa, 'kd_desa')->widget(DepDrop::classname(), [
+                    'type' => DepDrop::TYPE_SELECT2,
+                    'options' => ['id' => 'village_id'],
+                    'select2Options' => ['pluginOptions' => ['allowClear' => true]],
+                    'pluginOptions' => [
+                        'depends' => ['subdistricts_id'],
+                        'url' => \yii\helpers\Url::to(['/cmregions/default/show-village']),
+                        'placeholder' => Yii::t('app', 'Pilih Kelurahan / Desa'),
+                    ]
+                ])->label('Desa');
+                ?>
+            </div>
+        </div>
 
-        <script type="text/javascript">
-            $(".file-loading input").each(function() {
-                var id = $(this).attr('id');
-                $("#" + id).fileinput({
-                    theme: 'fa',
-                    uploadUrl: "{{ route('upload.file') }}", // Sesuaikan dengan rute untuk mengunggah file
-                    uploadExtraData: function() {
-                        return {
-                            _token: $("input[name='_token']").val(),
-                            id: $("#id").val(), // Ganti dengan cara Anda mendapatkan ID
-                            store_id: $("#store_id").val(), // Ganti dengan cara Anda mendapatkan store_id
-                            file_category: $("#file_category").val() // Ganti dengan cara Anda mendapatkan kategori file
-                        };
-                    },
-                    allowedFileExtensions: ['jpg', 'png', 'gif', 'pdf'], // Sesuaikan dengan ekstensi file yang diizinkan
-                    overwriteInitial: false,
-                    maxFileSize: 2000,
-                    maxFilesNum: 10,
-                    slugCallback: function(filename) {
-                        return filename.replace('(', '_').replace(']', '_');
-                    }
-                });
-            });
-        </script>
-    </body>
+        <div class="row">
+            <div class="col-lg-9">
+                <?= $form->field($modelSekolah, 'alamat')->textInput(['maxlength' => true])->label('Alamat') ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($modelSekolah, 'kode_pos')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
 
-    </html>
-@endsection
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <?= Html::submitButton('Berikutnya', ['class' => 'btn btn-primary float-right', 'name' => 'info-usaha']) ?>
+        </div>
+    </div>
+
+</div>
+<?php ActiveForm::end(); ?>

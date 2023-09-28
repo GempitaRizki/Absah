@@ -13,9 +13,11 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\location\LocationController;
 use App\Http\Controllers\Seller\AuthSellerController;
 use App\Http\Controllers\Seller\Uploads\UploadDataRegister;
 use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
+use App\Http\Controllers\User\AuthUserController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -82,10 +84,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
 Route::post('favorites', [FavoriteController::class, 'store'])->name('favorites.store');
 
-//User Register
-Route::get('/register/user', [UserRegisterController::class, 'FormOneRegistrationUser'])->name('register.buyer');
-Route::post('/register/user', [UserRegisterController::class, 'storageUser'])->name('store.buyer');
-
 
 //Seller Register
 Route::get('/register/seller', [AuthSellerController::class, 'index'])->name('index.seller');
@@ -94,6 +92,8 @@ Route::get('/register/seller/form', [AuthSellerController::class, 'form'])->name
 Route::post('/register/seller/form', [AuthSellerController::class, 'FormStore'])->name('StoreSellerIndex');
 Route::get('/register/seller/form/info-ttd', [AuthSellerController::class, 'indexForm'])->name('indexForm.info-ttd');
 Route::post('/register/seller/form/info-ttd', [AuthSellerController::class, 'IndexFormStore'])->name('StoreSellerIndexForm');
+Route::get('/register/seller/form/wilayah-jual', [AuthSellerController::class, 'WilayahJual'])->name('index.wilayahJual');
+Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 'WilayahJualStore'])->name('StoreWilayahJualForm');
 Route::get('/register/seller/form/location', [AuthSellerController::class, 'IndexLocation'])->name('IndexSellerLocation');
 Route::post('/register/seller/form/location', [AuthSellerController::class, 'IndexLocationStore'])->name('IndexSellerLocationStore');
 Route::get('/register/seller/form/bank', [AuthSellerController::class, 'IndexBank'])->name('indexBank');
@@ -101,6 +101,17 @@ Route::post('/register/seller/form/bank', [AuthSellerController::class, 'IndexBa
 Route::get('/register/seller/registration-summary', [AuthSellerController::class, 'summary'])->name('registrationSummary');
 
 //Seller Register Upload Data 
-Route::get('register/seller/registration-summary/upload-data', [UploadDataRegisterController::class, 'index'])->name('uploadDataRegister');
-Route::post('register/seller/registration-summary/upload-data',[UploadDataRegisterController::class, 'uploadFile'])->name('upload.file');
+Route::get('/register/seller/registration-summary/upload-data', [UploadDataRegisterController::class, 'index'])->name('uploadDataRegister');
+Route::post('/register/seller/registration-summary/upload-data', [UploadDataRegisterController::class, 'uploadFile'])->name('upload.file');
 
+//User Register
+Route::get('/register/buyer', [AuthUserController::class, 'index'])->name('index.users');
+Route::post('/register/buyer', [AuthUserController::class, 'indexStore'])->name('StoreBuyerSession');
+Route::get('/register/buyer/info-sekolah', [AuthUserController::class, 'infoSekolah'])->name('index.infoSekolah');
+Route::post('/register/buyer/info-sekolah', [AuthUserController::class, 'infoSekolahStore'])->name('index.infoSekolahStore');
+
+//Location GET DB 
+Route::get('/get-provinces', [LocationController::class, 'getProvinces'])->name('get-provinces');
+Route::get('/get-districts/{provinceId}', [LocationController::class, 'getDistrictsByProvince'])->name('get-districts-by-province');
+Route::get('/get-subdistricts/{districtId}', [LocationController::class, 'getSubDistrictsByDistrict'])->name('get-subdistricts-by-district');
+Route::get('/get-villages/{subdistrictId}', [LocationController::class, 'getVillagesBySubDistrict'])->name('get-villages-by-subdistrict');

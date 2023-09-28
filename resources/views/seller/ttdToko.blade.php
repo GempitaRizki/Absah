@@ -20,7 +20,7 @@
                                         <h3 class="text-center">Penandatangan Toko</h3>
                                         <hr>
                                         <div class="form-group row">
-                                            <label for="nama" class="col-md-4 col-form-label text-md-end text-start required-label">Nama Toko</label> 
+                                            <label for="nama" class="col-md-4 col-form-label text-md-end text-start required-label">Nama</label> 
                                             <div class="col-md-6">
                                                 <input type="text" required
                                                     class="form-control @error('nama') is-invalid @enderror"

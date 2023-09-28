@@ -19,7 +19,7 @@
                     <div class="login">
                         <div class="login-form-container">
                             <div class="login-form">
-                                <form action="{{ route('infosekolah-submit') }}" method="POST">
+                                <form action="{{ route('index.infoSekolahStore') }}" method="POST">
                                     @csrf
                                     <div class="form-group row">
                                         <label for="data_sekolah"
@@ -163,34 +163,77 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label>Provinsi</label>
-                                        <select name="provinsi" id="provinsi">
-                                            <option value="">Provinsi</option>
-                                        </select>
-                                        <input type="hidden" name="provinsi" value="">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="provinsi"
+                                                class="col-md-4 col-form-label text-md-end text-start required-label">Provinsi</label>
+                                            <select class="form-control" id="provinsiDropdown" name="provinsi"
+                                                value="{{ old('provinsi') }}" required>
+                                                <option value="">Pilih Provinsi</option>
+                                            </select>
+                                        </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="kota"
+                                                class="col-md-4 col-form-label text-md-end text-start required-label">Kota/Kabupaten</label>
+                                            <select class="form-control" id="kotaDropdown" name="kota"
+                                                value="{{ old('kota') }}" required>
+                                                <option value="">Pilih Kota/Kabupaten</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="kecamatan"
+                                                class="col-md-4 col-form-label text-md-end text-start required-label">Kecamatan</label>
+                                            <select class="form-control" id="kecamatanDropdown" name="kecamatan"
+                                                value="{{ old('kecamatan') }}" required>
+                                                <option value="">Pilih Kecamatan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="kelurahan"
+                                                class="col-md-4 col-form-label text-md-end text-start required-label">Kelurahan/Desa</label>
+                                            <select class="form-control" id="kelurahanDropdown" name="kelurahan"
+                                                value="{{ old('kelurahan') }}" required>
+                                                <option value="">Pilih Kelurahan/Desa</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="alamat"
+                                            class="col-md-4 col-form-label text-md-end text-start">Alamat</label>
+                                        <div class="col-md-6">
+                                            <input type="text"
+                                                class="form-control @error('alamat') is-invalid @enderror"
+                                                id="alamat" name="alamat"
+                                                value="alamat">
+                                            @if ($errors->has('alamat'))
+                                                <span
+                                                    class="text-danger">{{ $errors->first('alamat') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="kode_pos"
+                                            class="col-md-4 col-form-label text-md-end text-start">Kode Pos</label>
+                                        <div class="col-md-6">
+                                            <input type="text"
+                                                class="form-control @error('kode_pos') is-invalid @enderror"
+                                                id="kode_pos" name="kode_pos"
+                                                value="kode_pos">
+                                            @if ($errors->has('kode_pos'))
+                                                <span
+                                                    class="text-danger">{{ $errors->first('kode_pos') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
 
-                                    <div class="form-group">
-                                        <label>kota</label>
-                                        <select name="kota" id="kota">
-                                            <option>kota</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>kecamatan</label>
-                                        <select name="kecamatan" id="kecamatan">
-                                            <option>kecamatan</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>kelurahan</label>
-                                        <select name="kelurahan" id="kelurahan">
-                                            <option>kelurahan</option>
-                                        </select>
-                                    </div>
 
-                                    <!-- disini -->
                                     <div class="form-group row">
                                         <div class="col-md-6 offset-md-4">
                                             <input type="submit" class="btn btn-primary" value="Berikutnya">
@@ -205,114 +248,85 @@
         </div>
     </div>
     </div>
+
+
     <script>
         fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/provinces.json`)
             .then(response => response.json())
             .then(provinces => {
                 var data = provinces;
-                var tampung = '<option>Pilih</option>';
+                var tampung = '<option value="">Pilih</option>';
                 data.forEach(element => {
                     tampung +=
                         `<option data-reg="${element.id}" value="${element.name}">${element.name}</option>`;
                 });
-                document.getElementById('provinsi').innerHTML = tampung;
+                document.getElementById('provinsiDropdown').innerHTML = tampung;
             });
-    </script>
-    <script>
-        const selectProvinsi = document.getElementById('provinsi');
-        const selectKota = document.getElementById('kota');
-        const selectKecamatan = document.getElementById('kecamatan');
-        const selectKelurahan = document.getElementById('kelurahan');
-    
+
+        const selectProvinsi = document.getElementById('provinsiDropdown');
+        const selectKota = document.getElementById('kotaDropdown');
+        const selectKecamatan = document.getElementById('kecamatanDropdown');
+        const selectKelurahan = document.getElementById('kelurahanDropdown');
+
         const selectedOptions = {
             provinsi: "",
             kota: "",
             kecamatan: "",
             kelurahan: ""
         };
-    
+
         selectProvinsi.addEventListener('change', (e) => {
-            selectedOptions.provinsi = e.target.value;
-            updateSelectedOptions();
+            var provinsi = e.target.options[e.target.selectedIndex].dataset.reg;
+            var selectedProvinsi = e.target.options[e.target.selectedIndex].value;
+            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/regencies/${provinsi}.json`)
+                .then(response => response.json())
+                .then(regencies => {
+                    var data = regencies;
+                    var tampung = '<option value="">Kota/Kabupaten</option>';
+                    selectKecamatan.innerHTML = '<option value="">Kecamatan</option>';
+                    selectKelurahan.innerHTML = '<option value="">Kelurahan/Desa</option>';
+                    data.forEach(element => {
+                        tampung +=
+                            `<option data-dist="${element.id}" value="${element.name}">${element.name}</option>`;
+                    });
+                    selectKota.innerHTML = tampung;
+                })
+                .catch(error => console.error('Error fetching data:', error));
         });
-    
+
         selectKota.addEventListener('change', (e) => {
-            selectedOptions.kota = e.target.value;
-            updateSelectedOptions();
+            var kota = e.target.options[e.target.selectedIndex].dataset.dist;
+            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/districts/${kota}.json`)
+                .then(response => response.json())
+                .then(districts => {
+                    var data = districts;
+                    var tampung = '<option value="">Kecamatan</option>';
+                    selectKelurahan.innerHTML = '<option value="">Kelurahan/Desa</option>';
+                    data.forEach(element => {
+                        tampung +=
+                            `<option data-vill="${element.id}" value="${element.name}">${element.name}</option>`;
+                    });
+                    selectKecamatan.innerHTML = tampung;
+                })
+                .catch(error => console.error('Error fetching data:', error));
         });
-    
+
         selectKecamatan.addEventListener('change', (e) => {
-            selectedOptions.kecamatan = e.target.value;
-            updateSelectedOptions();
+            var kecamatan = e.target.options[e.target.selectedIndex].dataset.vill;
+            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/villages/${kecamatan}.json`)
+                .then(response => response.json())
+                .then(villages => {
+                    var data = villages;
+                    var tampung = '<option value="">Kelurahan/Desa</option>';
+                    data.forEach(element => {
+                        tampung +=
+                            `<option value="${element.name}">${element.name}</option>`;
+                    });
+                    selectKelurahan.innerHTML = tampung;
+                })
+                .catch(error => console.error('Error fetching data:', error));
         });
-    
-        selectKelurahan.addEventListener('change', (e) => {
-            selectedOptions.kelurahan = e.target.value;
-            updateSelectedOptions();
-        });
-    
-        function updateSelectedOptions() {
-            const selectedOptionsJSON = JSON.stringify(selectedOptions);
-            document.getElementById('selectedOptions').value = selectedOptionsJSON;
-        }
     </script>
-<script>
-    const selectProvinsi = document.getElementById('provinsi');
-    selectProvinsi.addEventListener('change', (e) => {
-        var provinsi = e.target.options[e.target.selectedIndex].dataset.reg;
-        var selectedProvinsi = e.target.options[e.target.selectedIndex].value;
-        fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/regencies/${provinsi}.json`)
-            .then(response => response.json())
-            .then(regencies => {
-                var data = regencies;
-                var tampung = '<option>Pilih</option>';
-                document.getElementById('kota').innerHTML = '<option>Pilih</option>';
-                document.getElementById('kecamatan').innerHTML = '<option>Pilih</option>';
-                document.getElementById('kelurahan').innerHTML = '<option>Pilih</option>';
-                data.forEach(element => {
-                    tampung +=
-                        `<option data-dist="${element.id}" value="${element.name}">${element.name}</option>`;
-                });
-                document.getElementById('kota').innerHTML = tampung;
-            })
-            .catch(error => console.error('Error fetching data:', error)); 
-    });
-    const selectKota = document.getElementById('kota');
-    selectKota.addEventListener('change', (e) => {
-        var kota = e.target.options[e.target.selectedIndex].dataset.dist;
-        fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/districts/${kota}.json`)
-            .then(response => response.json())
-            .then(districts => {
-                var data = districts;
-                var tampung = '<option>Pilih</option>';
-                document.getElementById('kecamatan').innerHTML = '<option>Pilih</option>';
-                document.getElementById('kelurahan').innerHTML = '<option>Pilih</option>';
-                data.forEach(element => {
-                    tampung +=
-                        `<option data-vill="${element.id}" value="${element.name}">${element.name}</option>`;
-                });
-                document.getElementById('kecamatan').innerHTML = tampung;
-            })
-            .catch(error => console.error('Error fetching data:', error)); 
-    });
-    const selectKecamatan = document.getElementById('kecamatan');
-    selectKecamatan.addEventListener('change', (e) => {
-        var kecamatan = e.target.options[e.target.selectedIndex].dataset.vill;
-        fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/villages/${kecamatan}.json`)
-            .then(response => response.json())
-            .then(villages => {
-                var data = villages;
-                var tampung = '<option>Pilih</option>';
-                document.getElementById('kelurahan').innerHTML = '<option>Pilih</option>';
-                data.forEach(element => {
-                    tampung +=
-                        `<option value="${element.name}">${element.name}</option>`;
-                });
-                document.getElementById('kelurahan').innerHTML = tampung;
-            })
-            .catch(error => console.error('Error fetching data:', error)); 
-    });
-</script>
 
     <script>
         document.getElementById('npwp_dinas').addEventListener('input', function(e) {

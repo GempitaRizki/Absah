@@ -4,14 +4,19 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\MasterBank;
+use App\Models\MasterStatus;
 use Illuminate\Http\Request;
+use App\Models\Store;
+use App\Models\WilayahJual;
+use Illuminate\Support\Facades\Session;
+use App\Models\Province;
+use App\Models\Village;
+use App\Models\Subdistricts;
+use App\Models\Districts;
 
 class AuthSellerController extends Controller
 {
 
-    //storeSession = use for page 1
-    //storeSessionFor = use for page 2 
-    //owner Session = use for page 3
     public function index()
     {
         return view('seller.register');
@@ -61,7 +66,7 @@ class AuthSellerController extends Controller
 
         //session baru
         $storeFormSession = [
-            'store_name' => $request->input('store_name'), 
+            'store_name' => $request->input('store_name'),
             'web_name' => $request->input('web_name'),
             'public_email' => $request->input('public_email'),
             'phone_number' => $request->input('phone_number'),
@@ -141,33 +146,61 @@ class AuthSellerController extends Controller
         return view('seller.location');
     }
 
-    public function IndexLocationStore(Request $request)
+    //location
+
+    public function getProvinces(Request $request)
+{
+    $provinces = Province::all();
+    return response()->json($provinces);
+}
+
+public function getDistricts(Request $request)
+{
+    $provinceId = $request->input('provinceId');
+    $districts = Districts::where('province_id', $provinceId)->get();
+    return response()->json($districts);
+}
+
+public function getSubdistricts(Request $request)
+{
+    $districtId = $request->input('districtId');
+    $subdistricts = SubDistricts::where('districts_id', $districtId)->get();
+    return response()->json($subdistricts);
+}
+
+public function getVillages(Request $request)
+{
+    $subdistrictId = $request->input('subdistrictId');
+    $villages = Village::where('subdistrict_id', $subdistrictId)->get();
+    return response()->json($villages);
+}
+
+    public function WilayahJual()
     {
-        $request->validate([
-            'province' => 'required',
-            'districts' => 'required',
-            'subdistricts' => 'required',
-            'village' => 'required',
-            'address' => 'required',
-            'postal_code' => 'required',
-        ]);
-
-        $locationSession = [
-            'province' => $request->input('province'),
-            'districts' => $request->input('districts'),
-            'subdistricts' => $request->input('subdistricts'),
-            'village' => $request->input('village'),
-            'address' => $request->input('address'),
-            'postal_code' => $request->input('postal_code')
-
-        ];
-        session(['locationSession' => $locationSession]);
-
-        // dd($locationSession);
-
-    return redirect()->route('indexBank');
+        return view('seller.WilayahJual');
     }
 
+
+    public function WilayahJualStore(Request $request)
+    {
+        $request->validate([
+            //belum dapat dilakukan
+        ]);
+
+        $wilayahJualSession = [
+            //belum dapat dilakukan
+
+        ];
+        session(['wilayahJualSession' => $wilayahJualSession]);
+
+        dd($wilayahJualSession);
+
+        return redirect()->route('indexBank');
+    }
+
+
+
+    //wilayah jual sek 
     public function IndexBank()
     {
         $banks = MasterBank::all();
@@ -177,9 +210,9 @@ class AuthSellerController extends Controller
     public function IndexBankStore(Request $request)
     {
         $request->validate([
-            'bank_id' => 'required', 
-            'number' => 'required|max:255', 
-            'name' => 'required|max:255', 
+            'bank_id' => 'required',
+            'number' => 'required|max:255',
+            'name' => 'required|max:255',
         ]);
         $bankSession = [
             'bank_id' => $request->input('bank_id'),
@@ -195,7 +228,6 @@ class AuthSellerController extends Controller
 
     public function Summary()
     {
-        return view('seller.registration_summary'); 
+        return view('seller.registration_summary');
     }
-
 }

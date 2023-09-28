@@ -3,6 +3,11 @@
 @section('content')
 <div class="container mt-5" style="margin-bottom: 100px;">
     <h3>Data Registrasi</h3>
+    <div class="logo-2 furniture-logo ptb-30">
+        <a href="/">
+            <img src="{{ url('assets/img/logo/logo-3.png') }}" alt="">
+        </a>
+    </div>
     <div class="row">
         <div class="col-lg-12 text-right">
             <a href="{{ route('registrationSummary') }}" class="btn btn-primary" name="info-usaha">Preview Data</a>
@@ -62,6 +67,10 @@
         <li><strong>Address:</strong> {{ session('locationSession.address') }}</li>
         <li><strong>Postal Code:</strong> {{ session('locationSession.postal_code') }}</li>
 
+    </ul>
+    <h4>Wilayah Jual</h4>
+    <ul>
+        <li><strong>Kabupaten:</strong> {{ session('selectedDistricts.name') }}</li>
     </ul>
 
     <h4>Informasi Bank</h4>

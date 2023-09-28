@@ -7,6 +7,7 @@
             color: red;
         }
     </style>
+
     <div class="container mt-5" style="margin-bottom: 100px;">
         <form method="POST" action="{{ route('IndexSellerLocationStore') }}">
             @csrf
@@ -32,60 +33,43 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="province" class="col-md-4 col-form-label text-md-end text-start required-label">Provinsi</label> 
-                            <select class="form-control" id="province" name="province" value="province" required>
+                            <label for="province" class="required-label">Provinsi</label>
+                            <select class="form-control" id="province" name="province" required>
+                                <option value="">Pilih Provinsi</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="districts" class="col-md-4 col-form-label text-md-end text-start required-label">Kabupaten</label>
-                            <select class="form-control" id="districts" name="districts" value="districts" required>
-                                <option>Pilih Kabupaten</option>
+                            <label for="districts" class="required-label">Kabupaten</label>
+                            <select class="form-control" id="districts" name="districts" required>
+                                <option value="">Pilih Kabupaten</option>
                             </select>
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="subdistricts" class="col-md-4 col-form-label text-md-end text-start required-label">Kecamatan</label>
+                            <label for="subdistricts" class="required-label">Kecamatan</label>
                             <select class="form-control" id="subdistricts" name="subdistricts" required>
-                                <option value="subdistricts">Pilih Kecamatan</option>
+                                <option value="">Pilih Kecamatan</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="village" class="col-md-4 col-form-label text-md-end text-start required-label">Kelurahan / Desa</label>
-                            <select class="form-control" id="village" name="village" reuired>
-                                <option value="village">Pilih Kelurahan / Desa</option>
+                            <label for="villages" class="required-label">Desa</label>
+                            <select class="form-control" id="villages" name="villages" required>
+                                <option value="">Pilih Desa</option>
                             </select>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="form-group">
-                            <label for="address" class="col-md-4 col-form-label text-md-end text-start required-label">Nama Jalan</label>
-                            <input type="text" class="form-control" id="address" name="address" maxlength="255"
-                                required>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="postal_code" class="col-md-4 col-form-label text-md-end text-start required-label">Kode Pos</label>
-                            <input type="text" class="form-control" id="postal_code" name="postal_code" maxlength="10" required>
-                        </div>
-                    </div>
-                </div>
-
+                <br>
                 <div class="row">
                     <div class="col-lg-12">
                         <button type="submit" class="btn btn-primary float-right" name="info-usaha">Berikutnya</button>
@@ -94,80 +78,110 @@
             </div>
         </form>
     </div>
-    <script>
-        fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/provinces.json`)
-            .then(response => response.json())
-            .then(province => {
-                var data = province;
-                var dataTampung = '<option>Pilih Provinsi</option>';
-                data.forEach(element => {
-                    dataTampung +=
-                        `<option data-reg="${element.id}" value="${element.name}">${element.name}</option>`;
-                });
-                document.getElementById('province').innerHTML = dataTampung;
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    </script>
-    <script>
-        const selectProvince = document.getElementById('province');
 
-        selectProvince.addEventListener('change', (e) => {
-            var province = e.target.options[e.target.selectedIndex].getAttribute('data-reg');
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function populateProvinces() {
+            var url = "{{ route('get-provinces') }}";
 
-            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/regencies/${province}.json`)
-                .then(response => response.json())
-                .then(districts => {
-                    var data = districts;
-                    var dataTampung = '<option>Pilih Kabupaten</option>';
-                    document.getElementById('districts').innerHTML = '<option>Pilih</option>';
-                    document.getElementById('subdistricts').innerHTML = '<option>Pilih</option>';
-                    document.getElementById('village').innerHTML = '<option>Pilih</option>';
-                    data.forEach(element => {
-                        dataTampung +=
-                            `<option data-dist="${element.id}" value="${element.name}">${element.name}</option>`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#province').empty();
+                    $('#province').append('<option value="">Pilih Provinsi</option>');
+                    $.each(data, function(key, value) {
+                        $('#province').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
                     });
-                    document.getElementById('districts').innerHTML = dataTampung;
-                })
-                .catch(error => console.error('Error fetching Data:', error));
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            populateProvinces();
         });
 
-        const selectDistricts = document.getElementById('districts');
+        function populateDistrictsByProvince(provinceId) {
+            var url = "{{ route('get-districts-by-province', ':provinceId') }}".replace(':provinceId', provinceId);
 
-        selectDistricts.addEventListener('change', (e) => {
-            var districts = e.target.options[e.target.selectedIndex].getAttribute('data-dist');
-
-            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/districts/${districts}.json`)
-                .then(response => response.json())
-                .then(DistrictData => {
-                    var data = DistrictData;
-                    var dataTampung = '<option>Pilih</option>';
-                    document.getElementById('subdistricts').innerHTML = '<option>Pilih</option>';
-                    document.getElementById('village').innerHTML = '<option>Pilih</option>';
-                    data.forEach(element => {
-                        dataTampung +=
-                            `<option data-vill="${element.id}" value="${element.name}">${element.name}</option>`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#districts').empty();
+                    $('#districts').append('<option value="">Pilih Kabupaten</option>');
+                    $.each(data, function(key, value) {
+                        $('#districts').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
                     });
-                    document.getElementById('subdistricts').innerHTML = dataTampung;
-                })
-                .catch(error => console.error('Error fetching data:', error));
+                }
+            });
+        }
+
+        $('#province').change(function() {
+            var provinceId = $(this).val();
+            if (provinceId) {
+                populateDistrictsByProvince(provinceId);
+            } else {
+                $('#districts').empty();
+                $('#districts').append('<option value="">Pilih Kabupaten</option>');
+            }
         });
 
-        const selectSubdistricts = document.getElementById('subdistricts');
+        function populateSubDistrictsByDistrict(districtId) {
+            var url = "{{ route('get-subdistricts-by-district', ':districtId') }}".replace(':districtId', districtId);
 
-        selectSubdistricts.addEventListener('change', (e) => {
-            var subdistricts = e.target.options[e.target.selectedIndex].getAttribute('data-vill');
-
-            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/villages/${subdistricts}.json`)
-                .then(response => response.json())
-                .then(village => {
-                    var data = village;
-                    var dataTampung = '<option>Pilih</option>';
-                    data.forEach(element => {
-                        dataTampung += `<option value="${element.name}">${element.name}</option>`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#subdistricts').empty();
+                    $('#subdistricts').append('<option value="">Pilih Kecamatan</option>');
+                    $.each(data, function(key, value) {
+                        $('#subdistricts').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
                     });
-                    document.getElementById('village').innerHTML = dataTampung;
-                })
-                .catch(error => console.error('Error fetching data:', error));
+                }
+            });
+        }
+
+        $('#districts').change(function() {
+            var districtId = $(this).val();
+            if (districtId) {
+                populateSubDistrictsByDistrict(districtId);
+            } else {
+                $('#subdistricts').empty();
+                $('#subdistricts').append('<option value="">Pilih Kecamatan</option>');
+            }
+        });
+
+        function populateVillagesBySubDistrict(subdistrictId) {
+            var url = "{{ route('get-villages-by-subdistrict', ':subdistrictId') }}".replace(':subdistrictId',
+                subdistrictId);
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#villages').empty();
+                    $('#villages').append('<option value="">Pilih Desa</option>');
+                    $.each(data, function(key, value) {
+                        $('#villages').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
+                    });
+                }
+            });
+        }
+
+        $('#subdistricts').change(function() {
+            var subdistrictId = $(this).val();
+            if (subdistrictId) {
+                populateVillagesBySubDistrict(subdistrictId);
+            } else {
+                $('#villages').empty();
+                $('#villages').append('<option value="">Pilih Desa</option>');
+            }
         });
     </script>
 @endsection

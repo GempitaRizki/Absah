@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+	use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-	
-    protected $fillable = [
+
+	protected $fillable = [
 		'name', 'email', 'password', 'phone', 'jabatan', 'NIP', 'NIK',
 	];
 
@@ -30,7 +30,7 @@ class User extends Authenticatable
 
 	protected $casts = [
 		'email_verified_at' => 'datetime',
-		'password' =>'hashed'
+		'password' => 'hashed'
 	];
 
 	public function products()
@@ -47,7 +47,12 @@ class User extends Authenticatable
 	protected function role(): Attribute
 	{
 		return new Attribute(
-			get: fn($value) => ["user", "seller", "mitra", "admin"][$value],
+			get: fn ($value) => ["user", "seller", "mitra", "admin"][$value],
 		);
+	}
+
+	public function hasRole($role)
+	{
+		return $this->role === $role;
 	}
 }

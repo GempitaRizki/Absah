@@ -9,7 +9,7 @@ class SubDistricts extends Model
 {
     use HasFactory;
     protected $table = 'subdistricts';
-    protected $primaryKey = 'id'; 
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name',
@@ -21,6 +21,11 @@ class SubDistricts extends Model
 
     public function district()
     {
-        return $this->belongsTo(District::class, 'districts_id');
+        return $this->belongsTo(Districts::class, 'districts_id');
+    }
+
+    public function villages()
+    {
+        return $this->hasMany(Village::class, 'subdistrict_id');
     }
 }

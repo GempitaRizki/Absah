@@ -24,7 +24,7 @@
                             <center>
                                 <img src="{{url('assets/img/logo/pembeli.png')}}" alt="pembeli.png" width="50px" height="50px">
                                 <br>
-                                <a href="{{route('register.buyer')}}">Register Pembeli</a> 
+                                <a href="{{route('index.users')}}">Register Pembeli</a> 
                             </center>
                         </div>
                     </a>

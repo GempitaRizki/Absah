@@ -21,6 +21,7 @@ class Village extends Model
 
     public function subdistrict()
     {
-        return $this->belongsTo(Subdistrict::class, 'subdistrict_id');
+        return $this->belongsTo(SubDistricts::class, 'subdistrict_id');
     }
+    
 }

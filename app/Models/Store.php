@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Store extends Model
 {
     use HasFactory;
-    protected $table = 'stores'; 
-    protected $primaryKey = 'id'; 
+    protected $table = 'stores';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'store_name',
@@ -54,5 +55,17 @@ class Store extends Model
     public function status()
     {
         return $this->belongsTo(MasterStatus::class, 'status_id');
+    }
+
+    public static function getStoreIdByUserLogin()
+    {
+        $user = Auth::user();
+
+        if ($user && $user->hasRole('3')) {
+
+            return $user->store_id;
+        }
+
+        return null;
     }
 }
