@@ -13,6 +13,7 @@ class Store extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'store_type',
         'store_name',
         'province_id',
         'district_id',

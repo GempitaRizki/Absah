@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class StoreFile extends Model
 {
-    use HasFactory;
 
     protected $table = 'store_file';
 
@@ -24,3 +23,4 @@ class StoreFile extends Model
     }
     
 }
+

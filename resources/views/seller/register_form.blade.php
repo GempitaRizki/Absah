@@ -53,8 +53,8 @@
                     <div class="form-group">
                         <label for="phone_number" class="col-md-4 col-form-label text-md-end text-start required-label">No
                             Hp</label>
-                        <input type="text" class="form-control" name="phone_number" id="phone_number" required
-                            value="{{ old('phone_number', session('sellerData.phone_number')) }}"
+                        <input type="text" class="form-control" name="phone_number" id="phone_number" minlength="8"
+                            required value="{{ old('phone_number', session('sellerData.phone_number')) }}"
                             placeholder="Nomor Telepon">
                     </div>
                 </div>
@@ -201,13 +201,15 @@
                         <option value="10000000000">Rp. 500.000.000 - Rp. 10.000.000.000</option>
                     </select>
                 </div>
-                <div class="col-lg-6">
-                    <select name="kategori_usaha" id="kategori_usaha_dropdown" disabled>
-                        <option value="">Kategori Usaha</option>
-                        <option value="Mikro">Mikro</option>
-                        <option value="Kecil">Kecil</option>
-                        <option value="Menengah">Menengah</option>
-                    </select>
+                <div class="col-md-6">
+                    <div id="kategori_usaha_container">
+                        <select name="kategori_usaha" id="kategori_usaha_dropdown" disabled>
+                            <option value="">Kategori Usaha</option>
+                            <option value="Mikro">Mikro</option>
+                            <option value="Kecil">Kecil</option>
+                            <option value="Menengah">Menengah</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -232,8 +234,8 @@
                     <div class="form-group">
                         <label for="npwp"
                             class="col-md-4 col-form-label text-md-end text-start required-label">NPWP</label>
-                        <input type="text" class="form-control" name="npwp" id="npwp" required
-                            value="{{ old('npwp') }}" placeholder="NPWP">
+                        <input type="text" class="form-control" name="npwp" id="npwp" maxlength="20"
+                            required value="{{ old('npwp') }}" placeholder="NPWP">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -288,9 +290,31 @@
         });
     </script>
     <script>
-        function formatNpwp(npwp) {
-            if (typeof npwp === 'string') {
-                return npwp.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/, '$1.$2.$3.$4-$5.$6');
+        const NPWP = document.getElementById("npwp")
+        NPWP.oninput = (e) => {
+            e.target.value = autoFormatNPWP(e.target.value);
+        }
+
+        function autoFormatNPWP(NPWPString) {
+            try {
+                var cleaned = ("" + NPWPString).replace(/\D/g, "");
+                var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
+                return [
+                    match[1],
+                    match[2] ? "." : "",
+                    match[2],
+                    match[3] ? "." : "",
+                    match[3],
+                    match[4] ? "." : "",
+                    match[4],
+                    match[5] ? "-" : "",
+                    match[5],
+                    match[6] ? "." : "",
+                    match[6]
+                ].join("")
+
+            } catch (err) {
+                return "";
             }
         }
     </script>

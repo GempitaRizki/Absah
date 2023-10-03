@@ -7,10 +7,8 @@
         <title>Absah.id</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="{{url('public/assets/img/favicon.png')}}??">
+        <link rel="shortcut icon" type="image/x-icon" href="{{url('public/assets/img/favicon.ico')}}??">
 		
-		<!-- all css here -->
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/magnific-popup.css') }}">
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/animate.css') }}">
@@ -28,16 +26,12 @@
         <meta name="csrf-token" content="{{ csrf_token()}}">
     </head>
     <body>
-        <!--[if lt IE 8]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        @include('seller.header');
-        {{-- <!-- @include('themes.ezone.partials.mini_cart') --> --}}
+
+        @include('seller.header')
 
         @yield('content')
 
-        {{-- @include('partials.footer'); --}}
-        @include('themes.ezone.partials.modals');
+        @include('themes.ezone.partials.modals')
 
 
 		<!-- all js here -->

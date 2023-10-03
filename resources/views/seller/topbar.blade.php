@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="{{url('public/assets/img/favicon.png')}}??">
+        <link rel="shortcut icon" type="image/x-icon" href="{{url('public/assets/img/favicon.ico')}}">
 		
 		<!-- all css here -->
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/bootstrap.min.css') }}">
@@ -41,6 +41,7 @@
 
 
 		<!-- all js here -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="{{ asset('themes/ezone/assets/js/vendor/jquery-1.12.0.min.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/popper.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/bootstrap.min.js') }}"></script>

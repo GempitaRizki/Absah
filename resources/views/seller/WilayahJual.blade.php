@@ -1,55 +1,38 @@
 @extends('seller.topbar')
 
 @section('content')
-<div class="container mt-5" style="margin-bottom: 100px;">
-    <form method="POST" action="{{ route('StoreWilayahJualForm') }}">
-        @csrf
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <button type="button" class="pull-right btn btn-primary"><i class="fa fa-plus"></i>Tambah
-                            Wilayah
-                            Jual</button>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="panel-body container-items">
-                        <div class="item panel panel-default">
-                            <div class="panel-heading">
-                                <span class="panel-title-address">Wilayah Jual: 1</span>
-                                <button type="button" class="pull-right btn btn-danger"><i
-                                        class="fa fa-minus"></i>Hapus</button>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="panel-body">
-                                <input type="hidden" name="WilayahJual[0][id]">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <p><b>Region Type</b></p>
-                                        <select name="WilayahJual[0][region_type]"
-                                            class="form-control form-control-lg">
-                                            <option value="Regional">Regional</option>
-                                            <option value="Nasional">Nasional</option>
-                                        </select>
+    <div class="container mt-5" style="margin-bottom: 100px;">
+        <form method="POST" action="{{ route('WilayahJual-Store') }}">
+            @csrf
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <h3 class="center">Wilayah Jual</h3>
+                        <hr>
+                        <div class="panel-body container-items">
+                            <div class="item panel panel-default">
+                                <div class="panel-body">
+                                    <input type="hidden" name="districts[]"> 
+                                    <div class="selected-districts">
+                                        <div class="selected-district-names"></div>
                                     </div>
-                                </div>
-                                <br>
-                                <div class="row" id="showKota">
-                                    <div class="col-sm-12">
-                                        <p><b>Districts</b></p>
-                                        <select name="WilayahJual[0][districts][]"
-                                            class="form-control form-control-lg" multiple id="districtSelect"
-                                            size="5" style="height: 200px; font-size: 16px;">
-                                        </select>
-                                        <div id="selectedOptions">
-                                            <b>Data yang Disimpan:</b>
-                                            <ul>
-                                                @foreach (session('selectedDistricts', []) as $district)
-                                                    <li>{{ isset($district['name']) ? $district['name'] : 'Nama Tidak Dapat Ditemukan' }}</li>
-                                                @endforeach
-                                            </ul>
+                                    <input type="hidden" name="district_ids[]" class="selected-district-ids"> 
+                                    <div class="row">
+                                        <div class="col-sm-4">
                                         </div>
-                                        <br>
+                                    </div>
+                                    <br>
+                                    <div class="row showKota"> 
+                                        <div class="col-sm-12">
+                                            <p><b>Districts</b></p>
+                                            <select name="districts[]" class="form-control form-control-lg"
+                                                multiple id="districtSelect" size="5" style="height: 200px; font-size: 16px;">
+                                                @foreach ($districts as $district)
+                                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <br>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -57,46 +40,89 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <button type="submit" class="btn btn-primary float-right" name="info-usaha">Berikutnya</button>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="selectedDistrictNames"></div>
+                    <button type="submit" class="btn btn-primary float-right" name="info-usaha">Berikutnya</button>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
-<script>
-    const districtSelect = document.getElementById('districtSelect');
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        jQuery(document).ready(function($) {
+            var selectedDistrictsCount = 0;
 
-    function fetchRegenciesForProvince(provinceId) {
-        const apiUrl = `https://kanglerian.github.io/api-wilayah-indonesia/api/regencies/${provinceId}.json`;
+            $('#addDistrictButton').on('click', function() {
+                var newItem = $('.item.panel.panel-default').first().clone();
 
-        return fetch(apiUrl)
-            .then(response => response.json())
-            .then(regencies => {
-                regencies.forEach(regency => {
-                    const option = document.createElement('option');
-                    option.value = regency.id;
-                    option.textContent = regency.name;
-                    option.setAttribute('data-province-id', provinceId);
-                    districtSelect.appendChild(option);
+                newItem.find('select[name^="districts"]').val([]);
+                newItem.find('input[name^="districts[]"]').val('');
+
+                var panelTitle = newItem.find('.panel-title-address');
+                var panelTitleText = panelTitle.text();
+                panelTitleText = panelTitleText.replace(/(\d+)/, function(match) {
+                    return parseInt(match) + 1;
                 });
-            })
-            .catch(error => {
-                console.error(`Terjadi kesalahan saat mengambil data kabupaten untuk provinsi ${provinceId}:`,
-                    error);
+                panelTitle.text(panelTitleText);
+
+                newItem.find('.selected-districts').html('');
+
+                $('.container-items').append(newItem);
+
+                selectedDistrictsCount++;
+
+                $('#totalSelectedDistricts').text(selectedDistrictsCount);
+
+                var districtSelect = newItem.find('select[name^="districts[]"]');
+                districtSelect.empty();
+                @foreach ($districts as $district)
+                    districtSelect.append($('<option>', {
+                        value: '{{ $district->id }}',
+                        text: '{{ $district->name }}'
+                    }));
+                @endforeach
+
+                districtSelect.selectpicker('refresh');
             });
-    }
 
-    for (let provinceId = 1; provinceId <= 94; provinceId++) {
-        fetchRegenciesForProvince(provinceId);
-    }
+            $('.container-items').on('click', '.remove-item', function() {
+                $(this).closest('.item.panel.panel-default').remove();
+                selectedDistrictsCount--;
+                $('#totalSelectedDistricts').text(selectedDistrictsCount);
 
-    districtSelect.addEventListener('change', () => {
-        const selectedOptions = Array.from(districtSelect.selectedOptions).map(option => option.textContent);
-        const selectedOptionsDiv = document.getElementById('selectedOptions');
-        selectedOptionsDiv.innerHTML = '<b>Data yang dipilih:</b> ' + selectedOptions.join(', ');
-    });
-</script>
+                updateSelectedDistrictNames();
+            });
+
+            $('.container-items').on('change', 'select[name^="districts[]"]', function() {
+                updateSelectedDistrictNames($(this));
+            });
+
+            function updateSelectedDistrictNames(selectElement) {
+                var selectedValues = selectElement.val();
+                var selectedDistrictNames = [];
+                var selectedDistrictIds = [];
+
+                if (selectedValues) {
+                    selectedValues = selectedValues.filter(function(value) {
+                        return value !== null; 
+                    });
+
+                    $.each(selectedValues, function(index, value) {
+                        var districtName = selectElement.find('option[value="' + value + '"]').text();
+                        selectedDistrictNames.push(districtName);
+                        selectedDistrictIds.push(value);
+                    });
+                }
+
+                selectElement.closest('.item.panel.panel-default').find('.selected-district-names').html(
+                    '<b>Districts yang Dipilih:</b> ' + selectedDistrictNames.join(', '));
+
+                selectElement.closest('.item.panel.panel-default').find('.selected-district-ids').val(
+                    selectedDistrictIds);
+            }
+
+            updateSelectedDistrictNames($('select[name^="districts[]"]'));
+        });
+    </script>
 @endsection

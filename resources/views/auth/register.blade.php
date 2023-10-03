@@ -7,9 +7,6 @@
 <div class="container mt-5">
     <div class="col-lg-12">
         <div class="d-flex justify-content-center">
-            <h2>Register</h2>
-        </div>
-        <div class="d-flex justify-content-center">
             <img src="{{url('assets/img/product/absahlogo.png')}}" alt="logoip.png" width="300pxs">
         </div>
     </div>

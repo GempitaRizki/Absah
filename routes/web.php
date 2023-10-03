@@ -13,11 +13,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\location\LocationController;
+use App\Http\Controllers\Location\LocationController;
 use App\Http\Controllers\Seller\AuthSellerController;
-use App\Http\Controllers\Seller\Uploads\UploadDataRegister;
 use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
 use App\Http\Controllers\User\AuthUserController;
+use App\Http\Controllers\Seller\FileUploadController;
+use App\Http\Controllers\SendMailController;
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -92,17 +94,11 @@ Route::get('/register/seller/form', [AuthSellerController::class, 'form'])->name
 Route::post('/register/seller/form', [AuthSellerController::class, 'FormStore'])->name('StoreSellerIndex');
 Route::get('/register/seller/form/info-ttd', [AuthSellerController::class, 'indexForm'])->name('indexForm.info-ttd');
 Route::post('/register/seller/form/info-ttd', [AuthSellerController::class, 'IndexFormStore'])->name('StoreSellerIndexForm');
-Route::get('/register/seller/form/wilayah-jual', [AuthSellerController::class, 'WilayahJual'])->name('index.wilayahJual');
-Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 'WilayahJualStore'])->name('StoreWilayahJualForm');
+
 Route::get('/register/seller/form/location', [AuthSellerController::class, 'IndexLocation'])->name('IndexSellerLocation');
-Route::post('/register/seller/form/location', [AuthSellerController::class, 'IndexLocationStore'])->name('IndexSellerLocationStore');
 Route::get('/register/seller/form/bank', [AuthSellerController::class, 'IndexBank'])->name('indexBank');
 Route::post('/register/seller/form/bank', [AuthSellerController::class, 'IndexBankStore'])->name('submitBankInfo');
 Route::get('/register/seller/registration-summary', [AuthSellerController::class, 'summary'])->name('registrationSummary');
-
-//Seller Register Upload Data 
-Route::get('/register/seller/registration-summary/upload-data', [UploadDataRegisterController::class, 'index'])->name('uploadDataRegister');
-Route::post('/register/seller/registration-summary/upload-data', [UploadDataRegisterController::class, 'uploadFile'])->name('upload.file');
 
 //User Register
 Route::get('/register/buyer', [AuthUserController::class, 'index'])->name('index.users');
@@ -110,8 +106,22 @@ Route::post('/register/buyer', [AuthUserController::class, 'indexStore'])->name(
 Route::get('/register/buyer/info-sekolah', [AuthUserController::class, 'infoSekolah'])->name('index.infoSekolah');
 Route::post('/register/buyer/info-sekolah', [AuthUserController::class, 'infoSekolahStore'])->name('index.infoSekolahStore');
 
-//Location GET DB 
-Route::get('/get-provinces', [LocationController::class, 'getProvinces'])->name('get-provinces');
-Route::get('/get-districts/{provinceId}', [LocationController::class, 'getDistrictsByProvince'])->name('get-districts-by-province');
-Route::get('/get-subdistricts/{districtId}', [LocationController::class, 'getSubDistrictsByDistrict'])->name('get-subdistricts-by-district');
-Route::get('/get-villages/{subdistrictId}', [LocationController::class, 'getVillagesBySubDistrict'])->name('get-villages-by-subdistrict');
+//Location seller
+Route::get('/get-provinces', [AuthSellerController::class, 'getProvinces'])->name('get-provinces');
+Route::get('/get-districts/{provinceId}', [AuthSellerController::class, 'getDistrictsByProvince'])->name('get-districts-by-province');
+Route::get('/get-subdistricts/{districtId}', [AuthSellerController::class, 'getSubDistrictsByDistrict'])->name('get-subdistricts-by-district');
+Route::get('/get-villages/{subdistrictId}', [AuthSellerController::class, 'getVillagesBySubDistrict'])->name('get-villages-by-subdistrict');
+Route::post('/register/seller/form/location', [AuthSellerController::class, 'storeLocation'])->name('LocationServiceStore');
+
+//wilayah jual
+Route::get('/register/seller/form/wilayah-jual', [AuthSellerController::class, 'IndexWilayahJual'])->name('WilayahJualIndex');
+Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 'StoreWilayahJual'])->name('WilayahJual-Store');
+
+
+//uploadfile
+Route::get('/register/seller/form/upload', [FileUploadController::class, 'index'])->name('uploadFiles');
+Route::post('/register/seller/form/upload', [FileUploadController::class, 'store'])->name('uploadForm');
+
+
+//test mail 
+Route::get('/send-mail', [SendMailController::class, 'index']);
