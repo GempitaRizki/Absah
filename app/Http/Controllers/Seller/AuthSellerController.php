@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Seller;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\MasterBank;
@@ -13,7 +14,7 @@ use App\Models\Province;
 use App\Models\Village;
 use App\Models\Subdistricts;
 use App\Models\Districts;
-use Laravolt\Indonesia\Seeds\DistrictsSeeder;
+use App\Models\User;
 
 class AuthSellerController extends Controller
 {
@@ -40,6 +41,11 @@ class AuthSellerController extends Controller
         ];
 
         session(['storeSession' => $storeSession]);
+
+        // $store = new Store();
+        // $store->seller_type = $storeSession['seller_type'];
+        // $store->store_name = $storeSession['store_name'];
+        // $store->save();
 
         // dd($storeSession);
 
@@ -247,43 +253,42 @@ class AuthSellerController extends Controller
     public function Summary()
     {
         $locationSessionStore = session('locationSessionStore', []);
-    
+
         if (isset($locationSessionStore['province'])) {
             $province = Province::find($locationSessionStore['province']);
         } else {
             $province = null;
         }
-    
+
         if (isset($locationSessionStore['districts'])) {
             $districts = Districts::find($locationSessionStore['districts']);
         } else {
             $districts = null;
         }
-    
+
         if (isset($locationSessionStore['subdistricts'])) {
             $subdistricts = Subdistricts::find($locationSessionStore['subdistricts']);
         } else {
             $subdistricts = null;
         }
-    
+
         if (isset($locationSessionStore['villages'])) {
             $villages = Village::find($locationSessionStore['villages']);
         } else {
             $villages = null;
         }
-    
+
         $WilayahJualSession = session('WilayahJualSession', []);
-        
+
         if (isset($WilayahJualSession['districts'])) {
             $districtIds = $WilayahJualSession['districts'];
             $wilayahJualDistricts = Districts::whereIn('id', $districtIds)->get();
         } else {
             $wilayahJualDistricts = null;
         }
-    
+
         return view('seller.registration_summary', compact('province', 'districts', 'subdistricts', 'villages', 'wilayahJualDistricts'));
     }
-    
 }
 
 class LocationServiceStore

@@ -19,7 +19,7 @@ use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
 use App\Http\Controllers\User\AuthUserController;
 use App\Http\Controllers\Seller\FileUploadController;
 use App\Http\Controllers\SendMailController;
-
+use App\Livewire\FileUploadComponent;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -121,7 +121,10 @@ Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 
 //uploadfile
 Route::get('/register/seller/form/upload', [FileUploadController::class, 'index'])->name('uploadFiles');
 Route::post('/register/seller/form/upload', [FileUploadController::class, 'store'])->name('uploadForm');
+Route::post('/delete-file/{key}', 'Seller\FileUploadController@deleteFile')->name('deleteFile');
 
 
 //test mail 
 Route::get('/send-mail', [SendMailController::class, 'index']);
+
+

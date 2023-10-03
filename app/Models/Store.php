@@ -58,15 +58,15 @@ class Store extends Model
         return $this->belongsTo(MasterStatus::class, 'status_id');
     }
 
-    public static function getStoreIdByUserLogin()
-    {
-        $user = Auth::user();
+    // public static function getStoreIdByUserLogin()
+    // {
+    //     $user = Auth::user();
 
-        if ($user && $user->hasRole('3')) {
+    //     if ($user && $user->hasRole('3')) {
 
-            return $user->store_id;
-        }
+    //         return $user->store_id;
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 }
