@@ -28,9 +28,11 @@ class Store extends Model
         'about_us',
         'fb_name',
         'tw_name',
+        'yt_name',
         'linked_name',
         'web_name',
         'status_id',
+        'seller_type',
     ];
 
     public function province()
@@ -58,15 +60,10 @@ class Store extends Model
         return $this->belongsTo(MasterStatus::class, 'status_id');
     }
 
-    // public static function getStoreIdByUserLogin()
-    // {
-    //     $user = Auth::user();
-
-    //     if ($user && $user->hasRole('3')) {
-
-    //         return $user->store_id;
-    //     }
-
-    //     return null;
-    // }
+    public function sellerType()
+    {
+        return $this->belongsTo(MasterStatus::class, 'seller_type', 'name');
+    }
+    
+    
 }

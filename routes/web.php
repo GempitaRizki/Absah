@@ -105,6 +105,7 @@ Route::get('/register/buyer', [AuthUserController::class, 'index'])->name('index
 Route::post('/register/buyer', [AuthUserController::class, 'indexStore'])->name('StoreBuyerSession');
 Route::get('/register/buyer/info-sekolah', [AuthUserController::class, 'infoSekolah'])->name('index.infoSekolah');
 Route::post('/register/buyer/info-sekolah', [AuthUserController::class, 'infoSekolahStore'])->name('index.infoSekolahStore');
+Route::get('/register/buyer/info-sekolah/form', [AuthUserController::class, 'indexForm'])->name('index.form');
 
 //Location seller
 Route::get('/get-provinces', [AuthSellerController::class, 'getProvinces'])->name('get-provinces');
@@ -121,10 +122,15 @@ Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 
 //uploadfile
 Route::get('/register/seller/form/upload', [FileUploadController::class, 'index'])->name('uploadFiles');
 Route::post('/register/seller/form/upload', [FileUploadController::class, 'store'])->name('uploadForm');
-Route::post('/delete-file/{key}', 'Seller\FileUploadController@deleteFile')->name('deleteFile');
+Route::post('/delete-file/{key}', [FileUplpadController::class, 'deleteFile'])->name('deleteFile');
 
-
+//Location User
+Route::get('/get-provinces', [AuthUserController::class, 'getProvinces'])->name('get-provinces-user');
+Route::get('/get-districts/{provinceId}', [AuthUserController::class, 'getDistricts'])->name('get-districts-by-province-user');
+Route::get('/get-subdistricts/{districtId}', [AuthUserController::class, 'getSubDistrictsByDistrict'])->name('get-subdistricts-by-district-user');
+Route::get('/get-villages/{subdistrictId}', [AuthUserController::class, 'getVillagesBySubDistrict'])->name('get-villages-by-subdistrict-user');
+Route::get('/register/buyer/info-sekolah', [AuthUserController::class, 'IndexLocation'])->name('IndexUserController');
 //test mail 
-Route::get('/send-mail', [SendMailController::class, 'index']);
+// Route::get('/send-mail', [SendMailController::class, 'index']);
 
 

@@ -13,14 +13,14 @@ class StoreDetail extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = 
+    protected $fillable =
     [
         'nib',
         'skb',
         'akta',
         'akta_perusahaan',
         'npwp',
-        'suip',
+        'siup',
         'tdp',
         'kbli',
         'latitude',
@@ -35,7 +35,11 @@ class StoreDetail extends Model
         'upload_sertel_pajak',
 
     ];
-    
+
+    protected $casts = [
+        'store_id' => 'string', 
+    ];
+
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id');
@@ -60,6 +64,5 @@ class StoreDetail extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'pkp');
     }
-
 
 }

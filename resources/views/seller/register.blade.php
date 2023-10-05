@@ -24,8 +24,8 @@
                                             class="col-md-4 col-form-label text-md-end text-start required-label">Surel</label>
                                         <div class="col-md-6">
                                             <input type="text" class="form-control @error('surel') is-invalid @enderror"
-                                                id="surel" name="surel" value="{{ Session::get('storeSession.surel') }}"
-                                                required>
+                                                id="surel" name="surel"
+                                                value="{{ old('surel', session('storeSession.surel')) }}" required>
                                             @if ($errors->has('surel'))
                                                 <span class="text-danger">{{ $errors->first('surel') }}</span>
                                             @endif
@@ -39,30 +39,24 @@
                                                 class="form-control @error('password') is-invalid @enderror" id="password"
                                                 name="password" placeholder="Password" required>
                                             <input type="hidden" name="original_password"
-                                                value="{{ Session::get('storeSession.password') }}">
+                                                value="{{ old('original_password', session('storeSession.password')) }}">
                                             @if ($errors->has('password'))
                                                 <span class="text-danger">{{ $errors->first('password') }}</span>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <select class="form-control @error('seller_type') is-invalid @enderror"
-                                            id="seller_type" name="seller_type" required>
-                                            <option value="Corporate"
-                                                {{ Session::get('storeSession.seller_type') == 'Corporate' ? 'selected' : '' }}>
-                                                Corporate</option>
+                                    <div class="row">
+                                        <select class="form-control" name="seller_type" id="seller_type">
                                             <option value="Individual"
-                                                {{ Session::get('storeSession.seller_type') == 'Individual' ? 'selected' : '' }}>
+                                                {{ old('seller_type', session('storeSession.seller_type')) === 'Individual' ? 'selected' : '' }}>
                                                 Individual</option>
+                                            <option value="Corporate"
+                                                {{ old('seller_type', session('storeSession.seller_type')) === 'Corporate' ? 'selected' : '' }}>
+                                                Corporate
+                                            </option>
                                         </select>
-                                        @error('seller_type')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-
-                                        <input type="hidden" name="seller_type_value"
-                                            value="{{Session('storeSession.seller_type') == 'Corporate' ? 1 : 0 }}">
-
                                     </div>
+                                    <br><br>
                                     <div class="form-group row">
                                         <label for="store_name"
                                             class="col-md-4 col-form-label text-md-end text-start required-label">Nama
@@ -71,7 +65,8 @@
                                             <input type="text"
                                                 class="form-control @error('store_name') is-invalid @enderror"
                                                 id="store_name" name="store_name"
-                                                value="{{ Session::get('storeSession.store_name') }}" required>
+                                                value="{{ old('store_name', session('storeSession.store_name')) }}"
+                                                required>
                                             @if ($errors->has('store_name'))
                                                 <span class="text-danger">{{ $errors->first('store_name') }}</span>
                                             @endif

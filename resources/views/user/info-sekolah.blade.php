@@ -163,44 +163,52 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="provinsi"
-                                                class="col-md-4 col-form-label text-md-end text-start required-label">Provinsi</label>
-                                            <select class="form-control" id="provinsiDropdown" name="provinsi"
-                                                value="{{ old('provinsi') }}" required>
-                                                <option value="">Pilih Provinsi</option>
-                                            </select>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="province" class="required-label">Provinsi</label>
+                                                <select class="form-control" id="province" name="province" required>
+                                                    <option value="">Pilih Provinsi</option>
+                                                    @foreach($provinces as $province)
+                                                        <option value="{{ $province->id }}">{{ $province->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="districts" class="required-label">Kabupaten</label>
+                                                <select class="form-control" id="districts" name="districts" required>
+                                                    <option value="">Pilih Kabupaten</option>
+                                                    @foreach($districts as $district)
+                                                        <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="kota"
-                                                class="col-md-4 col-form-label text-md-end text-start required-label">Kota/Kabupaten</label>
-                                            <select class="form-control" id="kotaDropdown" name="kota"
-                                                value="{{ old('kota') }}" required>
-                                                <option value="">Pilih Kota/Kabupaten</option>
-                                            </select>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="subdistricts" class="required-label">Kecamatan</label>
+                                                <select class="form-control" id="subdistricts" name="subdistricts" required>
+                                                    <option value="">Pilih Kecamatan</option>
+                                                    @foreach($subdistricts as $subdistrict)
+                                                        <option value="{{ $subdistrict->id }}">{{ $subdistrict->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="kecamatan"
-                                                class="col-md-4 col-form-label text-md-end text-start required-label">Kecamatan</label>
-                                            <select class="form-control" id="kecamatanDropdown" name="kecamatan"
-                                                value="{{ old('kecamatan') }}" required>
-                                                <option value="">Pilih Kecamatan</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="kelurahan"
-                                                class="col-md-4 col-form-label text-md-end text-start required-label">Kelurahan/Desa</label>
-                                            <select class="form-control" id="kelurahanDropdown" name="kelurahan"
-                                                value="{{ old('kelurahan') }}" required>
-                                                <option value="">Pilih Kelurahan/Desa</option>
-                                            </select>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="villages" class="required-label">Desa</label>
+                                                <select class="form-control" id="villages" name="villages" required>
+                                                    <option value="">Pilih Desa</option>
+                                                    @foreach($villages as $village)
+                                                        <option value="{{ $village->id }}">{{ $village->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -248,97 +256,125 @@
         </div>
     </div>
     </div>
-
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/provinces.json`)
-            .then(response => response.json())
-            .then(provinces => {
-                var data = provinces;
-                var tampung = '<option value="">Pilih</option>';
-                data.forEach(element => {
-                    tampung +=
-                        `<option data-reg="${element.id}" value="${element.name}">${element.name}</option>`;
-                });
-                document.getElementById('provinsiDropdown').innerHTML = tampung;
+        function populateProvinces() {
+            var url = "{{ route('get-provinces-user') }}";
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#province').empty();
+                    $('#province').append('<option value="">Pilih Provinsi</option>');
+                    $.each(data, function(key, value) {
+                        $('#province').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
+                    });
+                }
             });
+        }
 
-        const selectProvinsi = document.getElementById('provinsiDropdown');
-        const selectKota = document.getElementById('kotaDropdown');
-        const selectKecamatan = document.getElementById('kecamatanDropdown');
-        const selectKelurahan = document.getElementById('kelurahanDropdown');
-
-        const selectedOptions = {
-            provinsi: "",
-            kota: "",
-            kecamatan: "",
-            kelurahan: ""
-        };
-
-        selectProvinsi.addEventListener('change', (e) => {
-            var provinsi = e.target.options[e.target.selectedIndex].dataset.reg;
-            var selectedProvinsi = e.target.options[e.target.selectedIndex].value;
-            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/regencies/${provinsi}.json`)
-                .then(response => response.json())
-                .then(regencies => {
-                    var data = regencies;
-                    var tampung = '<option value="">Kota/Kabupaten</option>';
-                    selectKecamatan.innerHTML = '<option value="">Kecamatan</option>';
-                    selectKelurahan.innerHTML = '<option value="">Kelurahan/Desa</option>';
-                    data.forEach(element => {
-                        tampung +=
-                            `<option data-dist="${element.id}" value="${element.name}">${element.name}</option>`;
-                    });
-                    selectKota.innerHTML = tampung;
-                })
-                .catch(error => console.error('Error fetching data:', error));
+        $(document).ready(function() {
+            populateProvinces();
         });
 
-        selectKota.addEventListener('change', (e) => {
-            var kota = e.target.options[e.target.selectedIndex].dataset.dist;
-            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/districts/${kota}.json`)
-                .then(response => response.json())
-                .then(districts => {
-                    var data = districts;
-                    var tampung = '<option value="">Kecamatan</option>';
-                    selectKelurahan.innerHTML = '<option value="">Kelurahan/Desa</option>';
-                    data.forEach(element => {
-                        tampung +=
-                            `<option data-vill="${element.id}" value="${element.name}">${element.name}</option>`;
+        function populateDistrictsByProvince(provinceId) {
+            var url = "{{ route('get-districts-by-province-user', ':provinceId') }}".replace(':provinceId', provinceId);
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#districts').empty();
+                    $('#districts').append('<option value="">Pilih Kabupaten</option>');
+                    $.each(data, function(key, value) {
+                        $('#districts').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
                     });
-                    selectKecamatan.innerHTML = tampung;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
+                }
+            });
+        }
 
-        selectKecamatan.addEventListener('change', (e) => {
-            var kecamatan = e.target.options[e.target.selectedIndex].dataset.vill;
-            fetch(`https://kanglerian.github.io/api-wilayah-indonesia/api/villages/${kecamatan}.json`)
-                .then(response => response.json())
-                .then(villages => {
-                    var data = villages;
-                    var tampung = '<option value="">Kelurahan/Desa</option>';
-                    data.forEach(element => {
-                        tampung +=
-                            `<option value="${element.name}">${element.name}</option>`;
-                    });
-                    selectKelurahan.innerHTML = tampung;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
-    </script>
-
-    <script>
-        document.getElementById('npwp_dinas').addEventListener('input', function(e) {
-            var npwp = e.target.value.replace(/\D/g, '');
-            npwp = npwp.substring(0, 15);
-
-            if (npwp.length > 0) {
-                npwp = npwp.match(new RegExp('.{1,3}', 'g')).join('.');
-                npwp = npwp.substring(0, 17) + '-' + npwp.substring(17);
+        $('#province').change(function() {
+            var provinceId = $(this).val();
+            if (provinceId) {
+                populateDistrictsByProvince(provinceId);
+            } else {
+                $('#districts').empty();
+                $('#districts').append('<option value="">Pilih Kabupaten</option>');
             }
+        });
 
-            e.target.value = npwp;
+        function populateSubDistrictsByDistrict(districtId) {
+            var url = "{{ route('get-subdistricts-by-district-user', ':districtId') }}".replace(':districtId', districtId);
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#subdistricts').empty();
+                    $('#subdistricts').append('<option value="">Pilih Kecamatan</option>');
+                    $.each(data, function(key, value) {
+                        $('#subdistricts').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
+                    });
+                }
+            });
+        }
+
+        $('#districts').change(function() {
+            var districtId = $(this).val();
+            if (districtId) {
+                populateSubDistrictsByDistrict(districtId);
+            } else {
+                $('#subdistricts').empty();
+                $('#subdistricts').append('<option value="">Pilih Kecamatan</option>');
+            }
+        });
+
+                function populateVillagesBySubDistrict(subdistrictId) {
+            var url = "{{ route('get-villages-by-subdistrict-user', ':subdistrictId') }}".replace(':subdistrictId',
+                subdistrictId);
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    $('#villages').empty();
+                    $('#villages').append('<option value="">Pilih Desa</option>');
+                    $.each(data, function(key, value) {
+                        $('#villages').append('<option value="' + value.id + '">' + value.name +
+                            '</option>');
+                    });
+                }
+            });
+        }
+
+        $('#subdistricts').change(function() {
+            var subdistrictId = $(this).val();
+            if (subdistrictId) {
+                populateVillagesBySubDistrict(subdistrictId);
+            } else {
+                $('#villages').empty();
+                $('#villages').append('<option value="">Pilih Desa</option>');
+            }
+        });
+
+        $(document).ready(function() {
+
+            $('form').submit(function() {
+                var province = $('#province').val();
+                var districts = $('#districts').val();
+                var subdistricts = $('#subdistricts').val();
+                var villages = $('#villages').val();
+                // var latitude = $('#lat').val();
+                // var longitude = $('#lng').val();
+
+                return true;
+            });
         });
     </script>
+
+
 @endsection

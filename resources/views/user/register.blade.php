@@ -56,12 +56,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="password_confirmation" class="col-md-4 col-form-label text-md-end text-start required-label"><b>Konfirmasi Password</b></label>
-                                    <div class="col-md-6">
-                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="jabatan" class="col-md-4 col-form-label text-md-end text-start required-label"><b>Jabatan</b></label>
                                     <div class="col-md-6">
                                         <select class="form-control @error('jabatan') is-invalid @enderror" id="jabatan" name="jabatan" required>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 
 use App\Models\MasterBank;
-use App\Models\MasterStatus;
 use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\WilayahJual;
@@ -14,7 +13,11 @@ use App\Models\Province;
 use App\Models\Village;
 use App\Models\Subdistricts;
 use App\Models\Districts;
-use App\Models\User;
+use App\Models\StoreDetail;
+use App\Models\MasterStatus;
+use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
+
 
 class AuthSellerController extends Controller
 {
@@ -33,24 +36,29 @@ class AuthSellerController extends Controller
             'store_name' => 'required',
         ]);
 
+        $sellerType = $request->input('seller_type');
+        $sellerTypeStatus = MasterStatus::where('name', $sellerType)->first();
+
+        if (!$sellerTypeStatus) {
+            return redirect()->back()->withInput()->withErrors(['message' => 'Data yang dimasukkan tidak valid.']);
+        }
+
         $storeSession = [
             'surel' => $request->surel,
             'password' => $request->password,
-            'seller_type' => $request->seller_type,
             'store_name' => $request->store_name,
+            'seller_type' => $sellerTypeStatus->id,
         ];
 
         session(['storeSession' => $storeSession]);
 
-        // $store = new Store();
-        // $store->seller_type = $storeSession['seller_type'];
-        // $store->store_name = $storeSession['store_name'];
-        // $store->save();
 
-        // dd($storeSession);
+        // dd(session('storeSession'));
 
         return redirect()->route('sellerIndexForm');
     }
+
+
 
     public function form()
     {
@@ -59,7 +67,6 @@ class AuthSellerController extends Controller
 
     public function FormStore(Request $request)
     {
-
         $request->validate([
             'store_name' => 'required',
             'public_email' => 'required',
@@ -67,10 +74,12 @@ class AuthSellerController extends Controller
             'pkp' => 'required',
             'kekayaan_bersih' => 'required',
             'npwp' => 'required',
-            'kategori_usaha' => 'required'
         ]);
 
+        $storeSession = session('storeSession');
+
         $storeFormSession = [
+            'kepemilikan_usaha' => $request->input('kepemilikan_usaha'),
             'store_name' => $request->input('store_name'),
             'web_name' => $request->input('web_name'),
             'public_email' => $request->input('public_email'),
@@ -91,25 +100,64 @@ class AuthSellerController extends Controller
             'tdp' => $request->input('tdp'),
             'kbli' => $request->input('kbli'),
             'kekayaan_bersih' => $request->input('kekayaan_bersih'),
-            'pkp' => $request->input('pkp')
-
+            'pkp' => $request->input('pkp'),
+            'kategori_usaha' => $request->input('kategori_usaha'),
+            'seller_type' => $storeSession['seller_type'],
         ];
 
-        $kekayaan_bersih = $request->input('kekayaan_bersih');
-        $kategori_usaha = '';
-
-        if ($kekayaan_bersih < 50000000) {
-            $kategori_usaha = 'Mikro';
-        } elseif ($kekayaan_bersih >= 50000000 && $kekayaan_bersih <= 500000000) {
-            $kategori_usaha = 'Kecil';
-        } elseif ($kekayaan_bersih > 500000000 && $kekayaan_bersih <= 10000000000) {
-            $kategori_usaha = 'Menengah';
+        $pkpStatus = MasterStatus::where('name', $storeFormSession['pkp'])->value('id');
+        if ($pkpStatus !== null) {
+            $storeFormSession['pkp'] = $pkpStatus;
         }
 
-        $storeFormSession['kategori_usaha'] = $kategori_usaha;
+        $kepemilikan_usahaStatus = MasterStatus::where('name', $storeFormSession['kepemilikan_usaha'])->value('id');
+        if ($kepemilikan_usahaStatus !== null) {
+            $storeFormSession['kepemilikan_usaha'] = $kepemilikan_usahaStatus;
+        }
 
-        session(['storeFormSession' => $storeFormSession]);
+        $kategori_usahaStatus = MasterStatus::where('name', $storeFormSession['kategori_usaha'])->value('id');
+        if ($kategori_usahaStatus !== null) {
+            $storeFormSession['kategori_usaha'] = $kategori_usahaStatus;
+        }
 
+        $storeFormSession['store_id'] = 'IP' . substr(Uuid::uuid4()->toString(), -4);
+
+        $store = new Store();
+        $store->store_name = $storeFormSession['store_name'];
+
+        $store->slug = Str::slug($storeFormSession['store_name'], '');
+        $store->public_email = $storeFormSession['public_email'];
+        $store->phone_number = $storeFormSession['phone_number'];
+        $store->web_name = $storeFormSession['web_name'];
+        $store->short_description = $storeFormSession['short_description'];
+        $store->about_us = $storeFormSession['about_us'];
+        $store->fb_name = $storeFormSession['fb_name'];
+        $store->tw_name = $storeFormSession['tw_name'];
+        $store->linked_name = $storeFormSession['linked_name'];
+        $store->yt_name = $storeFormSession['yt_name'];
+        $store->seller_type = $storeFormSession['seller_type'];
+        $store->status_id = 5;
+        $store->save();
+
+        $storeDetail = new StoreDetail();
+        $storeDetail->kepemilikan_usaha = $storeFormSession['kepemilikan_usaha'];
+        $storeDetail->npwp = $storeFormSession['npwp'];
+        $storeDetail->kekayaan_bersih = $storeFormSession['kekayaan_bersih'];
+        $storeDetail->pkp = $storeFormSession['pkp'];
+        $storeDetail->nib = $storeFormSession['nib'];
+        $storeDetail->skb = $storeFormSession['skb'];
+        $storeDetail->akta = $storeFormSession['akta'];
+        $storeDetail->siup = $storeFormSession['siup'];
+        $storeDetail->akta_perusahaan = $storeFormSession['akta_perusahaan'];
+        $storeDetail->kategori_usaha = $storeFormSession['kategori_usaha'];
+        $storeDetail->tdp = $storeFormSession['tdp'];
+        $storeDetail->kbli = $storeFormSession['kbli'];
+        $storeDetail->store_id = $storeFormSession['store_id'];
+
+
+
+        $storeDetail->save();
+        $store->save();
 
         return redirect()->route('indexForm.info-ttd');
     }

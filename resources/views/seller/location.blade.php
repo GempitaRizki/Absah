@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="postal_code">Kode Post</label>
+                            <label for="postal_code">Kode Pos</label>
                             <input type="postal_code" class="form-control" id="postal_code" name="postal_code" required>
                         </div>
                     </div>

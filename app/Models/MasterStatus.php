@@ -19,4 +19,5 @@ class MasterStatus extends Model
         'is_status',
         'is_visible',
     ];
+
 }

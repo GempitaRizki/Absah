@@ -11,7 +11,12 @@
         </div>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-lg-12">
+        <h2 style="text-align: center">Registrasi</h2>
+        <hr>
+    </div>
+</div>
 <div class="container mt-3">
     <div class="col-lg-12">
         <div class="signup">

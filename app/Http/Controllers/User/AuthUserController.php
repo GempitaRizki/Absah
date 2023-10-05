@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Province;
+use App\Models\Districts;
+use App\Models\Subdistricts;
+use App\Models\Village;
+
 use Illuminate\Http\Request;
 
 class AuthUserController extends Controller
@@ -91,8 +96,118 @@ class AuthUserController extends Controller
 
         dd($userSekolahStore);
 
-        return redirect()->route('index.Sekolahi');
+        return redirect()->route('index.Sekolah');
     }
 
-    
+    public function IndexLocation()
+    {
+        $provinces = Province::all();
+        $districts = [];
+        $subdistricts = [];
+        $villages = [];
+
+        return view('user.info-sekolah', compact('provinces', 'districts', 'subdistricts', 'villages'));
+    }
+
+    public function getDistrictsByProvince($provinceId)
+    {
+        $districts = Districts::where('province_id', $provinceId)->get();
+        return response()->json($districts);
+    }
+
+    public function getSubDistrictsByDistrict($districtId)
+    {
+        $subdistricts = Subdistricts::where('districts_id', $districtId)->get();
+        return response()->json($subdistricts);
+    }
+
+
+    public function storeLocation(Request $request)
+    {
+        $request->validate([
+            'province' => 'required',
+            'districts' => 'required',
+            'subdistricts' => 'required',
+            'villages' => 'required',
+            'address' => 'required',
+            'postal_code' => 'required'
+        ]);
+
+        $locationSessionUser = [
+            'province' => $request->input('province'),
+            'districts' => $request->input('districts'),
+            'subdistricts' => $request->input('subdistricts'),
+            'villages' => $request->input('villages'),
+            'address' => $request->input('address'),
+            'postal_code' => $request->input('postal_code')
+        ];
+
+        session(['locationSessionUser' => $locationSessionUser]);
+
+        return redirect()->route('index.form');
+    }
+
+    public function LocationSummary()
+    {
+        $locationSessionStore = session('locationSessionStore', []);
+
+        if (isset($locationSessionStore['province'])) {
+            $province = Province::find($locationSessionStore['province']);
+        } else {
+            $province = null;
+        }
+
+        if (isset($locationSessionStore['districts'])) {
+            $districts = Districts::find($locationSessionStore['districts']);
+        } else {
+            $districts = null;
+        }
+
+        if (isset($locationSessionStore['subdistricts'])) {
+            $subdistricts = Subdistricts::find($locationSessionStore['subdistricts']);
+        } else {
+            $subdistricts = null;
+        }
+
+        if (isset($locationSessionStore['villages'])) {
+            $villages = Village::find($locationSessionStore['villages']);
+        } else {
+            $villages = null;
+        }
+
+        $WilayahJualSession = session('WilayahJualSession', []);
+
+        if (isset($WilayahJualSession['districts'])) {
+            $districtIds = $WilayahJualSession['districts'];
+            $wilayahJualDistricts = Districts::whereIn('id', $districtIds)->get();
+        } else {
+            $wilayahJualDistricts = null;
+        }
+
+        return view('seller.registration_summary', compact('province', 'districts', 'subdistricts', 'villages', 'wilayahJualDistricts'));
+    }
+}
+
+
+class LocationServiceStore
+{
+    public static function getProvinces()
+    {
+        return Province::all();
+    }
+
+    public static function getDistrictsByProvince($provinceId)
+    {
+        return Districts::where('province_id', $provinceId)->get();
+    }
+
+    public static function getSubDistrictsByDistrict($districtId)
+    {
+        return SubDistricts::where('districts_id', $districtId)->get();
+    }
+
+    public static function getVillagesBySubDistrict($subdistrictId)
+    {
+        return Village::where('subdistrict_id', $subdistrictId)->get();
+    }
 }
