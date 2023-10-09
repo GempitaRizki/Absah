@@ -9,7 +9,7 @@
                                     </a>
                                 </div>
                                 <div class="text-right">
-                                    <a href="{{ route('registrationSummary') }}" class="btn btn-primary" name="info-usaha">Preview Data</a>
+                                    <a href="{{ route('registrationSummary') }}" class="btn btn-primary">Preview Data</a>
                                 </div>
                             </div>
                         </div>

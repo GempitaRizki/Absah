@@ -20,16 +20,18 @@
                                     <h3 class="text-center">Penandatangan Toko</h3>
                                     <hr>
                                     <div class="form-group row">
-                                        <label for="nama"
-                                            class="col-md-4 col-form-label text-md-end text-start required-label">Nama</label>
+                                        <label for="name"
+                                            class="col-md-4 col-form-label text-md-end text-start required-label">Name</label>
                                         <div class="col-md-6">
                                             <input type="text" required
-                                                class="form-control @error('nama') is-invalid @enderror" id="nama"
-                                                name="nama" value="{{ Session::get('ownerSession.nama') }}">
-                                            @if ($errors->has('nama'))
-                                                <span class="text-danger">{{ $errors->first('nama') }}</span>
+                                                class="form-control @error('name') is-invalid @enderror" id="name"
+                                                name="name" value="{{ Session::get('ownerSession.name') }}">
+                                            @if ($errors->has('name'))
+                                                <span class="text-danger">{{ $errors->first('name') }}</span>
                                             @endif
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="jabatan"
                                             class="col-md-4 col-form-label text-md-end text-start required-label">Jabatan</label>
                                         <div class="col-md-6">
@@ -52,16 +54,21 @@
                                                 <span class="text-danger">{{ $errors->first('NIK') }}</span>
                                             @endif
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="NPWP"
                                             class="col-md-4 col-form-label text-md-end text-start required-label">NPWP</label>
                                         <div class="col-md-6">
                                             <input type="text" required
                                                 class="form-control @error('NPWP') is-invalid @enderror" id="NPWP"
-                                                name="NPWP" value="{{ Session::get('ownerSession.NPWP') }}" maxlength="20">
+                                                name="NPWP" value="{{ Session::get('ownerSession.NPWP') }}"
+                                                maxlength="15">
                                             @if ($errors->has('NPWP'))
                                                 <span class="text-danger">{{ $errors->first('NPWP') }}</span>
                                             @endif
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="phone_number"
                                             class="col-md-4 col-form-label text-md-end text-start required-label">No.
                                             HP</label>
@@ -75,11 +82,13 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <input type="checkbox" id="ownerCheckbox" onchange="toggleFormFields(this)">
-                                    <label for="ownerCheckbox">Penandatangan sama dengan penanggung jawab</label>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="ownerCheckbox" name="ownerCheckbox"
+                                            onchange="toggleFormFields(this)">
+                                        <label for="ownerCheckbox">Penandatangan sama dengan penanggung jawab</label>
+                                    </div>
                                     <br>
-
-                                    <div id="additionalFields" class="form-group row">
+                                    <div id="additionalFields">
                                         <div class="form-group row">
                                             <label for="nama"
                                                 class="col-md-4 col-form-label text-md-end text-start">Nama</label>
@@ -91,6 +100,8 @@
                                                     <span class="text-danger">{{ $errors->first('nama') }}</span>
                                                 @endif
                                             </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="jabatan"
                                                 class="col-md-4 col-form-label text-md-end text-start">Jabatan</label>
                                             <div class="col-md-6">
@@ -102,6 +113,8 @@
                                                     <span class="text-danger">{{ $errors->first('jabatan') }}</span>
                                                 @endif
                                             </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="NIK"
                                                 class="col-md-4 col-form-label text-md-end text-start">NIK</label>
                                             <div class="col-md-6">
@@ -112,16 +125,21 @@
                                                     <span class="text-danger">{{ $errors->first('NIK') }}</span>
                                                 @endif
                                             </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="NPWP"
                                                 class="col-md-4 col-form-label text-md-end text-start">NPWP</label>
                                             <div class="col-md-6">
                                                 <input type="text"
-                                                    class="form-control @error('NPWP') is-invalid @enderror" id="NPWP2"
-                                                    name="NPWP2" value="{{ Session::get('ownerSession.NPWP') }}">
+                                                    class="form-control @error('NPWP') is-invalid @enderror"
+                                                    id="NPWP2" name="NPWP2"
+                                                    value="{{ Session::get('ownerSession.NPWP') }}">
                                                 @if ($errors->has('NPWP'))
                                                     <span class="text-danger">{{ $errors->first('NPWP') }}</span>
                                                 @endif
                                             </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="phone_number"
                                                 class="col-md-4 col-form-label text-md-end text-start">Phone Number</label>
                                             <div class="col-md-6">
@@ -137,10 +155,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <br>
                             <div class="row">
                                 <div class="col-lg-12">
+                                    <button type="button" class="btn btn-secondary" onclick="goBack()">Kembali</button>
                                     <button type="submit" class="btn btn-primary float-right"
-                                        name="info-usaha">Berikutnya</button>
+                                        name="">Berikutnya</button>
                                 </div>
                             </div>
                         </form>
@@ -161,7 +181,11 @@
             }
         }
     </script>
-
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
     <script>
         const NPWP = document.getElementById("NPWP")
         NPWP.oninput = (e) => {
@@ -191,4 +215,38 @@
             }
         }
     </script>
+    <script>
+        function toggleFormFields(checkbox) {
+            const additionalFields = document.getElementById("additionalFields");
+            const nameField = document.getElementById("name");
+            const jabatanField = document.getElementById("jabatan");
+            const NIKField = document.getElementById("NIK");
+            const NPWPField = document.getElementById("NPWP");
+            const phoneField = document.getElementById("phone_number");
+    
+            if (checkbox.checked) {
+                additionalFields.style.display = "none";
+            } else {
+                additionalFields.style.display = "block";
+            }
+    
+            // Lakukan pengisian otomatis jika checkbox dicentang
+            if (checkbox.checked) {
+                // Isi nilai-nilai pada field utama dengan nilai dari field tambahan
+                nameField.value = document.getElementById("nama2").value;
+                jabatanField.value = document.getElementById("jabatan2").value;
+                NIKField.value = document.getElementById("NIK2").value;
+                NPWPField.value = document.getElementById("NPWP2").value;
+                phoneField.value = document.getElementById("phone_number2").value;
+            } else {
+                // Kembalikan nilai-nilai field utama ke nilai awal dari sesi
+                nameField.value = "{{ Session::get('ownerSession.name') }}";
+                jabatanField.value = "{{ Session::get('ownerSession.jabatan') }}";
+                NIKField.value = "{{ Session::get('ownerSession.NIK') }}";
+                NPWPField.value = "{{ Session::get('ownerSession.NPWP') }}";
+                phoneField.value = "{{ Session::get('ownerSession.phone_number') }}";
+            }
+        }
+    </script>
+    
 @endsection

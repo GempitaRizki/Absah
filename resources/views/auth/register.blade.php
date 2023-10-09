@@ -3,20 +3,19 @@
 @section('content')
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-<div class="container mt-5">
-    <div class="col-lg-12">
-        <div class="d-flex justify-content-center">
-            <img src="{{url('assets/img/product/absahlogo.png')}}" alt="logoip.png" width="300pxs">
-        </div>
-    </div>
-</div>
+<br>
 <div class="row">
     <div class="col-lg-12">
         <h2 style="text-align: center">Registrasi</h2>
         <hr>
     </div>
 </div>
+    <div class="col-lg-12">
+        <div class="d-flex justify-content-center">
+            <img src="{{url('assets/img/product/absahlogo.png')}}" alt="logoip.png" width="300pxs">
+        </div>
+    </div>
+
 <div class="container mt-3">
     <div class="col-lg-12">
         <div class="signup">

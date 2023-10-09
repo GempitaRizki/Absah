@@ -5,11 +5,13 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Redirect;
 
 class UserRoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, $role)
     {
         if (Auth::check() && Auth::user()->role == $role) {
             if ($request->input('login_as') == 'user') {
@@ -25,7 +27,6 @@ class UserRoleMiddleware
             return $next($request);
         }
         
-        return response()->json(['message' => 'Anda tidak memiliki akses pada halaman ini!!'], 403);
+        return Redirect::route('handle403');
     }
-    
 }

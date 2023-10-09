@@ -12,9 +12,11 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\UserRegisterController;
+use App\Http\Controllers\Error\HandleErrorController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Location\LocationController;
 use App\Http\Controllers\Seller\AuthSellerController;
+use App\Http\Controllers\Seller\ContentManagementSystemSellerController;
 use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
 use App\Http\Controllers\User\AuthUserController;
 use App\Http\Controllers\Seller\FileUploadController;
@@ -70,7 +72,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
 // Seller route// ini nanti buat cms seller
 Route::middleware(['auth', 'role:seller'])->group(function () {
-    Route::get('/seller/home', [HomeController::class, 'sellerHome'])->name('home.seller');
+    Route::get('/seller/home', [ContentManagementSystemSellerController::class, 'index'])->name('indexCMSSeller');
 });
 
 // Mitra route// ini nanti buat cms mitra
@@ -122,15 +124,13 @@ Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 
 //uploadfile
 Route::get('/register/seller/form/upload', [FileUploadController::class, 'index'])->name('uploadFiles');
 Route::post('/register/seller/form/upload', [FileUploadController::class, 'store'])->name('uploadForm');
-Route::post('/delete-file/{key}', [FileUplpadController::class, 'deleteFile'])->name('deleteFile');
+Route::post('/delete-file/{key}', [FileUploadController::class, 'deleteFile'])->name('deleteFile');
 
-//Location User
-Route::get('/get-provinces', [AuthUserController::class, 'getProvinces'])->name('get-provinces-user');
-Route::get('/get-districts/{provinceId}', [AuthUserController::class, 'getDistricts'])->name('get-districts-by-province-user');
-Route::get('/get-subdistricts/{districtId}', [AuthUserController::class, 'getSubDistrictsByDistrict'])->name('get-subdistricts-by-district-user');
-Route::get('/get-villages/{subdistrictId}', [AuthUserController::class, 'getVillagesBySubDistrict'])->name('get-villages-by-subdistrict-user');
-Route::get('/register/buyer/info-sekolah', [AuthUserController::class, 'IndexLocation'])->name('IndexUserController');
-//test mail 
-// Route::get('/send-mail', [SendMailController::class, 'index']);
+//handle error 
+Route::get('/error/404', [HandleErrorController::class, 'index404'])->name('handle404');
+Route::get('/error/403', [HandleErrorController::class, 'index403'])->name('handle403');
 
+
+//store add db 
+Route::post('/save-and-continue', [AuthSellerController::class, 'store'])->name('saveAndContinue');
 

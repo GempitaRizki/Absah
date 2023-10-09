@@ -7,8 +7,10 @@
         <title>Absah.id</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" type="image/x-icon" href="{{url('public/assets/img/favicon.ico')}}??">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/img/favicon.png')}}??">
 		
+		<!-- all css here -->
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/magnific-popup.css') }}">
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/animate.css') }}">

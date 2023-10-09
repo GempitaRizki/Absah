@@ -19,8 +19,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="store_name" class="col-md-4 col-form-label text-md-end text-start required-label">Nama
-                            Toko</label>
+                        <label for="store_name" class="required-label">Nama Toko</label>
                         <input type="text" class="form-control" name="store_name" id="store_name" required
                             value="{{ old('store_name', session('storeSession.store_name')) }}" placeholder="Store Name">
                     </div>
@@ -38,12 +37,10 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="public_email"
-                            class="col-md-4 col-form-label text-md-end text-start required-label">Email Public</label>
+                        <label for="public_email" class="required-label">Email Public</label>
                         <input type="text" class="form-control" name="public_email" id="public_email" required
                             value="{{ old('public_email', session('sellerData.public_email')) }}"
                             placeholder="Email Publik">
@@ -51,8 +48,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="phone_number" class="col-md-4 col-form-label text-md-end text-start required-label">No
-                            Hp</label>
+                        <label for="phone_number" class="required-label">Nomor telepon</label>
                         <input type="text" class="form-control" name="phone_number" id="phone_number" minlength="8"
                             required value="{{ old('phone_number', session('sellerData.phone_number')) }}"
                             placeholder="Nomor Telepon">
@@ -69,9 +65,8 @@
 
             <div class="form-group">
                 <label for="about_us">Description</label>
-                <textarea class="form-control" name="about_us" id="about_us" rows="6">{{ old('about_us', session('sellerData.about_us')) }}</textarea>
+                <textarea class="form-control" name="about_us" id="about_us" rows="6" placeholder="Description">{{ old('about_us', session('sellerData.about_us')) }}</textarea>
             </div>
-
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -162,17 +157,17 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="skb">SKB</label>
+                        <label for="skb"
+                            class="col-md-4 col-form-label text-md-end text-start required-label">SKB</label>
                         <input type="text" class="form-control" name="skb" id="skb"
                             value="{{ old('skb') }}" placeholder="SKB">
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="kepemilikan_usaha">Kepemilikan Usaha</label>
+                        <label for="kepemilikan_usaha" class="required-label">Kepemilikan Usaha</label>
                         <select class="form-control" name="kepemilikan_usaha" id="kepemilikan_usaha">
                             <option value="Firma" {{ old('kepemilikan_usaha') === 'Firma' ? 'selected' : '' }}>Firma
                             </option>
@@ -183,28 +178,29 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="pkp"
-                            class="col-md-4 col-form-label text-md-end text-start required-label">PKP</label>
+                        <label for="pkp" class="required-label">PKP</label>
                         <select class="form-control" name="pkp" id="pkp" required>
-                            <option value="PKP" {{ old('pkp') === 'pkp' ? 'selected' : '' }}>PKP</option>
-                            <option value="Non PKP" {{ old('pkp') === 'pkp' ? 'selected' : '' }}>Non PKP</option>
+                            <option value="PKP" {{ old('pkp') === 'PKP' ? 'selected' : '' }}>PKP</option>
+                            <option value="Non PKP" {{ old('pkp') === 'Non PKP' ? 'selected' : '' }}>Non PKP</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
+                    <label for="kekayaan_bersih_dropdown" class="required-label">Range Kekayaan Bersih</label>
                     <select name="kekayaan_bersih" id="kekayaan_bersih_dropdown" required>
-                        <option value="">Range Kekayaan Bersih</option>
+                        <option value="">Pilih Range Kekayaan Bersih</option>
                         <option value="50000000">Kurang dari Rp. 50.000.000</option>
                         <option value="500000000">Rp. 50.000.000 - Rp. 500.000.000</option>
                         <option value="10000000000">Rp. 500.000.000 - Rp. 10.000.000.000</option>
                     </select>
                 </div>
                 <div class="col-md-6">
+                    <label for="kategori_usaha_dropdown" class="required-label">Kategori Usaha</label>
                     <div id="kategori_usaha_container">
                         <select name="kategori_usaha" id="kategori_usaha_dropdown" disabled>
-                            <option value="">Kategori Usaha</option>
+                            <option value="">Pilih Kategori Usaha</option>
                             <option value="Mikro">Mikro</option>
                             <option value="Kecil">Kecil</option>
                             <option value="Menengah">Menengah</option>
@@ -212,6 +208,8 @@
                     </div>
                 </div>
             </div>
+
+            <br>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -232,8 +230,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="npwp"
-                            class="col-md-4 col-form-label text-md-end text-start required-label">NPWP</label>
+                        <label for="npwp" class="required-label">NPWP</label>
                         <input type="text" class="form-control" name="npwp" id="npwp" maxlength="20"
                             required value="{{ old('npwp') }}" placeholder="NPWP">
                     </div>
@@ -262,9 +259,11 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-lg-12">
-                    <button type="submit" class="btn btn-primary float-right" name="info-usaha">Berikutnya</button>
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Kembali</button>
+                    <button type="submit" class="btn btn-primary float-right" name="">Berikutnya</button>
                 </div>
             </div>
         </form>
@@ -288,6 +287,11 @@
             kategoriUsahaDropdown.value = kategoriUsaha;
             kategoriUsahaDropdown.disabled = false;
         });
+    </script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
     </script>
     <script>
         const NPWP = document.getElementById("npwp")

@@ -6,27 +6,24 @@ use App\Http\Controllers\Controller;
 
 use App\Models\MasterBank;
 use Illuminate\Http\Request;
-use App\Models\Store;
-use App\Models\WilayahJual;
 use Illuminate\Support\Facades\Session;
 use App\Models\Province;
 use App\Models\Village;
 use App\Models\Subdistricts;
 use App\Models\Districts;
-use App\Models\StoreDetail;
 use App\Models\MasterStatus;
+use App\Models\User;
+use App\Models\Store;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
-
+use App\Models\StoreDetail;
+use App\Models\BankStore;
 
 class AuthSellerController extends Controller
 {
-
     public function index()
     {
         return view('seller.register');
     }
-
     public function IndexStore(Request $request)
     {
         $request->validate([
@@ -38,22 +35,21 @@ class AuthSellerController extends Controller
 
         $sellerType = $request->input('seller_type');
         $sellerTypeStatus = MasterStatus::where('name', $sellerType)->first();
-
         if (!$sellerTypeStatus) {
             return redirect()->back()->withInput()->withErrors(['message' => 'Data yang dimasukkan tidak valid.']);
         }
 
+        $storeSession = $request->all();
         $storeSession = [
-            'surel' => $request->surel,
-            'password' => $request->password,
-            'store_name' => $request->store_name,
+            'surel' => $request->input('surel'),
+            'password' => $request->input('password'),
+            'store_name' => $request->input('store_name'),
             'seller_type' => $sellerTypeStatus->id,
+            'seller_type_name' => $sellerTypeStatus->name,
+            'role' => 1,
         ];
 
         session(['storeSession' => $storeSession]);
-
-
-        // dd(session('storeSession'));
 
         return redirect()->route('sellerIndexForm');
     }
@@ -64,7 +60,6 @@ class AuthSellerController extends Controller
     {
         return view('seller.register_form');
     }
-
     public function FormStore(Request $request)
     {
         $request->validate([
@@ -77,33 +72,8 @@ class AuthSellerController extends Controller
         ]);
 
         $storeSession = session('storeSession');
-
-        $storeFormSession = [
-            'kepemilikan_usaha' => $request->input('kepemilikan_usaha'),
-            'store_name' => $request->input('store_name'),
-            'web_name' => $request->input('web_name'),
-            'public_email' => $request->input('public_email'),
-            'phone_number' => $request->input('phone_number'),
-            'short_description' => $request->input('short_description'),
-            'about_us' => $request->input('about_us'),
-            'fb_name' => $request->input('fb_name'),
-            'tw_name' => $request->input('tw_name'),
-            'linked_name' => $request->input('linked_name'),
-            'inst_name' => $request->input('inst_name'),
-            'yt_name' => $request->input('yt_name'),
-            'nib' => $request->input('nib'),
-            'skb' => $request->input('skb'),
-            'akta' => $request->input('akta'),
-            'siup' => $request->input('siup'),
-            'akta_perusahaan' => $request->input('akta_perusahaan'),
-            'npwp' => $request->input('npwp'),
-            'tdp' => $request->input('tdp'),
-            'kbli' => $request->input('kbli'),
-            'kekayaan_bersih' => $request->input('kekayaan_bersih'),
-            'pkp' => $request->input('pkp'),
-            'kategori_usaha' => $request->input('kategori_usaha'),
-            'seller_type' => $storeSession['seller_type'],
-        ];
+        $storeFormSession = $storeSession;
+        $storeFormSession = array_merge($storeFormSession, $request->all());
 
         $pkpStatus = MasterStatus::where('name', $storeFormSession['pkp'])->value('id');
         if ($pkpStatus !== null) {
@@ -120,44 +90,8 @@ class AuthSellerController extends Controller
             $storeFormSession['kategori_usaha'] = $kategori_usahaStatus;
         }
 
-        $storeFormSession['store_id'] = 'IP' . substr(Uuid::uuid4()->toString(), -4);
-
-        $store = new Store();
-        $store->store_name = $storeFormSession['store_name'];
-
-        $store->slug = Str::slug($storeFormSession['store_name'], '');
-        $store->public_email = $storeFormSession['public_email'];
-        $store->phone_number = $storeFormSession['phone_number'];
-        $store->web_name = $storeFormSession['web_name'];
-        $store->short_description = $storeFormSession['short_description'];
-        $store->about_us = $storeFormSession['about_us'];
-        $store->fb_name = $storeFormSession['fb_name'];
-        $store->tw_name = $storeFormSession['tw_name'];
-        $store->linked_name = $storeFormSession['linked_name'];
-        $store->yt_name = $storeFormSession['yt_name'];
-        $store->seller_type = $storeFormSession['seller_type'];
-        $store->status_id = 5;
-        $store->save();
-
-        $storeDetail = new StoreDetail();
-        $storeDetail->kepemilikan_usaha = $storeFormSession['kepemilikan_usaha'];
-        $storeDetail->npwp = $storeFormSession['npwp'];
-        $storeDetail->kekayaan_bersih = $storeFormSession['kekayaan_bersih'];
-        $storeDetail->pkp = $storeFormSession['pkp'];
-        $storeDetail->nib = $storeFormSession['nib'];
-        $storeDetail->skb = $storeFormSession['skb'];
-        $storeDetail->akta = $storeFormSession['akta'];
-        $storeDetail->siup = $storeFormSession['siup'];
-        $storeDetail->akta_perusahaan = $storeFormSession['akta_perusahaan'];
-        $storeDetail->kategori_usaha = $storeFormSession['kategori_usaha'];
-        $storeDetail->tdp = $storeFormSession['tdp'];
-        $storeDetail->kbli = $storeFormSession['kbli'];
-        $storeDetail->store_id = $storeFormSession['store_id'];
-
-
-
-        $storeDetail->save();
-        $store->save();
+        session(['storeFormSession' => $storeFormSession]);
+        dd(session('storeFormSession'));
 
         return redirect()->route('indexForm.info-ttd');
     }
@@ -170,28 +104,20 @@ class AuthSellerController extends Controller
     public function IndexFormStore(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
+            'name' => 'required',
             'jabatan' => 'required',
             'NIK' => 'required',
             'NPWP' => 'required',
             'phone_number' => 'required',
-
         ]);
 
-        $ownerSession = [
-            'nama' => $request->input('nama'),
-            'jabatan' => $request->input('jabatan'),
-            'NIK' => $request->input('NIK'),
-            'NPWP' => $request->input('NPWP'),
-            'phone_number' => $request->input('phone_number')
+        $storeOwner = $request->all();
+        session(['storeOwner' => $storeOwner]);
 
-        ];
-        session(['ownerSession' => $ownerSession]);
-
+        // dd(session('storeOwner'));
 
         return redirect()->route('IndexSellerLocation');
     }
-
 
     public function IndexLocation()
     {
@@ -232,46 +158,12 @@ class AuthSellerController extends Controller
             'postal_code' => 'required'
         ]);
 
-        $locationSessionStore = [
-            'province' => $request->input('province'),
-            'districts' => $request->input('districts'),
-            'subdistricts' => $request->input('subdistricts'),
-            'villages' => $request->input('villages'),
-            'address' => $request->input('address'),
-            'postal_code' => $request->input('postal_code')
-        ];
+        $locationSessionStore = $request->all();
         session(['locationSessionStore' => $locationSessionStore]);
-
-        // dd($locationSessionStore);
-
-
-        return redirect()->route('WilayahJualIndex');
-    }
-
-    public function IndexWilayahJual()
-    {
-        $districts = Districts::all();
-        return view('seller.WilayahJual', compact('districts'));
-    }
-
-    public function StoreWilayahJual(Request $request)
-    {
-        $request->validate([
-            'districts' => 'required'
-        ]);
-
-        $WilayahJualSession = [
-            'districts' => $request->input('districts')
-        ];
-
-        session(['WilayahJualSession' => $WilayahJualSession]);
-
-        // dd($WilayahJualSession);
+        // dd(session('locationSessionStore'));
 
         return redirect()->route('indexBank');
     }
-
-
 
 
     public function IndexBank()
@@ -287,19 +179,53 @@ class AuthSellerController extends Controller
             'number' => 'required|max:255',
             'name' => 'required|max:255',
         ]);
-        $bankSession = [
-            'bank_id' => $request->input('bank_id'),
-            'number' => $request->input('number'),
-            'name' => $request->input('name'),
-        ];
+
+        $bankSession = $request->all();
         session(['bankSession' => $bankSession]);
 
+        $bankStoreStatus = BankStore::where('bank_id', $bankSession['bank_id'])->value('name');
+        if ($bankStoreStatus !== null) {
+            $bankSession['bank_id'] = $bankStoreStatus;
+        }
+
+        // dd(session('bankSession'));
+        return redirect()->route('WilayahJualIndex');
+    }
+
+
+    public function IndexWilayahJual()
+    {
+        $districts = Districts::all();
+        return view('seller.WilayahJual', compact('districts'));
+    }
+
+    public function StoreWilayahJual(Request $request)
+    {
+        $request->validate([
+            'districts' => 'required|array',
+            'kategori_product' => 'required|string',
+        ]);
+
+        $kategoriProduct = [$request->input('kategori_product')];
+        $WilayahJualSession = $request->only('districts');
+        $WilayahJualSession['kategori_product'] = $kategoriProduct;
+
+        session(['WilayahJualSession' => $WilayahJualSession]);
 
         return redirect()->route('registrationSummary');
     }
 
+
     public function Summary()
     {
+        $WilayahJualSession = session('WilayahJualSession', []);
+        if (isset($WilayahJualSession['districts'])) {
+            $districtIds = $WilayahJualSession['districts'];
+            $wilayahJualDistricts = Districts::whereIn('id', $districtIds)->get();
+        } else {
+            $wilayahJualDistricts = null;
+        }
+
         $locationSessionStore = session('locationSessionStore', []);
 
         if (isset($locationSessionStore['province'])) {
@@ -326,18 +252,91 @@ class AuthSellerController extends Controller
             $villages = null;
         }
 
+        $storeSession = session('storeSession', []);
+        $storeFormSession = session('storeFormSession', []);
+        $storeOwner = session('storeOwner', []);
+        $bankSession = session('bankSession', []);
         $WilayahJualSession = session('WilayahJualSession', []);
 
-        if (isset($WilayahJualSession['districts'])) {
-            $districtIds = $WilayahJualSession['districts'];
-            $wilayahJualDistricts = Districts::whereIn('id', $districtIds)->get();
+        return view('seller.registration_summary', compact('province', 'districts', 'subdistricts', 'villages', 'storeSession', 'storeFormSession', 'storeOwner', 'locationSessionStore', 'bankSession', 'WilayahJualSession', 'wilayahJualDistricts'));
+    }
+
+
+    public function store(Request $request)
+    {
+        $data = $request->all();
+
+        $storeSession = session('storeSession', []);
+        $storeFormSession = session('storeFormSession', []);
+        $bankSession = session('bankSession', []);
+
+        $bankName = $bankSession['name'];
+        $masterBank = MasterBank::where('name', $bankName)->first();
+        
+        if ($masterBank) {
+            $statusId = $masterBank->status_id;
         } else {
-            $wilayahJualDistricts = null;
+            return redirect()->back()->with('error', 'Nama bank tidak valid.');
         }
 
-        return view('seller.registration_summary', compact('province', 'districts', 'subdistricts', 'villages', 'wilayahJualDistricts'));
+        if (array_key_exists('store_name', $storeSession)) {
+            $user = new User();
+            $user->name = $storeSession['store_name'];
+            $user->password = $storeSession['password'];
+            $user->email = $storeSession['surel'];
+            $user->role = 1;
+            $user->save();
+
+            $store = new Store();
+            $store->store_name = $storeFormSession['store_name'];
+            $store->slug = Str::slug($storeFormSession['store_name'], '');
+            $store->public_email = $storeFormSession['public_email'];
+            $store->phone_number = $storeFormSession['phone_number'];
+            $store->web_name = $storeFormSession['web_name'];
+            $store->short_description = $storeFormSession['short_description'];
+            $store->about_us = $storeFormSession['about_us'];
+            $store->fb_name = $storeFormSession['fb_name'];
+            $store->tw_name = $storeFormSession['tw_name'];
+            $store->linked_name = $storeFormSession['linked_name'];
+            $store->yt_name = $storeFormSession['yt_name'];
+            $store->seller_type = $storeFormSession['seller_type'];
+            $store->status_id = 5;
+            $store->save();
+
+            $storeDetail = new StoreDetail();
+            $storeDetail->kepemilikan_usaha = $storeFormSession['kepemilikan_usaha'];
+            $storeDetail->npwp = $storeFormSession['npwp'];
+            $storeDetail->kekayaan_bersih = $storeFormSession['kekayaan_bersih'];
+            $storeDetail->pkp = $storeFormSession['pkp'];
+            $storeDetail->nib = $storeFormSession['nib'];
+            $storeDetail->skb = $storeFormSession['skb'];
+            $storeDetail->akta = $storeFormSession['akta'];
+            $storeDetail->siup = $storeFormSession['siup'];
+            $storeDetail->akta_perusahaan = $storeFormSession['akta_perusahaan'];
+            $storeDetail->kategori_usaha = $storeFormSession['kategori_usaha'];
+            $storeDetail->tdp = $storeFormSession['tdp'];
+            $storeDetail->kbli = $storeFormSession['kbli'];
+            $storeDetail->store_id = $store->id;
+            $storeDetail->save();
+
+            $bankStore = new BankStore();
+            $bankStore->name = $bankSession['name'];
+            $bankStore->number = $bankSession['number'];
+            $bankStore->status_id = $statusId; 
+            $bankStore->store_id = $store->id;
+            $bankStore->save();
+
+
+            session(['forgot' => true]);
+
+            return redirect()->route('indexCMSSeller')->with('success', 'Data toko berhasil disimpan.');
+        } else {
+            return redirect()->back()->with('error', 'Data yang diperlukan tidak tersedia.');
+        }
     }
 }
+
+
 
 class LocationServiceStore
 {
@@ -345,17 +344,14 @@ class LocationServiceStore
     {
         return Province::all();
     }
-
     public static function getDistrictsByProvince($provinceId)
     {
         return Districts::where('province_id', $provinceId)->get();
     }
-
     public static function getSubDistrictsByDistrict($districtId)
     {
         return SubDistricts::where('districts_id', $districtId)->get();
     }
-
     public static function getVillagesBySubDistrict($subdistrictId)
     {
         return Village::where('subdistrict_id', $subdistrictId)->get();

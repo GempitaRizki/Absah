@@ -11,22 +11,31 @@
                         <hr>
                         <div class="panel-body container-items">
                             <div class="item panel panel-default">
+                                <div class="selected_wilayahjual">
+                                    <select name="kategori_product" id="kategori_product">
+                                        <option value="Nasional">Nasional</option>
+                                        <option value="Regional">Regional</option>
+                                    </select>
+                                </div>
+                                <br>
                                 <div class="panel-body">
-                                    <input type="hidden" name="districts[]"> 
+                                    <!-- Hidden input to store selected districts -->
+                                    <input type="hidden" name="districts[]">
                                     <div class="selected-districts">
                                         <div class="selected-district-names"></div>
                                     </div>
-                                    <input type="hidden" name="district_ids[]" class="selected-district-ids"> 
+                                    <input type="hidden" name="district_ids[]" class="selected-district-ids">
                                     <div class="row">
                                         <div class="col-sm-4">
+                                            <!-- Some content here -->
                                         </div>
                                     </div>
                                     <br>
-                                    <div class="row showKota"> 
+                                    <div class="row showKota">
                                         <div class="col-sm-12">
                                             <p><b>Districts</b></p>
-                                            <select name="districts[]" class="form-control form-control-lg"
-                                                multiple id="districtSelect" size="5" style="height: 200px; font-size: 16px;">
+                                            <select name="districts[]" class="form-control form-control-lg" multiple
+                                                id="districtSelect" size="5" style="height: 200px; font-size: 16px;">
                                                 @foreach ($districts as $district)
                                                     <option value="{{ $district->id }}">{{ $district->name }}</option>
                                                 @endforeach
@@ -42,13 +51,18 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div id="selectedDistrictNames"></div>
-                    <button type="submit" class="btn btn-primary float-right" name="info-usaha">Berikutnya</button>
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Kembali</button>
+                    <button type="submit" class="btn btn-primary float-right">Simpan & Lanjutkan</button>
                 </div>
             </div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
     <script>
         jQuery(document).ready(function($) {
             var selectedDistrictsCount = 0;
@@ -105,7 +119,7 @@
 
                 if (selectedValues) {
                     selectedValues = selectedValues.filter(function(value) {
-                        return value !== null; 
+                        return value !== null;
                     });
 
                     $.each(selectedValues, function(index, value) {
@@ -123,6 +137,11 @@
             }
 
             updateSelectedDistrictNames($('select[name^="districts[]"]'));
+
+            $('.selected_wilayahjual select').change(function() {
+                var selectedValue = $(this).val();
+                $('#kategori_product').val(selectedValue);
+            });
         });
     </script>
 @endsection

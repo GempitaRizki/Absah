@@ -39,7 +39,7 @@
                             <label for="province" class="required-label">Provinsi</label>
                             <select class="form-control" id="province" name="province" required>
                                 <option value="">Pilih Provinsi</option>
-                                @foreach($provinces as $province)
+                                @foreach ($provinces as $province)
                                     <option value="{{ $province->id }}">{{ $province->name }}</option>
                                 @endforeach
                             </select>
@@ -50,7 +50,7 @@
                             <label for="districts" class="required-label">Kabupaten</label>
                             <select class="form-control" id="districts" name="districts" required>
                                 <option value="">Pilih Kabupaten</option>
-                                @foreach($districts as $district)
+                                @foreach ($districts as $district)
                                     <option value="{{ $district->id }}">{{ $district->name }}</option>
                                 @endforeach
                             </select>
@@ -63,7 +63,7 @@
                             <label for="subdistricts" class="required-label">Kecamatan</label>
                             <select class="form-control" id="subdistricts" name="subdistricts" required>
                                 <option value="">Pilih Kecamatan</option>
-                                @foreach($subdistricts as $subdistrict)
+                                @foreach ($subdistricts as $subdistrict)
                                     <option value="{{ $subdistrict->id }}">{{ $subdistrict->name }}</option>
                                 @endforeach
                             </select>
@@ -74,7 +74,7 @@
                             <label for="villages" class="required-label">Desa</label>
                             <select class="form-control" id="villages" name="villages" required>
                                 <option value="">Pilih Desa</option>
-                                @foreach($villages as $village)
+                                @foreach ($villages as $village)
                                     <option value="{{ $village->id }}">{{ $village->name }}</option>
                                 @endforeach
                             </select>
@@ -98,7 +98,8 @@
                 <br>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button type="submit" class="btn btn-primary float-right" name="info-usaha">Berikutnya</button>
+                        <button type="button" class="btn btn-secondary" onclick="goBack()">Kembali</button>
+                        <button type="submit" class="btn btn-primary float-right">Berikutnya</button>
                     </div>
                 </div>
             </div>

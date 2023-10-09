@@ -7,9 +7,6 @@
                         <img src="{{ url('assets/img/logo/logo-3.png') }}" alt="">
                     </a>
                 </div>
-                <div class="text-right">
-                    <a href="{{ route('dashboard.index') }}" class="btn btn-primary" name="info-usaha">Home</a>
-                </div>
             </div>
         </div>
     </div>

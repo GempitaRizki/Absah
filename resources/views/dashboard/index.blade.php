@@ -32,13 +32,9 @@
 
 <body>
     @include('partials.header');
-
     @include('partials.slider');
-
     @include('partials.category');
-
     @include('partials.product');
-
     @include('partials.footer');
     <!-- modal -->
     <!-- all js here -->

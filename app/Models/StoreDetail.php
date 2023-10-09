@@ -42,7 +42,7 @@ class StoreDetail extends Model
 
     public function store()
     {
-        return $this->belongsTo(Store::class, 'store_id');
+        return $this->belongTo(Store::class, 'store_id');
     }
 
     public function kategoriusaha()

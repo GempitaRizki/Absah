@@ -51,7 +51,7 @@ class LoginController extends Controller
             if (auth()->user()->role == 'mitra') {
                 return redirect()->route('home.mitra');
             } else if (auth()->user()->role == 'seller') {
-                return redirect()->route('home.seller');
+                return redirect()->route('indexCMSSeller');
             } else {
                 return redirect()->route('home');
             }

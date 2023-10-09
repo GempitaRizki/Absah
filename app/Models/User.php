@@ -17,16 +17,12 @@ class User extends Authenticatable
 
 
 	protected $fillable = [
-		'name', 'email', 'password', 'phone', 'jabatan', 'NIP', 'NIK',
+		'name', 'role', 'email', 'password', 'phone', 'jabatan', 'NIP', 'NIK',
 	];
 
 	protected $hidden = [
 		'id_login',
 	];
-
-	// protected $attributes = [
-	// 	'id_login' => 0,
-	// ];
 
 	protected $casts = [
 		'email_verified_at' => 'datetime',
