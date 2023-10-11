@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ProductSku extends Model
 {
     use HasFactory;
-    protected $table = 'product_sku'; 
-    protected $primaryKey = 'id'; 
+    protected $table = 'product_sku';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'product_id',
@@ -51,6 +51,27 @@ class ProductSku extends Model
         'made_in',
     ];
 
+    public const DRAFT = 0;
+
+    public const ACTIVE = 1;
+
+    public const INACTIVE = 2;
+
+    public const STATUSES = [
+        self::DRAFT => 'draft',
+        self::ACTIVE => 'active',
+        self::INACTIVE => 'inactive'
+    ];
+
+    public const SIMPLE = 'simple';
+
+    public const CONFIGURABLE = 'configurable';
+
+    public const TYPES = [
+        self::SIMPLE => 'Simple',
+        self::CONFIGURABLE => 'Configurable'
+    ];
+
     public function createdByUser()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -86,9 +107,24 @@ class ProductSku extends Model
         return $this->belongsTo(MasterStatus::class, 'status_id');
     }
 
+    public static function statuses()
+    {
+        return [ 
+            0 =>'draft',
+            1 => 'active',
+            2 => 'inactive'
+        ];
+    }
+
+    public function statusLabel()
+    {
+        $statuses = $this->statuses();
+
+        return isset($this->status) ? $statuses[$this->status] : null;
+    }
+
     public function typePpn()
     {
         return $this->belongsTo(MasterStatus::class, 'type_ppn');
     }
 }
-

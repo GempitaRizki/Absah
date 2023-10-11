@@ -20,8 +20,7 @@ use App\Http\Controllers\Seller\ContentManagementSystemSellerController;
 use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
 use App\Http\Controllers\User\AuthUserController;
 use App\Http\Controllers\Seller\FileUploadController;
-use App\Http\Controllers\SendMailController;
-use App\Livewire\FileUploadComponent;
+use App\Http\Controllers\Seller\SellerCMSController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -70,10 +69,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/', [HomeController::class, 'userHome'])->name('home');
 });
 
-// Seller route// ini nanti buat cms seller
-Route::middleware(['auth', 'role:seller'])->group(function () {
-    Route::get('/seller/home', [ContentManagementSystemSellerController::class, 'index'])->name('indexCMSSeller');
-});
 
 // Mitra route// ini nanti buat cms mitra
 Route::middleware(['auth', 'role:mitra'])->group(function () {
@@ -134,3 +129,9 @@ Route::get('/error/403', [HandleErrorController::class, 'index403'])->name('hand
 //store add db 
 Route::post('/save-and-continue', [AuthSellerController::class, 'store'])->name('saveAndContinue');
 
+// Seller route// ini nanti buat cms seller
+//CMS Seller
+Route::middleware(['auth', 'role:seller'])->group(function () {
+    Route::get('/seller/home', [HomeController::class, 'sellerHome'])->name('home.seller');
+    Route::get('/seller/dashboard', [SellerCMSController::class, 'index'])->name('DashboardSeller');
+});

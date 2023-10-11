@@ -68,15 +68,8 @@
             </ul>
             <h4>Wilayah Jual</h4>
             <ul>
-                @if (session()->has('WilayahJualSession') && isset(session('WilayahJualSession')['kategori_product']))
-                    @foreach (session('WilayahJualSession')['kategori_product'] as $kategori)
-                        <li>{{ $kategori }}</li>
-                    @endforeach
-                @else
-                    <li>Tidak ada kategori produk yang dipilih.</li>
-                @endif
+                <li>{{session('WilayahJualSession.kategori_product')}}
             </ul>
-
             <h4>Districts</h4>
             <ul>
                 @if ($wilayahJualDistricts !== null && $wilayahJualDistricts->count() > 0)
@@ -91,7 +84,10 @@
 
             <h4>Informasi Bank</h4>
             <ul>
-                <li><strong>Bank:</strong> {{ session('bankSession.bank_id') }}</li>
+                <strong>Bank:</strong>
+                @if (session('bankSession.bank_id'))
+                    {{ \App\Models\MasterBank::find(session('bankSession.bank_id'))->name }}
+                @endif
                 <li><strong>Nomor Rekening:</strong> {{ session('bankSession.number') }}</li>
                 <li><strong>Nama Pemilik Rekening:</strong> {{ session('bankSession.name') }}</li>
             </ul>
@@ -104,7 +100,6 @@
             </div>
         </form>
     </div>
-
     <script>
         function goBack() {
             window.history.back();

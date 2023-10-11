@@ -9,7 +9,7 @@ class WilayahJual extends Model
     protected $table = 'wilayah_jual';
 
     protected $fillable = [
-        'id',
+        'districts_id',
         'kategori_product',
         'store_id',
     ];
@@ -23,7 +23,4 @@ class WilayahJual extends Model
     {
         return $this->belongsTo(District::class, 'districts_id');
     }
-
 }
-
-

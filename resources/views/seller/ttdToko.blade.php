@@ -88,7 +88,7 @@
                                         <label for="ownerCheckbox">Penandatangan sama dengan penanggung jawab</label>
                                     </div>
                                     <br>
-                                    <div id="additionalFields">
+                                    <div id="additionalFields" style="display: none;">
                                         <div class="form-group row">
                                             <label for="nama"
                                                 class="col-md-4 col-form-label text-md-end text-start">Nama</label>
@@ -180,8 +180,7 @@
                 additionalFields.style.display = "block";
             }
         }
-    </script>
-    <script>
+
         function goBack() {
             window.history.back();
         }
@@ -215,38 +214,4 @@
             }
         }
     </script>
-    <script>
-        function toggleFormFields(checkbox) {
-            const additionalFields = document.getElementById("additionalFields");
-            const nameField = document.getElementById("name");
-            const jabatanField = document.getElementById("jabatan");
-            const NIKField = document.getElementById("NIK");
-            const NPWPField = document.getElementById("NPWP");
-            const phoneField = document.getElementById("phone_number");
-    
-            if (checkbox.checked) {
-                additionalFields.style.display = "none";
-            } else {
-                additionalFields.style.display = "block";
-            }
-    
-            // Lakukan pengisian otomatis jika checkbox dicentang
-            if (checkbox.checked) {
-                // Isi nilai-nilai pada field utama dengan nilai dari field tambahan
-                nameField.value = document.getElementById("nama2").value;
-                jabatanField.value = document.getElementById("jabatan2").value;
-                NIKField.value = document.getElementById("NIK2").value;
-                NPWPField.value = document.getElementById("NPWP2").value;
-                phoneField.value = document.getElementById("phone_number2").value;
-            } else {
-                // Kembalikan nilai-nilai field utama ke nilai awal dari sesi
-                nameField.value = "{{ Session::get('ownerSession.name') }}";
-                jabatanField.value = "{{ Session::get('ownerSession.jabatan') }}";
-                NIKField.value = "{{ Session::get('ownerSession.NIK') }}";
-                NPWPField.value = "{{ Session::get('ownerSession.NPWP') }}";
-                phoneField.value = "{{ Session::get('ownerSession.phone_number') }}";
-            }
-        }
-    </script>
-    
 @endsection

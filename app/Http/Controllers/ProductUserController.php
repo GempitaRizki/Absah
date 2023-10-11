@@ -11,9 +11,9 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 
-use Str;
 
 class ProductUserController extends Controller
 {

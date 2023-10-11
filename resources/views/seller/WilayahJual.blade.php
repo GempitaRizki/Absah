@@ -12,7 +12,7 @@
                         <div class="panel-body container-items">
                             <div class="item panel panel-default">
                                 <div class="selected_wilayahjual">
-                                    <select name="kategori_product" id="kategori_product">
+                                    <select name="kategori_product" id="kategori_product" class="form-control">
                                         <option value="Nasional">Nasional</option>
                                         <option value="Regional">Regional</option>
                                     </select>
@@ -20,11 +20,10 @@
                                 <br>
                                 <div class="panel-body">
                                     <!-- Hidden input to store selected districts -->
-                                    <input type="hidden" name="districts[]">
+                                    <input type="hidden" name="districts_id[]">
                                     <div class="selected-districts">
                                         <div class="selected-district-names"></div>
                                     </div>
-                                    <input type="hidden" name="district_ids[]" class="selected-district-ids">
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <!-- Some content here -->
@@ -34,7 +33,7 @@
                                     <div class="row showKota">
                                         <div class="col-sm-12">
                                             <p><b>Districts</b></p>
-                                            <select name="districts[]" class="form-control form-control-lg" multiple
+                                            <select name="districts_id[]" class="form-control form-control-lg" multiple
                                                 id="districtSelect" size="5" style="height: 200px; font-size: 16px;">
                                                 @foreach ($districts as $district)
                                                     <option value="{{ $district->id }}">{{ $district->name }}</option>
@@ -70,8 +69,8 @@
             $('#addDistrictButton').on('click', function() {
                 var newItem = $('.item.panel.panel-default').first().clone();
 
-                newItem.find('select[name^="districts"]').val([]);
-                newItem.find('input[name^="districts[]"]').val('');
+                newItem.find('select[name="districts_id[]"]').val([]);
+                newItem.find('input[name="districts_id[]"]').val('');
 
                 var panelTitle = newItem.find('.panel-title-address');
                 var panelTitleText = panelTitle.text();
@@ -88,7 +87,7 @@
 
                 $('#totalSelectedDistricts').text(selectedDistrictsCount);
 
-                var districtSelect = newItem.find('select[name^="districts[]"]');
+                var districtSelect = newItem.find('select[name="districts_id[]"]');
                 districtSelect.empty();
                 @foreach ($districts as $district)
                     districtSelect.append($('<option>', {
@@ -108,20 +107,16 @@
                 updateSelectedDistrictNames();
             });
 
-            $('.container-items').on('change', 'select[name^="districts[]"]', function() {
+            $('.container-items').on('change', 'select[name="districts_id[]"]', function() {
                 updateSelectedDistrictNames($(this));
             });
 
             function updateSelectedDistrictNames(selectElement) {
-                var selectedValues = selectElement.val();
+                var selectedValues = selectElement.val() || [];
                 var selectedDistrictNames = [];
                 var selectedDistrictIds = [];
 
-                if (selectedValues) {
-                    selectedValues = selectedValues.filter(function(value) {
-                        return value !== null;
-                    });
-
+                if (selectedValues.length > 0) {
                     $.each(selectedValues, function(index, value) {
                         var districtName = selectElement.find('option[value="' + value + '"]').text();
                         selectedDistrictNames.push(districtName);
@@ -136,7 +131,7 @@
                     selectedDistrictIds);
             }
 
-            updateSelectedDistrictNames($('select[name^="districts[]"]'));
+            updateSelectedDistrictNames($('select[name="districts_id[]"]'));
 
             $('.selected_wilayahjual select').change(function() {
                 var selectedValue = $(this).val();
