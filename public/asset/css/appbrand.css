@@ -1,0 +1,15 @@
+    .app-brand {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .app-brand .brand-icon {
+        order: 1;
+    }
+
+    .app-brand .brand-name {
+        order: 2;
+        margin-left: 20px;
+    }

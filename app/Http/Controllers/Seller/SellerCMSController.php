@@ -9,25 +9,20 @@ use App\Models\ProductSku;
 class SellerCMSController extends Controller
 {
 
+
     public function __construct()
     {
-        $this->data['currentSellerMenu'] = 'catalog';
-        $this->data['currentAdminSubMenu'] = 'product';
 
-        $this->data['statuses'] = ProductSku::statuses();
-        // $this->data['types'] = ProductSku::types();
     }
+
     public function index()
     {
 
-        $this->data['product_sku'] = ProductSku::orderBy('name', 'ASC')->paginate(5);
-
+        $this->data['products'] = ProductSku::orderBy('name', 'ASC')->paginate(11);
         return view('cms.dashboard');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
 

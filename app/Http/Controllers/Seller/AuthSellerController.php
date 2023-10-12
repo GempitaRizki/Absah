@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\StoreFile;
 use App\Models\WilayahJual;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -229,7 +230,52 @@ class AuthSellerController extends Controller
         return redirect()->route('registrationSummary');
     }
 
+    public function indexUpload()
+    {
+        return view('seller.file-upload');
+    }
 
+    public function uploadFileStore(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:pdf|max:2048',
+            'file_type' => 'required'
+        ]);
+    
+        $uploadedFiles = session('uploaded_files', []);
+    
+        if ($request->hasFile('file')) {
+            $uploadedFile = $request->file('file');
+            $filename = $request->input('file_type') . '.' . $uploadedFile->getClientOriginalExtension();
+            $filePath = $uploadedFile->storeAs('uploads', $filename, 'public');
+            $uploadedFiles[$request->input('file_type')] = [
+                'type' => $request->input('file_type'),
+                'path' => asset('storage/' . $filePath),
+                'name' => $request->input('file_type') . '.' . $uploadedFile->getClientOriginalExtension(),
+            ];
+        }
+    
+        session(['uploaded_files' => $uploadedFiles]);
+    
+
+dd($uploadedFiles);        
+        return redirect()->route('uploadFiles')->with('success', 'File berhasil diunggah.');
+    }
+    
+    
+
+    public function deleteFile($type)
+    {
+        $uploadedFiles = session('uploaded_files');
+
+        if (isset($uploadedFiles[$type])) {
+            unset($uploadedFiles[$type]);
+            session(['uploaded_files' => $uploadedFiles]);
+
+            return redirect()->back()->with('success', 'File berhasil dihapus');
+        }
+        return redirect()->back()->with('error', 'File Tidak ditemukan');
+    }
 
     public function Summary()
     {
@@ -282,7 +328,7 @@ class AuthSellerController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-    
+
         try {
             $storeSession = session('storeSession', []);
             $storeFormSession = session('storeFormSession', []);
@@ -290,7 +336,8 @@ class AuthSellerController extends Controller
             $locationSessionStore = session('locationSessionStore', []);
             $storeOwner = session('storeOwner', []);
             $WilayahJualSession = session('WilayahJualSession', []);
-    
+            $uploadedFiles = session('uploadedFiles', []);
+
             if (array_key_exists('store_name', $storeSession)) {
                 $user = new User();
                 $user->name = $storeSession['store_name'];
@@ -298,7 +345,7 @@ class AuthSellerController extends Controller
                 $user->email = $storeSession['surel'];
                 $user->role = 1;
                 $user->save();
-    
+
                 $store = new Store();
                 $store->store_name = $storeFormSession['store_name'];
                 $store->slug = Str::slug($storeFormSession['store_name'], '');
@@ -316,7 +363,7 @@ class AuthSellerController extends Controller
                 $store->postal_code = $locationSessionStore['postal_code'];
                 $store->status_id = 5;
                 $store->save();
-    
+
                 $storeDetail = new StoreDetail();
                 $storeDetail->kepemilikan_usaha = $storeFormSession['kepemilikan_usaha'];
                 $storeDetail->npwp = $storeFormSession['npwp'];
@@ -332,7 +379,7 @@ class AuthSellerController extends Controller
                 $storeDetail->kbli = $storeFormSession['kbli'];
                 $storeDetail->store_id = $store->id;
                 $storeDetail->save();
-    
+
                 $bankStore = new BankStore();
                 $bankStore->name = $bankSession['name'];
                 $bankStore->number = $bankSession['number'];
@@ -340,7 +387,7 @@ class AuthSellerController extends Controller
                 $bankStore->status_id = 2;
                 $bankStore->store_id = $store->id;
                 $bankStore->save();
-    
+
                 $storeOwnerStore = new StoreOwner();
                 $storeOwnerStore->name = $storeOwner['name'];
                 $storeOwnerStore->jabatan = $storeOwner['jabatan'];
@@ -356,9 +403,18 @@ class AuthSellerController extends Controller
                 $damnLocation->kategori_product = $WilayahJualSession['kategori_product'];
                 $damnLocation->store_id = $store->id;
                 $damnLocation->save();
-    
+
+                foreach ($uploadedFiles as $fileData) {
+                    $fileUpload = new StoreFile();
+                    $fileUpload->file_category = 0; 
+                    $fileUpload->storefile_bash_url = $fileData['storefile_bash_url'];
+                    $fileUpload->storefile = $fileData['storefile'];
+                    $fileUpload->store_id = $store->id;
+                    $fileUpload->save();
+                }
+
                 DB::commit();
-    
+
                 session(['forgot' => true]);
                 return redirect()->route('DashboardSeller')->with('success', 'Data toko berhasil disimpan.');
             }

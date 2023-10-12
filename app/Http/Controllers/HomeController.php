@@ -35,7 +35,7 @@ class HomeController extends Controller
 
     public function sellerHome()
     {
-        return view('home', ['msg'=>'ini adalah role seller, disini adalah cms Seller']);
+        return view('cms.dashboard');
     }
 
     public function mitraHome()

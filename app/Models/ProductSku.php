@@ -109,8 +109,8 @@ class ProductSku extends Model
 
     public static function statuses()
     {
-        return [ 
-            0 =>'draft',
+        return [
+            0 => 'draft',
             1 => 'active',
             2 => 'inactive'
         ];
@@ -121,6 +121,14 @@ class ProductSku extends Model
         $statuses = $this->statuses();
 
         return isset($this->status) ? $statuses[$this->status] : null;
+    }
+
+    public static function types()
+    {
+        return [
+            'simple' => 'Simple',
+            'configurable' => 'Configurable',
+        ];
     }
 
     public function typePpn()

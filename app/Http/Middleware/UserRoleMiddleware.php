@@ -13,7 +13,7 @@ class UserRoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role)
     {
-        if (Auth::check() && Auth::user()->role == $role) {
+        if (Auth::check()) {
             if ($request->input('login_as') == 'user') {
                 Auth::user()->update(['role' => 'user']);
             } elseif ($request->input('login_as') == 'seller') {
@@ -23,10 +23,8 @@ class UserRoleMiddleware
             } elseif ($request->input('login_as') == 'admin') {
                 Auth::user()->update(['role' => 'admin']);
             }
-            
-            return $next($request);
         }
         
-        return Redirect::route('handle403');
-    }
+        return $next($request);
+    }    
 }

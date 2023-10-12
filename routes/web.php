@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductUserController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Auth\Login\SellerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\UserRegisterController;
@@ -46,7 +47,6 @@ Route::controller(ProductUserController::class)->group(function () {
     Route::get('/products/quick-view/{slug}', [ProductUserController::class, 'quickView']);
 });
 
-Auth::routes();
 
 //Admin middleware
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
@@ -83,6 +83,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
 Route::post('favorites', [FavoriteController::class, 'store'])->name('favorites.store');
 
+Auth::routes();
 
 //Seller Register
 Route::get('/register/seller', [AuthSellerController::class, 'index'])->name('index.seller');
@@ -117,9 +118,9 @@ Route::post('/register/seller/form/wilayah-jual', [AuthSellerController::class, 
 
 
 //uploadfile
-Route::get('/register/seller/form/upload', [FileUploadController::class, 'index'])->name('uploadFiles');
-Route::post('/register/seller/form/upload', [FileUploadController::class, 'store'])->name('uploadForm');
-Route::post('/delete-file/{key}', [FileUploadController::class, 'deleteFile'])->name('deleteFile');
+Route::get('/register/seller/form/upload', [AuthSellerController::class, 'indexUpload'])->name('uploadFiles');
+Route::post('/register/seller/form/upload', [AuthSellerController::class, 'uploadFileStore'])->name('uploadForm');
+Route::post('/delete-file/{key}', [AuthSellerController::class, 'DeleteFile'])->name('deleteFile');
 
 //handle error 
 Route::get('/error/404', [HandleErrorController::class, 'index404'])->name('handle404');
@@ -129,9 +130,14 @@ Route::get('/error/403', [HandleErrorController::class, 'index403'])->name('hand
 //store add db 
 Route::post('/save-and-continue', [AuthSellerController::class, 'store'])->name('saveAndContinue');
 
-// Seller route// ini nanti buat cms seller
-//CMS Seller
+
+//seller login controller
+Route::get('/seller/login', [SellerController::class, 'index'])->name('seller.login');
+Route::post('/seller/login', [SellerController::class, 'login']);
+Route::post('seller/logout', [SellerController::class, 'logout'])->name('seller.logout');
+
+
+//seller cms
 Route::middleware(['auth', 'role:seller'])->group(function () {
-    Route::get('/seller/home', [HomeController::class, 'sellerHome'])->name('home.seller');
-    Route::get('/seller/dashboard', [SellerCMSController::class, 'index'])->name('DashboardSeller');
+Route::get('/seller/dashboard', [SellerCMSController::class, 'index'])->name('DashboardSeller');
 });

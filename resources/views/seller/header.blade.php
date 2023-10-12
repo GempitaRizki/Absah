@@ -1,4 +1,3 @@
-<!-- header start -->
                 <header>
                     <div class="header-top-furniture wrapper-padding-2 res-header-sm">
                         <div class="container-fluid">

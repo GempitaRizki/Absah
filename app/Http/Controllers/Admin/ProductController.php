@@ -16,10 +16,13 @@ use App\Models\AttributeOption;
 use App\Models\ProductAttributeValue;
 use App\Models\ProductInventory;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
-use Str;
-use Auth;
-use DB;
+// use Str;
+// use Auth;
+// use DB;
 
 class ProductController extends Controller
 {

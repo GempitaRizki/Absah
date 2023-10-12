@@ -1,4 +1,4 @@
-@extends('themes.ezone.register')
+@extends('seller.topbar')
 
 @section('content')
 
