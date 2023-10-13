@@ -172,8 +172,8 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeneralServiceProvider::class,
-        Laracasts\Flash\FlashServiceProvider::class,
-        Darryldecode\Cart\CartServiceProvider::class
+        Barryvdh\DomPDF\ServiceProvider::class,
+
 
 
     ])->toArray(),
@@ -193,7 +193,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
 		'General' => App\Helpers\General::class,
-        'Cart' => Darryldecode\Cart\Facades\CartFacade::class
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
 
     ])->toArray(),
 

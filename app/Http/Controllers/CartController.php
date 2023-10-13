@@ -16,57 +16,49 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
 
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	public function index()
-	{
-        $user_id = Auth::id();
-		$cart = Cart::where('user_id', $user_id)->where('status', 1)->first();
+    public function index()
+    {
+        $user_id = auth()->id();
+        $cart = Cart::firstOrNew(['user_id' => $user_id, 'status' => 1]);
 
-		if (!$cart) {
-			$cart = new Cart();
-			$cart->user_id = $user_id;
-			$cart->status = 1;
-			$cart->save();
-		}
+        if (!$cart->exists) {
+            $cart->save();
+        }
 
-		$items = CartItem::where('cart_id', $cart->id)->get();
+        $items = CartItem::where('cart_id', $cart->id)->get();
+        $items->load(['product.images']);
 
-		$cartItems = [];
-		$cartSubtotal = 0;
+        $cartItems = [];
+        $cartSubtotal = 0;
 
-		foreach ($items as $item) {
-			$product = Product::findOrFail($item->product_id);
-			$image = ProductImage::where('product_id', $product->id)->first();
-			$total = $product->price * $item->quantity;
+        foreach ($items as $item) {
+            $product = $item->product;
+            $image = $product->images->first();
+            $total = $product->price * $item->quantity;
 
-			$cartItems[] = [
-				'item_id' => $item->id,
-				'slug' => $product->slug,
-				'image' => $image->path,
-				'product_name' => $product->name,
-				'price' => $product->price,
-				'quantity' => $item->quantity,
-				'total' => $total,
-			];
+            $cartItems[] = [
+                'item_id' => $item->id,
+                'slug' => $product->slug,
+                'image' => $image->path ?? null,
+                'product_name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $item->quantity,
+                'total' => $total,
+            ];
 
-			$cartSubtotal += $total;
-		}
+            $cartSubtotal += $total;
+        }
 
+        $cartTotalQuantity = $items->sum('quantity');
+        $cartTotal = $cartSubtotal;
 
-		$cartTotalQuantity = 0;
-		foreach ($items as $item) {
-			$cartTotalQuantity += $item->quantity;
-		}
-		$cartTotal = $cartSubtotal;
-
-
-		return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
-	}
-
+        return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
+    }
 
 	public function store(Request $request, $product)
 	{

@@ -9,9 +9,9 @@ use App\Models\Cart;
 
 class Product extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $fillable = [
+	protected $fillable = [
 		'parent_id',
 		'user_id',
 		'sku',
@@ -135,7 +135,7 @@ class Product extends Model
 		return [
 			0 => 'draft',
 			1 => 'active',
-			2=> 'inactive',
+			2 => 'inactive',
 		];
 	}
 
@@ -244,5 +244,10 @@ class Product extends Model
 	{
 		return $this->belongsTo(Cart::class);
 	}
-	
+
+
+	public function images()
+	{
+		return $this->hasMany(ProductImage::class, 'product_id');
+	}
 }

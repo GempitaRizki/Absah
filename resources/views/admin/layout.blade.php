@@ -9,16 +9,12 @@
 
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500" rel="stylesheet" />
 		<link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet" />
-		<!-- PLUGINS CSS STYLE -->
 		<link href="{{ URL::asset('admin/assets/plugins/nprogress/nprogress.css') }}" rel="stylesheet" />
-		<!-- No Extra plugin used -->  
 		<link href="{{ URL::asset('admin/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css') }}" rel="stylesheet" />
 		<link href="{{ URL::asset('admin/assets/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet" />
 		<link href="{{ URL::asset('admin/assets/plugins/toastr/toastr.min.css') }}" rel="stylesheet" />
-		<!-- SLEEK CSS -->
 		<link id="sleek-css" rel="stylesheet" href="{{ URL::asset('admin/assets/css/sleek.css') }}" />
 		<link id="bsdp-css" rel="stylesheet" href="{{ URL::asset('admin/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
-		<!-- FAVICON -->
 		<link href="{{ URL::asset('admin/assets/img/favicon.png') }}" rel="shortcut icon" />
 		<script src="{{ URL::asset('admin/assets/plugins/nprogress/nprogress.js') }}"></script>
 	</head>
@@ -31,7 +27,6 @@
 	<div class="mobile-sticky-body-overlay"></div>  
 	<div id="toaster"></div>
 	<div class="wrapper">
-		<!-- Github Link -->
 		<a href="https://github.com/tafcoder/sleek-dashboard" class="github-link">
 		<svg width="70" height="70" viewBox="0 0 250 250" aria-hidden="true">
 			<defs>

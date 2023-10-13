@@ -10,16 +10,11 @@ use App\Http\Controllers\CartController;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache; 
+
 
 class DashboardController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->data['currentUserMenu'] = 'categories';
-        $this->data['currentUserSubMenu'] = 'category';
-        
-    }
 
     public function index()
     {
@@ -62,9 +57,14 @@ class DashboardController extends Controller
         }
         $cartTotal = $cartSubtotal;
     
-        $categories = Category::where('parent_id', 0)->get();
-        $products = Product::all();
-    
+        $categories = Cache::remember('categories', 3600, function () {
+            return Category::where('parent_id', 0)->get();
+        });
+        
+        $products = Cache::remember('products', 3600, function () {
+            return Product::all();
+        });
+
         $productImages = ProductImage::whereIn('product_id', $products->pluck('id'))->get();
     
         $cartController = new CartController();

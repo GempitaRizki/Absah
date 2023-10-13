@@ -25,9 +25,6 @@
     <link rel="stylesheet" href="{{url('assets/css/footer.css')}}">
     <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/pe-icon-7-stroke.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/themify-icons.css') }}">
-
-    
-    
 </head>
 
 <body>

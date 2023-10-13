@@ -15,6 +15,7 @@
                         <div style="font-weight: bold; margin-top: 5px;">
                             <a href="{{ url('products?category=' . $category->slug) }}">{{ $category->name }}</a>
                         </div>
+                        {{-- <p>Jumlah Produk: {{ $category->products->count() }}</p> --}}
                     </div>
                 </div>
                 @endforeach

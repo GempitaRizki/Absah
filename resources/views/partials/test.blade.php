@@ -1,38 +1,31 @@
-@extends('seller.topbar')
-
-@section('content')
-    <style>
-        /* CSS Anda tetap sama */
-    </style>
-    <div class="login_form">
-        <form action="{{ route('seller.login') }}" method="POST" class="form">
-            @csrf
-            <h1 class="form_title"><b>Seller Login</b></h1>
-            <div class="form_div">
-                <input type="text" class="form_input" name="identifier" placeholder=" ">
-                <label class="form_label"><b>Email</b></label>
-            </div>
-            <div class="form_div">
-                <input type="password" class="form_input" name="password" placeholder=" ">
-                <label class="form_label"><b>Password</b></label>
-            </div>
-            <input type="submit" class="form_button" value="Log In">
-        </form>
-    </div>
-@endsection
-
-public function login(Request $request)
+public function index()
 {
-    $credentials = $request->only('email', 'password');
+    $user = Auth::user();
+    $user_id = $user->id;
 
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user();
-
-        if ($user->role == 1) {
-            return redirect()->route('dashboard');
-        } else {
-            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk login.');
-        }
+    $cart = Cart::firstOrNew(['user_id' => $user_id, 'status' => 1]);
+    if (!$cart->exists) {
+        $cart->save();
     }
-    return redirect()->back()->with('error', 'Email atau kata sandi salah.');
+
+    $cartItems = CartItem::where('cart_id', $cart->id)->get();
+    $productIds = $cartItems->pluck('product_id')->toArray();
+
+    $products = Product::with('images')->whereIn('id', $productIds)->get();
+
+    // ...
+
+    $responseData = [
+        'cartControllerResponseIndex' => $cartControllerResponseIndex,
+        'categories' => $categories,
+        'products' => $products,
+        'productImages' => $productImages,
+        'cartItems' => $cartItems,
+        'cartSubtotal' => $cartSubtotal,
+        'cartTotal' => $cartTotal,
+        'cartTotalQuantity' => $cartTotalQuantity,
+        'cart' => $cart,
+    ];
+
+    return view('dashboard.index', $responseData);
 }

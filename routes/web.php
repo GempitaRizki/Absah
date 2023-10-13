@@ -12,18 +12,22 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\Login\SellerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
-use App\Http\Controllers\Auth\UserRegisterController;
 use App\Http\Controllers\Error\HandleErrorController;
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\Location\LocationController;
+use App\Http\Controllers\Seller\AktivitasPenggunaSellerController;
 use App\Http\Controllers\Seller\AuthSellerController;
-use App\Http\Controllers\Seller\ContentManagementSystemSellerController;
-use App\Http\Controllers\Seller\Uploads\UploadDataRegisterController;
+use App\Http\Controllers\seller\DashboardSellerController;
 use App\Http\Controllers\User\AuthUserController;
-use App\Http\Controllers\Seller\FileUploadController;
-use App\Http\Controllers\Seller\SellerCMSController;
+use App\Http\Controllers\Seller\OrderSellerController;
+use App\Http\Controllers\Seller\PembayaranSellerController;
+use App\Http\Controllers\Seller\PajakSellerController;
+use App\Http\Controllers\Seller\ProductSellerController;
+use App\Http\Controllers\Seller\NegoSellerController;
+use App\Http\Controllers\Seller\ChatSellerController;
+use App\Http\Controllers\Seller\DaftarPenggunaSellerController;
+use App\Http\Controllers\Seller\KomplainSellerController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 //Route Keranjang
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -66,7 +70,7 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
 
 // User route // ini nanti buat cms user
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/', [HomeController::class, 'userHome'])->name('home');
+//user control
 });
 
 
@@ -137,7 +141,45 @@ Route::post('/seller/login', [SellerController::class, 'login']);
 Route::post('seller/logout', [SellerController::class, 'logout'])->name('seller.logout');
 
 
-//seller cms
-Route::middleware(['auth', 'role:seller'])->group(function () {
-Route::get('/seller/dashboard', [SellerCMSController::class, 'index'])->name('DashboardSeller');
+//Seller Content Management System
+Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller')->prefix('seller')->group(function () {
+
+Route::get('/dashboard', [DashboardSellerController::class, 'index'])->name('DashboardSeller');
+
+
+//order
+Route::get('/order', [OrderSellerController::class, 'index'])->name('order.index');
+
+
+//pembayaran 
+Route::get('/pembayaran', [PembayaranSellerController::class, 'index'])->name('pembayaran.index');
+
+
+//pajak
+Route::get('/pajak', [PajakSellerController::class, 'index'])->name('pajak.index');
+
+
+//product
+Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
+
+
+//Nego
+Route::get('/nego', [NegoSellerController::class, 'index'])->name('nego.index');
+
+//chat
+Route::get('/chat', [ChatSellerController::class, 'index'])->name('chat.index');
+
+
+//Komplain
+Route::get('/komplain', [KomplainSellerController::class, 'index'])->name('komplain.index');
+
+
+//daftar pengguna
+Route::get('/daftarpengguna', [DaftarPenggunaSellerController::class, 'index'])->name('daftarpengguna.index');
+
+
+//aktifitas pengguna
+Route::get('/aktivitaspengguna', [AktivitasPenggunaSellerController::class, 'index'])->name('aktivitaspengguna.index');
+Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
+
 });

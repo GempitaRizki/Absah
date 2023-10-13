@@ -22,6 +22,7 @@ class Controller extends BaseController
 
         $this->_initAdminMenu();
         $this->_initUserMenu();
+        $this->_initSellerMenu();
     }
 
     private function _initAdminMenu()
@@ -35,6 +36,21 @@ class Controller extends BaseController
         $this->data['currentUserMenu'] = 'category';
         $this->data['currentUserSubMenu'] = '';
     }
+
+    private function _initSellerMenu()
+    {
+        $this->data['currentSellerMenu'] = 'dashboardseller';
+        $this->data['currentSellerMenu'] = 'orderseller';
+        $this->data['currentSellerMenu'] = 'pembayaranseller';
+        $this->data['currentSellerMenu'] = 'pajakseller';
+        $this->data['currentSellerMenu'] = 'productseller';
+        $this->data['currentSellerMenu'] = 'negoSeller';
+        $this->data['currentSellerMenu'] = 'chatSeller';
+        $this->data['currentSellerMenu'] = 'komplainSeller';
+        $this->data['currentSellerMenu'] = 'daftarpenggunaSeller';
+        $this->data['currentSellerMenu'] = 'aktivitaspenggunaSeller';
+    }
+
 
     protected function load_theme($view, $data = [])
     {
