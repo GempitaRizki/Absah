@@ -9,13 +9,9 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-
-
     use AuthenticatesUsers;
 
-
     protected $redirectTo = RouteServiceProvider::HOME;
-
 
     public function __construct()
     {
@@ -24,24 +20,25 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $input = $request->all();
-        $this->validate($request, [
+        $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
-        if (auth()->attempt(['email' => $input['email'], 'password' => $input['password']])) {
-            if (auth()->user()->role == 'mitra') {
-                return redirect()->route('home.mitra');
-            } else if (auth()->user()->role == 'seller') {
-                return redirect()->route('seller.dashboard');
-            } else {
-                return redirect()->route('home');
-            }
-        } else {
-            return redirect()
-                ->route('login')
-                ->with('error', 'Email dan Password tidak sesuai ! ');
+        $credentials = $request->only('email', 'password');
+
+        if (auth()->attempt($credentials)) {
+            $userRole = auth()->user()->role;
+
+            return match ($userRole) {
+                'mitra' => redirect()->route('home.mitra'),
+                'seller' => redirect()->route('seller.dashboard'),
+                default => redirect()->route('home'),
+            };
         }
+
+        return redirect()
+            ->route('login')
+            ->with('error', 'Email dan Password tidak sesuai !');
     }
 }

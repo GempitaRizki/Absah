@@ -15,11 +15,16 @@ class AktivitasPenggunaSellerController extends Controller
         $this->middleware('activity.logger');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $this->data['activities'] = Activity::with('user')->get();
-        return view('seller.Items.aktivitaspenggunaIndex', $this->data);
+        $activities = Activity::with('user')
+            ->orderBy('id', 'desc') 
+            ->paginate(100);
+    
+        return view('seller.Items.aktivitaspenggunaIndex', compact('activities'));
     }
+    
+    
 
     public function generatePDF()
     {

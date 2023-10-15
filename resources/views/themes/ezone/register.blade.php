@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/img/favicon.png')}}??">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url('assets/img/favicon.png') }}??">
 
     <!-- all css here -->
     <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/bootstrap.min.css') }}">
@@ -26,19 +26,13 @@
     <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/register.css') }}">
     <script src="{{ asset('themes/ezone/assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
 
-    <meta name="csrf-token" content="{{ csrf_token()}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
-    <!--[if lt IE 8]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+
 
     @yield('content')
-
-    {{-- <div class="register-footer">
-        @include('partials.footer');
-    </div> --}}
 
     @include('themes.ezone.partials.modals');
 

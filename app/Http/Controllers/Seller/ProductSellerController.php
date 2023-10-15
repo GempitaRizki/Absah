@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ProductSku;
 
 class ProductSellerController extends Controller
 {
@@ -14,6 +15,10 @@ class ProductSellerController extends Controller
 
     public function index()
     {
-        return view('seller.Items.productIndex', $this->data);
+        $totalProducts = ProductSku::getTotalProduct('all');
+        $this->data['totalProducts'] = $totalProducts;
+
+        return view('seller.items.product_index', $this->data);
     }
 }
+

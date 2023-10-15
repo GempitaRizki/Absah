@@ -26,6 +26,7 @@ use App\Http\Controllers\Seller\NegoSellerController;
 use App\Http\Controllers\Seller\ChatSellerController;
 use App\Http\Controllers\Seller\DaftarPenggunaSellerController;
 use App\Http\Controllers\Seller\KomplainSellerController;
+use App\Http\Controllers\ControllerForTestingView;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -183,3 +184,6 @@ Route::get('/aktivitaspengguna', [AktivitasPenggunaSellerController::class, 'ind
 Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
 
 });
+
+
+// Route::get('mumetbanget/setan', [ControllerForTestingView::class, 'index']);

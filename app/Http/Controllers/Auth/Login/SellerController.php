@@ -8,29 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class SellerController extends Controller
 {
-
-
     public function index()
     {
         return view('login.seller');
     }
 
-
     public function login(Request $request)
     {
-        $input = $request->only('email', 'password');
-    
-        $this->validate($request, [
+        $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
-    
-        if (auth()->attempt($input) && auth()->user()->role == 'seller') {
+
+        if (auth()->attempt($request->only('email', 'password')) && auth()->user()->role == 'seller') {
             return redirect()->route('DashboardSeller');
-        } else {
-            return redirect()->route('seller.login')->withErrors(['login' => 'Email atau password salah.']);
         }
+
+        return redirect()->route('seller.login')->withErrors(['login' => 'Email atau password salah.']);
     }
-    
-    
 }

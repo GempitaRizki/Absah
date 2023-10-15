@@ -1,75 +1,126 @@
-<aside class="left-sidebar bg-sidebar">
-    <div class="app-brand" style="font-size: 14px;">
-        <a href="{{ url('seller/dashboard') }}">
-            <span class="brand-name">Seller Dashboard</span>
-        </a>
-    </div>
-    <br>
-    <div class="container-fluid">
-        <h1 style="font-size: 15px; color: rgb(252, 252, 252); text-align: center;">{{ Auth::user()->username }}</h1>
-    </div>
-    <div class="sidebar-scrollbar">
-        <ul class="nav sidebar-inner" id="sidebar-menu">
-            <li class="has-sub {{ Route::currentRouteName() == 'DashboardSeller' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('DashboardSeller') }}">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span class="nav-text">Dashboard</span>
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="" class="d-block" style="font-size: 15px; color: rgb(252, 252, 252); text-align: center;">
+                    {{ Auth::user()->username }}
                 </a>
-            </li>            
-            <li class="has-sub {{ Route::currentRouteName() == 'order.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('order.index') }}">
-                    <i class="fas fa-cart-plus"></i>
-                    <span class="nav-text">Order</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'pembayaran.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('pembayaran.index') }}">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span class="nav-text">Pembayaran</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'pajak.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('pajak.index') }}">
-                    <i class="fas fa-money-check"></i>
-                    <span class="nav-text">Pajak</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'product.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('product.index') }}">
-                    <i class="fas fa-book"></i>
-                    <span class="nav-text">Product</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'nego.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('nego.index') }}">
-                    <i class="fas fa-hourglass"></i>
-                    <span class="nav-text">Nego</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'chat.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('chat.index') }}">
-                    <i class="fas fa-phone-alt"></i>
-                    <span class="nav-text">Chat</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'komplain.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('komplain.index') }}">
-                    <i class="fas fa-comments"></i>
-                    <span class="nav-text">Komplain</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'daftarpengguna.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('daftarpengguna.index') }}">
-                    <i class="fas fa-users"></i>
-                    <span class="nav-text">Daftar Pengguna</span>
-                </a>
-            </li>
-            <li class="has-sub {{ Route::currentRouteName() == 'aktivitaspengguna.index' ? 'expand active' : '' }}">
-                <a class="sidenav-item-link" href="{{ route('aktivitaspengguna.index') }}">
-                    <i class="fas fa-history"></i>
-                    <span class="nav-text">Aktifitas Pengguna</span>
-                </a>
-            </li>
-        </ul>
+            </div>
+        </div>
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav {{ Route::currentRouteName() == 'dashboardseller' ? 'expand active' : '' }}">
+                    <a href="{{ route('DashboardSeller') }}" class="nav-link">
+                        <i class="fas fa-tachometer-alt" style="min-width: 2.5rem;"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'orderseller' ? 'expand active' : '' }}">
+                    <a href="{{ route('order.index') }}" class="nav-link">
+                        <i class="fas fa-cart-plus" style="min-width: 2.5rem;"></i>
+                        <p>
+                            Order
+                            <span class="badge badge-info right">0</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'pembayaran.index' ? 'expand active' : '' }}" id="pembayaran-menu">
+                    <a href="{{ route('pembayaran.index') }}" class="nav-link">
+                        <i class="fas fa-money-check" style="min-width: 2.5rem;"></i>
+                        <p>
+                            Pembayaran
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="pages/UI/general.html" class="nav-link">
+                                <i class="far fa-circle nav-icon" style="min-width: 2.5rem;"></i>
+                                <p>Payment Seller</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/UI/icons.html" class="nav-link">
+                                <i class="far fa-circle nav-icon" style="min-width: 2.5rem;"></i>
+                                <p>Bayar Full</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'pajak.index' ? 'expand active' : '' }}" id="pajak-menu">
+                    <a href="{{ route('pajak.index') }}" class="nav-link">
+                        <i class="fas fa-money-check" style="min-width: 2.5rem;"></i>
+                        <p>
+                            Pajak
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="pages/forms/general.html" class="nav-link">
+                                <i class="far fa-circle nav-icon" style="min-width: 2.5rem;"></i>
+                                <p>Nomor Faktur</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/forms/advanced.html" class="nav-link">
+                                <i class="far fa-circle nav-icon" style="min-width: 2.5rem;"></i>
+                                <p>E-Faktur</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/forms/editors.html" class="nav-link">
+                                <i class="far fa-circle nav-icon" style="min-width: 2.5rem;"></i>
+                                <p>E-Billing</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="nav {{ Route::currentRouteName() == 'productseller' ? 'expand active' : '' }}">
+                    <a href="{{ route('product.index') }}" class="nav-link">
+                        <i class="fas fa-book" style="min-width: 2.5rem;"></i>
+                        <p>Product</p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'negoSeller' ? 'expand active' : '' }}">
+                    <a href="{{ route('nego.index') }}" class="nav-link">
+                        <i class="fas fa-hourglass" style="min-width: 2.5rem;"></i>
+                        <p>Nego</p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'chatSeller' ? 'expand active' : '' }}">
+                    <a href="{{ route('chat.index') }}" class="nav-link">
+                        <i class="fas fa-phone-alt" style="min-width: 2.5rem;"></i>
+                        <p>Chat</p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'komplainSeller' ? 'expand active' : '' }}">
+                    <a href="{{ route('komplain.index') }}" class="nav-link">
+                        <i class="fas fa-comments" style="min-width: 2.5rem;"></i>
+                        <p>
+                            Komplain
+                            <span class="badge badge-info right">0</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'daftarpenggunaSeller' ? 'expand active' : '' }}">
+                    <a href="{{ route('daftarpengguna.index') }}" class="nav-link">
+                        <i class="fas fa-users" style="min-width: 2.5rem;"></i>
+                        <p>Daftar Pengguna</p>
+                    </a>
+                </li>
+                <li class="nav {{ Route::currentRouteName() == 'aktivitaspengguna.index' ? 'expand active' : '' }}">
+                    <a class="nav-link" href="{{ route('aktivitaspengguna.index') }}" >
+                        <i class="fas fa-history" style="min-width: 2.5rem;"></i>
+                        <p>Aktivitas Pengguna</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </aside>

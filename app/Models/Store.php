@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class Store extends Model
 {
@@ -64,6 +65,19 @@ class Store extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'seller_type', 'name');
     }
-    
-    
+    public static function getStoreIdByUserLogin()
+    {
+        $userId = auth()->user()->id;
+
+        $storeUser = StoreUser::join('rbac_auth_assignment as raa', 'store_user.user_id', '=', 'raa.user_id')
+            ->whereIn('raa.item_name', [User::ROLE_OWNER_STORE, User::ROLE_USER_STORE])
+            ->where('store_user.user_id', $userId)
+            ->first();
+
+        if ($storeUser) {
+            return $storeUser->store_id;
+        }
+
+        return null;
+    }
 }

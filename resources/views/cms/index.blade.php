@@ -1,75 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description"
-        content="Sleek Dashboard - Free Bootstrap 99 Admin Dashboard Template and UI Kit. It is very powerful bootstrap admin dashboard, which allows you to build products like admin panels, content management systems and CRMs etc.">
-    <meta name="theme-name" content="sleek" />
-    <title>Seller Dashboard</title>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500"
-        rel="stylesheet" />
-    <link href="https://cdn.materialdesignicons.com/4.4.95/css/materialdesignicons.min.css" rel="stylesheet" />
-    <link href="{{ asset('asset/css/plugins/simplebar/simplebar.css') }}" rel="stylesheet" />
-    <link href="{{ asset('asset/plugins/nprogress/nprogress.css') }}" rel="stylesheet" />
-    <link href="{{ asset('asset/plugins/jvectormap/jquery-jvectormap-2.0.3.css') }}" rel="stylesheet">
-    <link href="{{ asset('asset/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
-    <link href="{{ asset('asset/plugins/toastr/toastr.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link id="sleek-css" rel="stylesheet" href="{{ asset('asset/css/sleek.css') }}" />
-    <link href="{{ asset('asset/img/favicon.png') }}" rel="shortcut icon" />
-    <link href="{{ asset('asset/css/appbrand.css') }}" rel="stylesheet" />
-    <script src="{{ asset('asset/plugins/nprogress/nprogress.js') }}"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Absah.id</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 
-<body class="header-fixed sidebar-fixed sidebar-dark header-light" id="body">
-    <script>
-        NProgress.configure({
-            showSpinner: false
-        });
-        NProgress.start();
-    </script>
-    <aside class="left-sidebar bg-sidebar">
-        <div id="sidebar" class="sidebar sidebar-with-footer">
-            <div class="app-brand">
-                <a href="/index.html" title="Sleek Dashboard">
-                    <span class="brand-name text-truncate">Seller Dashboard</span>
-                    <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"
-                        width="30" height="33" viewBox="0 0 30 33">
-                        <g fill="none" fill-rule="evenodd">
-                            <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
-                            <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
-                        </g>
-                    </svg>
-                </a>
-                @include('seller.partials.sidebar')
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        @include('seller.partials.sidebar')
+
+        <div class="content-wrapper">
+            @include('seller.partials.header')
+            <div class="content">
+                @yield('content')
             </div>
         </div>
-    </aside>
-    <div class="page-wrapper">
-        @include('seller.partials.header')
-        <div class="content-wrapper">
-            @yield('content')
-        </div>
+
+        @include('seller.partials.footer')
+
+
     </div>
 
-    <script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('asset/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('asset/plugins/simplebar/simplebar.min.js') }}"></script>
-    <script src="{{ asset('asset/plugins/charts/Chart.min.js') }}"></script>
-    <script src="{{ asset('asset/js/chart.js') }}"></script>
-    <script src="{{ asset('asset/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js') }}"></script>
-    <script src="{{ asset('asset/plugins/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
-    <script src="{{ asset('asset/js/vector-map.js') }}"></script>
-    <script src="{{ asset('asset/plugins/daterangepicker/moment.min.js') }}"></script>
-    <script src="{{ asset('asset/plugins/daterangepicker/daterangepicker.js') }}"></script>
-    <script src="{{ asset('asset/js/date-range.js') }}"></script>
-    <script src="{{ asset('asset/plugins/toastr/toastr.min.js') }}"></script>
-    <script src="{{ asset('asset/js/sleek.js') }}"></script>
-    <link href="{{ asset('asset/options/optionswitch.css') }}" rel="stylesheet">
-    <script src="{{ asset('asset/options/optionswitcher.js') }}"></script>
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
+    <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('dist/js/demo.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.has-treeview > a').on('click', function(e) {
+                e.preventDefault();
+                $('.has-treeview.menu-open').not($(this).parent()).removeClass('menu-open');
+                $(this).parent().toggleClass('menu-open');
+            });
+        });
+    </script>
+    <script>
+        const pajakMenu = document.getElementById("pajak-menu");
+        pajakMenu.addEventListener("click", function(e) {
+            if (pajakMenu.classList.contains("menu-open")) {
+                pajakMenu.classList.remove("menu-open");
+            } else {
+                pajakMenu.classList.add("menu-open");
+            }
+        });
+    </script>
+    <script>
+        const pembayaranMenu = document.getElementById("pembayaran-menu");
+        pembayaranMenu.addEventListener("click", function(e) {
+            if (pembayaranMenu.classList.contains("menu-open")) {
+                pembayaranMenu.classList.remove("menu-open");
+            } else {
+                pembayaranMenu.classList.add("menu-open");
+            }
+        });
+    </script>
 </body>
-
 </html>

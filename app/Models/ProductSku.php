@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductSku extends Model
 {
-    use HasFactory;
     protected $table = 'product_sku';
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'product_id',
@@ -51,26 +48,12 @@ class ProductSku extends Model
         'made_in',
     ];
 
-    public const DRAFT = 0;
+    const HAPUS = 0;
+    const ENABLE_STATUS_ID = 1;
 
-    public const ACTIVE = 1;
+    const PENDING_REVIEW_STATUS_ID = 2;
 
-    public const INACTIVE = 2;
-
-    public const STATUSES = [
-        self::DRAFT => 'draft',
-        self::ACTIVE => 'active',
-        self::INACTIVE => 'inactive'
-    ];
-
-    public const SIMPLE = 'simple';
-
-    public const CONFIGURABLE = 'configurable';
-
-    public const TYPES = [
-        self::SIMPLE => 'Simple',
-        self::CONFIGURABLE => 'Configurable'
-    ];
+    const DRAFT = 3;
 
     public function createdByUser()
     {
@@ -87,12 +70,12 @@ class ProductSku extends Model
         return $this->belongsTo(MasterStatus::class, 'unit_weight');
     }
 
-    public function hasPpn()
+    public function hasPpnStatus()
     {
         return $this->belongsTo(MasterStatus::class, 'has_ppn');
     }
 
-    public function hasShipping()
+    public function hasShippingStatus()
     {
         return $this->belongsTo(MasterStatus::class, 'has_shipping');
     }
@@ -107,32 +90,24 @@ class ProductSku extends Model
         return $this->belongsTo(MasterStatus::class, 'status_id');
     }
 
-    public static function statuses()
+    public static function getTotalProduct($type)
     {
-        return [
-            0 => 'draft',
-            1 => 'active',
-            2 => 'inactive'
-        ];
-    }
-
-    public function statusLabel()
-    {
-        $statuses = $this->statuses();
-
-        return isset($this->status) ? $statuses[$this->status] : null;
-    }
-
-    public static function types()
-    {
-        return [
-            'simple' => 'Simple',
-            'configurable' => 'Configurable',
-        ];
-    }
-
-    public function typePpn()
-    {
-        return $this->belongsTo(MasterStatus::class, 'type_ppn');
+        $storeId = Store::getStoreIdByUserLogin();
+        return self::join('product_store as pstore', 'pstore.product_sku_id', '=', 'product_sku.id')
+            ->where('pstore.store_id', $storeId)
+            ->when($type === 'all', function ($query) {
+                return $query->whereNotIn('status_id', [self::HAPUS]);
+            })
+            ->when($type === 'aktif', function ($query) {
+                return $query->where('status_id', self::ENABLE_STATUS_ID);
+            })
+            ->when($type === 'pending', function ($query) {
+                return $query->where('status_id', self::PENDING_REVIEW_STATUS_ID);
+            })
+            ->when($type === 'draft', function ($query) {
+                return $query->where('status_id', self::DRAFT);
+            })
+            ->groupBy('product_sku.id')
+            ->count();
     }
 }
