@@ -46,6 +46,12 @@ class ProductSku extends Model
         'tgl_sk',
         'code_kbki',
         'made_in',
+        'min_qty',
+        'unique_id',
+        'agregasi_status',
+        'kat_produk',
+        
+
     ];
 
     const HAPUS = 0;
@@ -93,6 +99,7 @@ class ProductSku extends Model
     public static function getTotalProduct($type)
     {
         $storeId = Store::getStoreIdByUserLogin();
+
         return self::join('product_store as pstore', 'pstore.product_sku_id', '=', 'product_sku.id')
             ->where('pstore.store_id', $storeId)
             ->when($type === 'all', function ($query) {

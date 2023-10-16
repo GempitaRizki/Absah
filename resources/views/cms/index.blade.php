@@ -18,70 +18,66 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('seller.partials.sidebar')
 
-        <div class="content-wrapper">
-            @include('seller.partials.header')
-            <div class="content">
-                @yield('content')
-            </div>
-        </div>
+@include('seller.partials.navbar')
 
-        @include('seller.partials.footer')
+@include('seller.partials.sidebar')
+
+    @include('seller.partials.header')
+        @yield('content')
+
+@include('seller.partials.footer')
 
 
-    </div>
 
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
-    <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
-    <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
-    <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
-    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
-    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-    <script src="{{ asset('dist/js/adminlte.js') }}"></script>
-    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
-    <script src="{{ asset('dist/js/demo.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.has-treeview > a').on('click', function(e) {
-                e.preventDefault();
-                $('.has-treeview.menu-open').not($(this).parent()).removeClass('menu-open');
-                $(this).parent().toggleClass('menu-open');
-            });
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+<script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
+<script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+<script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+<script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+<script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+<script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+<script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+<script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+<script src="{{ asset('dist/js/adminlte.js') }}"></script>
+<script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('dist/js/demo.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.has-treeview > a').on('click', function(e) {
+            e.preventDefault();
+            $('.has-treeview.menu-open').not($(this).parent()).removeClass('menu-open');
+            $(this).parent().toggleClass('menu-open');
         });
-    </script>
-    <script>
-        const pajakMenu = document.getElementById("pajak-menu");
-        pajakMenu.addEventListener("click", function(e) {
-            if (pajakMenu.classList.contains("menu-open")) {
-                pajakMenu.classList.remove("menu-open");
-            } else {
-                pajakMenu.classList.add("menu-open");
-            }
-        });
-    </script>
-    <script>
-        const pembayaranMenu = document.getElementById("pembayaran-menu");
-        pembayaranMenu.addEventListener("click", function(e) {
-            if (pembayaranMenu.classList.contains("menu-open")) {
-                pembayaranMenu.classList.remove("menu-open");
-            } else {
-                pembayaranMenu.classList.add("menu-open");
-            }
-        });
-    </script>
-</body>
+    });
+</script>
+<script>
+    const pajakMenu = document.getElementById("pajak-menu");
+    pajakMenu.addEventListener("click", function(e) {
+        if (pajakMenu.classList.contains("menu-open")) {
+            pajakMenu.classList.remove("menu-open");
+        } else {
+            pajakMenu.classList.add("menu-open");
+        }
+    });
+</script>
+<script>
+    const pembayaranMenu = document.getElementById("pembayaran-menu");
+    pembayaranMenu.addEventListener("click", function(e) {
+        if (pembayaranMenu.classList.contains("menu-open")) {
+            pembayaranMenu.classList.remove("menu-open");
+        } else {
+            pembayaranMenu.classList.add("menu-open");
+        }
+    });
+</script>
+
 </html>

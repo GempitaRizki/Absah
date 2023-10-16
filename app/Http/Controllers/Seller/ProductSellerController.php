@@ -15,8 +15,8 @@ class ProductSellerController extends Controller
 
     public function index()
     {
-        $totalProducts = ProductSku::getTotalProduct('all');
-        $this->data['totalProducts'] = $totalProducts;
+        $totalAll = ProductSku::getTotalProduct('all');
+        $this->data['totalAll'] = $totalAll;
 
         return view('seller.items.product_index', $this->data);
     }

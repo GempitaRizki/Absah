@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
+    const STATUS_NOT_ACTIVE = 1;
+    const STATUS_ACTIVE = 2;
+    const STATUS_DELETED = 3;
     const ROLE_USER = 0;
     const ROLE_SELLER = 1;
     const ROLE_MITRA = 2;
@@ -19,7 +22,7 @@ class User extends Authenticatable
     const ROLE_OWNER_STORE = 'owner_store';
     const ROLE_USER_STORE = 'user_store';
 
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     protected $fillable = [
         'username', 'role', 'email', 'password', 'phone', 'jabatan', 'NIP', 'NIK',
@@ -31,28 +34,73 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed'
+        'password' => 'hashed',
     ];
 
     public function products()
     {
-        return $this->hasMany('App\Models\Product');
+        return $this->hasMany(Product::class);
     }
 
     public function favorites()
     {
-        return $this->hasMany('App\Models.Favorite');
+        return $this->hasMany(Favorite::class);
     }
 
-    protected function role(): Attribute
+    public function totalPengguna()
     {
-        return new Attribute(
-            get: fn ($value) => ["user", "seller", "mitra", "admin"][$value],
-        );
+        $users = $this->getUsersByStore();
+        return $users->count();
     }
 
-    public function hasRole($role)
+    public function totalPenggunaAktif()
     {
-        return $this->role === $role;
+        return $this->getUsersCountByStatus(self::STATUS_ACTIVE);
+    }
+
+    public function totalPenggunaBeku()
+    {
+        return $this->getUsersCountByStatus(self::STATUS_NOT_ACTIVE);
+    }
+
+    public function statuses()
+    {
+        return [
+            self::STATUS_NOT_ACTIVE => 'Not Active',
+            self::STATUS_ACTIVE => 'Active',
+            self::STATUS_DELETED => 'Deleted',
+        ];
+    }
+
+    public function storeDetail()
+    {
+        return $this->hasOne(StoreDetail::class, 'store_id', 'id');
+    }
+
+    protected function getUsersByStore()
+    {
+        $storeDetail = $this->storeDetail;
+
+        if ($storeDetail) {
+            return UserSekolah::where('sekolah_id', $storeDetail->store_id)->get();
+        }
+
+        return collect();
+    }
+
+    protected function getUsersCountByStatus($status)
+    {
+        $storeDetail = $this->storeDetail;
+
+        if ($storeDetail) {
+            $store_id = $storeDetail->store_id;
+            return UserSekolah::where('sekolah_id', $store_id)
+                ->join('users', 'user_sekolah.user_id', '=', 'users.id')
+                ->where('users.status', $status)
+                ->distinct()
+                ->count();
+        }
+
+        return 0;
     }
 }
