@@ -1,25 +1,24 @@
 @extends('cms.index')
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-10 mx-auto">
                 {!! Form::open(['route' => 'store-awal', 'method' => 'post']) !!}
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <a href={{ route('index-awal')}} class="btn btn-app {{ request()->routeIs('product-awal') ? 'bg-secondary' : '' }}">
+                        <a href={{ route('index-awal') }}
+                            class="btn btn-app {{ request()->routeIs('product-awal') ? 'bg-secondary' : '' }}">
                             <i class="fas fa-cog"></i> Info Awal
                         </a>
-                        <a href=#
+                        <a href={{ route('downloadtemplate') }}
                             class="btn btn-app {{ request()->routeIs('product-download-template') ? 'bg-secondary' : '' }}">
-                            <i class="fas fa-cloud-download-alt"></i> Download
+                            <i class="fa fa-info-circle"></i> Info Umum
                         </a>
-                        <a href=#
+                        <a href="#"
                             class="btn btn-app {{ request()->routeIs('product-import-product') || request()->routeIs('product-proses-import') ? 'bg-secondary' : '' }}">
                             <i class="fas fa-cloud-upload-alt"></i> Import Product
                         </a>
                     </div>
-
-
                 </div>
                 <div class="product-form">
                     <div class="card">

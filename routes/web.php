@@ -28,6 +28,7 @@ use App\Http\Controllers\Seller\DaftarPenggunaSellerController;
 use App\Http\Controllers\Seller\KomplainSellerController;
 use App\Http\Controllers\ControllerForTestingView;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Seller\partials\DownloadFormatController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -140,7 +141,7 @@ Route::post('/save-and-continue', [AuthSellerController::class, 'store'])->name(
 //seller login controller
 Route::get('/seller/login', [SellerController::class, 'index'])->name('seller.login');
 Route::post('/seller/login', [SellerController::class, 'login'])->name('seller-post');
-Route::post('seller/logout', [SellerController::class, 'logout'])->name('seller.logout');
+Route::post('/seller/logout', [SellerController::class, 'logout'])->name('seller.logout');
 
 
 //Seller Content Management System
@@ -166,6 +167,10 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/product/info-awal', [ProductSellerController::class, 'indexinfo'])->name('index-awal');
     Route::post('/store/info-awal', [ProductSellerController::class, 'infoawalStore'])->name('store-awal');
     Route::get('/product/info-umum', [ProductSellerController::class, 'infoumumindex'])->name('info-umum');
+    Route::post('product/info-umum', [ProductSellerController::class, 'infoumumStore'])->name('store-umum');
+    //product navbar download 
+    Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
+    Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');
 
 
 

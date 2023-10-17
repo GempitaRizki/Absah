@@ -25,6 +25,7 @@ class MasterStatus extends Model
     const PRODUCT_PRODUSEN_TYPE = 26;
     const MADE_IN = 33; 
 
+    const TYPE_CATEGORY = 32; 
 
 
     private static $_statuses =
@@ -45,6 +46,9 @@ class MasterStatus extends Model
         self::PRODUCT_PRODUSEN_TYPE => 'Produsen Type',
 
         self::MADE_IN => 'Made In',
+        
+        self::TYPE_CATEGORY => 'Tipe Kategori',
+
 
     ];
 

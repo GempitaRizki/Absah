@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="content">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box bg-info">
@@ -32,11 +32,11 @@
                     </div>
                 </div>
             </div>
-            <div class="card-header">
-                <a href="{{ route('daftarpengguna.create') }}" class="btn btn-success">
-                    Tambah Pengguna
-                </a>
-            </div>
+                <div class="card-header">
+                    <a href="{{ route('daftarpengguna.create') }}" class="btn btn-success">
+                        Tambah Pengguna
+                    </a>
+                </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>

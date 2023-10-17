@@ -84,8 +84,43 @@ class ProductSellerController extends Controller
         return redirect()->route('info-umum');
     }
 
+
     public function infoumumindex()
     {
-        return view('seller.daftarproduk.info_umum');
+        $categoryId = 1;
+        $selectedCategory = ProductCategory::find($categoryId);
+        $pathKategori = $this->getPathKategori($selectedCategory);
+        $tipeKategoriData = [
+            '1' => 'Barang',
+            '2' => 'Jasa',
+        ];
+
+        $listHierarchy = ProductCategory::getListHirarchy();
+
+        return view('seller.daftarproduk.info_umum', [
+            'listHierarchy' => $listHierarchy,
+            'pathKategori' => $pathKategori,
+            'tipeKategoriData' => $tipeKategoriData,
+        ]);
     }
+
+
+    private function getPathKategori($category)
+    {
+        $path = [];
+
+        while ($category) {
+            $path[] = $category->name;
+            $category = ProductCategory::find($category->parent_id);
+        }
+
+        return implode(' > ', array_reverse($path));
+    }
+
+
+    // public function fetchCategories($categoryTypeId)
+    // {
+    //     $categories = ProductCategory::where('parent_id', $categoryTypeId)->pluck('name', 'id');
+    //     return response()->json($categories);
+    // }
 }
