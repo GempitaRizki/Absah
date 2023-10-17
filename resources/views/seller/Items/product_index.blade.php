@@ -42,13 +42,10 @@
                 </div>
             </div>
         </div>
-
-
-
         <div class="product-index">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('product-awal') }}" class="btn btn-success">Add Product</a>
+                    <a href="{{ route('index-awal') }}" class="btn btn-success">Add Product</a>
                     <a href="#" class="btn btn-info">Add Product Puskurbuk</a>
                     <a href="#" class="btn btn-warning">Cari Bundle</a>
 
@@ -71,9 +68,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="card-footer">
-                    {{-- {{ $dataProvider->summary }} --}}
                 </div>
             </div>
         </div>

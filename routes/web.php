@@ -163,8 +163,9 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
 
     //product
     Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
-    Route::get('/seller/info-awal', [ProductSellerController::class, 'infoawalindex'])->name('product-awal');
-    Route::get('/create-infoawal', [ProductSellerController::class, 'infoawal'])->name('info-awal');
+    Route::get('/product/info-awal', [ProductSellerController::class, 'indexinfo'])->name('index-awal');
+    Route::post('/store/info-awal', [ProductSellerController::class, 'infoawalStore'])->name('store-awal');
+    Route::get('/product/info-umum', [ProductSellerController::class, 'infoumumindex'])->name('info-umum');
 
 
 

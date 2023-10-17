@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\TypeOngkir;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -51,7 +52,7 @@ class ProductSku extends Model
         'unique_id',
         'agregasi_status',
         'kat_produk',
-        
+
 
     ];
 
@@ -149,5 +150,27 @@ class ProductSku extends Model
         }
 
         return $count;
+    }
+
+    public static function getWilayahJual()
+    {
+        $storeId = Store::getStoreIdByUserLogin();
+
+        $listWilayahJual = WilayahJual::where('store_id', $storeId)
+            ->orderBy('kategori_product')
+            ->groupBy('kategori_product')
+            ->pluck('kategori_product')
+            ->toArray();
+
+        return $listWilayahJual;
+    }
+
+    public static function getTypeOngkir()
+    {
+        $listTypeOngkir = TypeOngkir::all()
+            ->pluck('type', 'type')
+            ->toArray();
+
+        return $listTypeOngkir;
     }
 }

@@ -3,23 +3,22 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 mx-auto">
-                {!! Form::open(['url' => 'store_product', 'method' => 'post']) !!}
+                {!! Form::open(['route' => 'store-awal', 'method' => 'post']) !!}
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <a href=#
-                            class="btn btn-app {{ (request()->routeIs('product-awal')) ? 'bg-secondary' : '' }}">
+                        <a href={{ route('index-awal')}} class="btn btn-app {{ request()->routeIs('product-awal') ? 'bg-secondary' : '' }}">
                             <i class="fas fa-cog"></i> Info Awal
                         </a>
                         <a href=#
-                            class="btn btn-app {{ (request()->routeIs('product-download-template')) ? 'bg-secondary' : '' }}">
+                            class="btn btn-app {{ request()->routeIs('product-download-template') ? 'bg-secondary' : '' }}">
                             <i class="fas fa-cloud-download-alt"></i> Download
                         </a>
                         <a href=#
-                            class="btn btn-app {{ (request()->routeIs('product-import-product') || request()->routeIs('product-proses-import')) ? 'bg-secondary' : '' }}">
+                            class="btn btn-app {{ request()->routeIs('product-import-product') || request()->routeIs('product-proses-import') ? 'bg-secondary' : '' }}">
                             <i class="fas fa-cloud-upload-alt"></i> Import Product
                         </a>
                     </div>
-                    
+
 
                 </div>
                 <div class="product-form">
@@ -49,39 +48,28 @@
 
                             <div id="more-category"></div>
 
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        {!! Form::label('product_type_id', 'Product Type') !!}
-                                        {!! Form::select('product_type_id', $productTypeList, null, [
-                                            'class' => 'form-control',
-                                            'id' => 'product_type_id',
-                                        ]) !!}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        {!! Form::label('price_type', 'Price Type') !!}
-                                        {!! Form::select('price_type', $priceTypeList, null, ['class' => 'form-control']) !!}
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                {!! Form::label('product_type_id', 'Product Type') !!}
+                                {!! Form::select('product_type_id', $productTypeList, null, [
+                                    'class' => 'form-control',
+                                    'id' => 'product_type_id',
+                                ]) !!}
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        {!! Form::label('condition_id', 'Condition') !!}
-                                        {!! Form::select('condition_id', $conditionList, null, ['class' => 'form-control']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        {!! Form::label('attribute', 'Attribute') !!}
-                                        {!! Form::select('attribute', $attributeList, null, ['class' => 'form-control']) !!}
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                {!! Form::label('price_type', 'Price Type') !!}
+                                {!! Form::select('price_type', $priceTypeList, null, ['class' => 'form-control', 'id' => 'price_type']) !!}
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::label('condition_id', 'Condition') !!}
+                                {!! Form::select('condition_id', $conditionList, null, ['class' => 'form-control', 'id' => 'condition_id']) !!}
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::label('attribute', 'Attribute') !!}
+                                {!! Form::select('attribute', $attributeList, null, ['class' => 'form-control', 'id' => 'attribute']) !!}
                             </div>
                         </div>
-
                         <div class="card-footer">
                             {!! Form::submit('Save & Next Step', ['class' => 'btn btn-success']) !!}
                         </div>

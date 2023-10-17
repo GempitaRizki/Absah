@@ -12,7 +12,8 @@
         </div>
 
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
                 <li class="nav-item">
                     <a href="{{ route('seller.dashboard') }}" class="nav-link">
                         <i class="fas fa-tachometer-alt" style="min-width: 2.5rem;"></i>
@@ -123,5 +124,3 @@
         </nav>
     </div>
 </aside>
-
-

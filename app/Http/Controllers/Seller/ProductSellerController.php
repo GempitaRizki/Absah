@@ -39,27 +39,14 @@ class ProductSellerController extends Controller
         return view('seller.items.product_index', $this->data);
     }
 
-
-    public function infoawalindex(Request $request)
+    public function indexinfo()
     {
         $productTypeList = MasterStatus::getListMasterProductType();
         $conditionList = MasterStatus::getListMasterCondition();
         $priceTypeList = MasterStatus::getListPriceType();
         $shippingTypeList = MasterStatus::getListShippingType();
         $attributeList = Option::getListOption();
-    
-        if (!session()->has('productTypeList')) {
-            session([
-                'productTypeList' => $productTypeList,
-                'conditionList' => $conditionList,
-                'priceTypeList' => $priceTypeList,
-                'shippingTypeList' => $shippingTypeList,
-                'attributeList' => $attributeList,
-            ]);
-        }
-    
-        dd(session()->all());
-    
+
         return view('seller.daftarproduk.info_awal', compact(
             'productTypeList',
             'conditionList',
@@ -67,5 +54,38 @@ class ProductSellerController extends Controller
             'shippingTypeList',
             'attributeList'
         ));
+    }
+
+
+    public function infoawalStore(Request $request)
+    {
+        $productTypeId = $request->input('product_type_id');
+        $priceTypeId = $request->input('price_type');
+        $conditionId = $request->input('condition_id');
+        $attributeId = $request->input('attribute');
+
+        if (session()->has('temporaryData')) {
+            $temporaryData = session('temporaryData');
+        } else {
+            $temporaryData = [];
+        }
+
+        $temporaryData = [
+            'productTypeId' => $productTypeId,
+            'priceTypeId' => $priceTypeId,
+            'conditionId' => $conditionId,
+            'attributeId' => $attributeId,
+        ];
+
+        session(['temporaryData' => $temporaryData]);
+
+        // dd(session('temporaryData'));
+
+        return redirect()->route('info-umum');
+    }
+
+    public function infoumumindex()
+    {
+        return view('seller.daftarproduk.info_umum');
     }
 }
