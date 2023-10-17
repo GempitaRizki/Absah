@@ -25,22 +25,22 @@ class CartController extends Controller
     {
         $user_id = auth()->id();
         $cart = Cart::firstOrNew(['user_id' => $user_id, 'status' => 1]);
-
+    
         if (!$cart->exists) {
             $cart->save();
         }
-
+    
         $items = CartItem::where('cart_id', $cart->id)->get();
         $items->load(['product.images']);
-
+    
         $cartItems = [];
         $cartSubtotal = 0;
-
+    
         foreach ($items as $item) {
             $product = $item->product;
             $image = $product->images->first();
             $total = $product->price * $item->quantity;
-
+    
             $cartItems[] = [
                 'item_id' => $item->id,
                 'slug' => $product->slug,
@@ -50,15 +50,16 @@ class CartController extends Controller
                 'quantity' => $item->quantity,
                 'total' => $total,
             ];
-
+    
             $cartSubtotal += $total;
         }
-
+    
         $cartTotalQuantity = $items->sum('quantity');
         $cartTotal = $cartSubtotal;
-
-        return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cart', 'cartTotalQuantity'));
+    
+        return $this->loadTheme('carts.index', compact('cartItems', 'cartSubtotal', 'cartTotal', 'cartTotalQuantity'));
     }
+    
 
 	public function store(Request $request, $product)
 	{
@@ -76,6 +77,7 @@ class CartController extends Controller
 			$cart->user_id = $user_id;
 			$cart->status = 1;
 			$cart->save();
+
 		}
 
 		$cartItem = CartItem::where('cart_id', $cart->id)

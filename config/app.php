@@ -173,6 +173,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeneralServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class
 
 
 

@@ -10,7 +10,6 @@
     "require": {
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "^2.0",
-        "darryldecode/cart": "^4.2",
         "doctrine/dbal": "^3.6",
         "filament/filament": "3.0-stable",
         "guzzlehttp/guzzle": "^7.7",
@@ -23,7 +22,6 @@
         "laravel/ui": "^4.2",
         "laravelcollective/html": "^6.4",
         "laravolt/indonesia": "^0.34.0",
-        "livewire/livewire": "*",
         "spatie/laravel-permission": "^5.11",
         "symfony/http-client": "*",
         "symfony/mailgun-mailer": "*",

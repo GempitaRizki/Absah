@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\UserSekolah; 
+use App\Models\User;
+use App\Models\Store;
+use App\Models\StoreUser;
 
 class DaftarPenggunaSellerController extends Controller
 {
@@ -16,16 +18,57 @@ class DaftarPenggunaSellerController extends Controller
     public function index()
     {
         $user = auth()->user();
-    
         $storeDetail = $user->storeDetail;
     
         if ($storeDetail) {
-            $dataProvider = UserSekolah::where('sekolah_id', $storeDetail->store_id)->get();
-            $this->data['dataProvider'] = $dataProvider;
+            $storeId = $storeDetail->store_id;
+            $daftarToko = Store::all();
+            $dataProvider = User::whereHas('storeUser', function ($query) use ($storeId) {
+                $query->where('store_id', $storeId);
+            })->get();
         } else {
-            $this->data['dataProvider'] = collect();
+            $dataProvider = collect();
+            $daftarToko = Store::all();
         }
     
-        return view('seller.Items.daftarpenggunaIndex', $this->data);
+        $totalPengguna = $dataProvider->count();
+        $totalPenggunaAktif = $dataProvider->where('status', User::STATUS_ACTIVE)->count();
+        $totalPenggunaTidakAktif = $dataProvider->where('status', User::STATUS_NOT_ACTIVE)->count();
+
+        // \Log::info('Total Pengguna: ' . $totalPengguna);
+        // \Log::info('Daftar Pengguna Aktif: ' . $totalPenggunaAktif);
+        // \Log::info('Daftar Pengguna tidak aktif: ' . $totalPenggunaTidakAktif);
+        
+        return view('seller.Items.daftarpenggunaIndex', compact('dataProvider', 'daftarToko', 'totalPengguna', 'totalPenggunaAktif', 'totalPenggunaTidakAktif'));
     }
+    
+
+    
+    
+    public function create()
+    {
+        return view('seller.daftarpengguna.create');
+    }
+    
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'username' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'store_id' => 'required|integer',
+        ]);
+    
+        $user = new User($data);
+        $user->save();
+    
+        $storeUser = new StoreUser([
+            'store_id' => $data['store_id'],
+            'user_id' => $user->id,
+        ]);
+        $storeUser->save();
+    
+        return redirect()->route('daftarpengguna.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
+    }
+    
 }

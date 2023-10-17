@@ -15,15 +15,22 @@ class SellerController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (auth()->attempt($request->only('email', 'password')) && auth()->user()->role == 'seller') {
-            return redirect()->route('DashboardSeller');
-        }
+        $credentials = $request->only('email', 'password');
 
-        return redirect()->route('seller.login')->withErrors(['login' => 'Email atau password salah.']);
+        if (auth()->attempt($credentials)) {
+            if (auth()->user()->role === 'seller') {
+                return redirect()->route('handle403');
+            } else {
+                return redirect()->route('seller.dashboard');
+            }
+        } else {
+            return redirect()->route('seller.login')->with('login', 'Email atau password salah.');
+        }
     }
+    
 }

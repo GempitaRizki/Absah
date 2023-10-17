@@ -17,6 +17,17 @@ class StoreUser extends Model
         'user_id',
     ];
 
+    public static function validationRules()
+    {
+        return [
+            'created_at' => 'integer',
+            'updated_at' => 'integer',
+            'store_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'public_name' => 'string|max:100',
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

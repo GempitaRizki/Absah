@@ -9,9 +9,13 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
+
+
     use AuthenticatesUsers;
 
-    protected $redirectTo = RouteServiceProvider::HOME;
+
+    protected $dashboardSeller = 'seller.dashboard';
+
 
     public function __construct()
     {
@@ -20,25 +24,24 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        $input = $request->all();
+        $this->validate($request, [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
-        $credentials = $request->only('email', 'password');
-
-        if (auth()->attempt($credentials)) {
-            $userRole = auth()->user()->role;
-
-            return match ($userRole) {
-                'mitra' => redirect()->route('home.mitra'),
-                'seller' => redirect()->route('seller.dashboard'),
-                default => redirect()->route('home'),
-            };
+        if (auth()->attempt(['email' => $input['email'], 'password' => $input['password']])) {
+            if (auth()->user()->role == 'mitra') {
+                return redirect()->route('home.mitra');
+            } else if (auth()->user()->role == 'seller') {
+                return redirect()->route('seller.dashboard');
+            } else {
+                return redirect()->route('seller.login');
+            }
+        } else {
+            return redirect()
+                ->route('login')
+                ->with('error', 'Email dan Password tidak sesuai ! ');
         }
-
-        return redirect()
-            ->route('login')
-            ->with('error', 'Email dan Password tidak sesuai !');
     }
 }

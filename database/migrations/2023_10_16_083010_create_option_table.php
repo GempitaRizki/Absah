@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product_sku', function (Blueprint $table) {
-            // $table->unsignedBigInteger('min_qty')->after('tipe_produk')->nullable();
-            $table->string('view_cat')->after('kat_produk')->nullable();
+        Schema::create('option', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->nullable();
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product_sku', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('option');
     }
 };

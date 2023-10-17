@@ -258,7 +258,7 @@ class AuthSellerController extends Controller
         session(['uploaded_files' => $uploadedFiles]);
     
 
-dd($uploadedFiles);        
+// dd($uploadedFiles);        
         return redirect()->route('uploadFiles')->with('success', 'File berhasil diunggah.');
     }
     
@@ -340,7 +340,7 @@ dd($uploadedFiles);
 
             if (array_key_exists('store_name', $storeSession)) {
                 $user = new User();
-                $user->name = $storeSession['store_name'];
+                $user->username = $storeSession['store_name'];
                 $user->password = $storeSession['password'];
                 $user->email = $storeSession['surel'];
                 $user->role = 1;

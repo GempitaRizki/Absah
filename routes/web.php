@@ -27,6 +27,7 @@ use App\Http\Controllers\Seller\ChatSellerController;
 use App\Http\Controllers\Seller\DaftarPenggunaSellerController;
 use App\Http\Controllers\Seller\KomplainSellerController;
 use App\Http\Controllers\ControllerForTestingView;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -71,7 +72,7 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
 
 // User route // ini nanti buat cms user
 Route::middleware(['auth', 'role:user'])->group(function () {
-//user control
+    //user control
 });
 
 
@@ -138,51 +139,57 @@ Route::post('/save-and-continue', [AuthSellerController::class, 'store'])->name(
 
 //seller login controller
 Route::get('/seller/login', [SellerController::class, 'index'])->name('seller.login');
-Route::post('/seller/login', [SellerController::class, 'login']);
+Route::post('/seller/login', [SellerController::class, 'login'])->name('seller-post');
 Route::post('seller/logout', [SellerController::class, 'logout'])->name('seller.logout');
 
 
 //Seller Content Management System
 Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller')->prefix('seller')->group(function () {
 
-Route::get('/dashboard', [DashboardSellerController::class, 'index'])->name('DashboardSeller');
+    Route::get('/dashboard', [DashboardSellerController::class, 'index'])->name('seller.dashboard');
 
 
-//order
-Route::get('/order', [OrderSellerController::class, 'index'])->name('order.index');
+    //order
+    Route::get('/order', [OrderSellerController::class, 'index'])->name('order.index');
 
 
-//pembayaran 
-Route::get('/pembayaran', [PembayaranSellerController::class, 'index'])->name('pembayaran.index');
+    //pembayaran 
+    Route::get('/pembayaran', [PembayaranSellerController::class, 'index'])->name('pembayaran.index');
 
 
-//pajak
-Route::get('/pajak', [PajakSellerController::class, 'index'])->name('pajak.index');
+    //pajak
+    Route::get('/pajak', [PajakSellerController::class, 'index'])->name('pajak.index');
 
 
-//product
-Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
+    //product
+    Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
+    Route::get('/seller/info-awal', [ProductSellerController::class, 'infoawalindex'])->name('product-awal');
+    Route::get('/create-infoawal', [ProductSellerController::class, 'infoawal'])->name('info-awal');
 
 
-//Nego
-Route::get('/nego', [NegoSellerController::class, 'index'])->name('nego.index');
 
-//chat
-Route::get('/chat', [ChatSellerController::class, 'index'])->name('chat.index');
+    //Nego
+    Route::get('/nego', [NegoSellerController::class, 'index'])->name('nego.index');
 
-
-//Komplain
-Route::get('/komplain', [KomplainSellerController::class, 'index'])->name('komplain.index');
+    //chat
+    Route::get('/chat', [ChatSellerController::class, 'index'])->name('chat.index');
 
 
-//daftar pengguna
-Route::get('/daftarpengguna', [DaftarPenggunaSellerController::class, 'index'])->name('daftarpengguna.index');
+    //Komplain
+    Route::get('/komplain', [KomplainSellerController::class, 'index'])->name('komplain.index');
 
 
-//aktifitas pengguna
-Route::get('/aktivitaspengguna', [AktivitasPenggunaSellerController::class, 'index'])->name('aktivitaspengguna.index');
-Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
+    //daftar pengguna
+    Route::get('/daftarpengguna', [DaftarPenggunaSellerController::class, 'index'])->name('daftarpengguna.index');
+    Route::get('/daftarpengguna/create', [DaftarPenggunaSellerController::class, 'create'])->name('daftarpengguna.create');
+    Route::post('/daftarpengguna', [DaftarPenggunaSellerController::class, 'store'])->name('daftarpengguna.store');
 
+
+
+
+    //aktifitas pengguna
+    Route::get('/aktivitaspengguna', [AktivitasPenggunaSellerController::class, 'index'])->name('aktivitaspengguna.index');
+    Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
 });
 
 

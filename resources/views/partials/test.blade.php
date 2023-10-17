@@ -1,3 +1,27 @@
-INSERT INTO product_sku (product_id, product_id_reference, sku, key_attribute, name, jenjang, tipe_produk, slug, weight, weight_packing, unit_weight, has_ppn, detail_ppn, tag_ppn, has_shipping, produsen_type, descriptions, url_video, length, width, height, preorder_estimate, preorder, created_by, status_id, attribute_value, value_ppn, type_ppn, tags, garansi, brand, cetakan, nomor_sk, tgl_sk, code_kbki, made_in, min_qty, unique_id, agregasi_status, kat_produk)
-VALUES
-(1, 2, 'SKU12345', 'Color', 'Product 1', 'High School', 'Type A', 'product-1', 1000, 1100, 2, 1, 'Detail PPN', 'Tag PPN', 1, 'Type A', 'Product description', 'video_url', 10, 20, 30, 5, 1, 1, 1, '[{"attribute_id": 1, "value": "Value 1"}, {"attribute_id": 2, "value": "Value 2"}]', 1, 2, 'Tag 1, Tag 2', '12 Months', 'Brand XYZ', 'Cetakan ABC', 'SK123', '2023-01-15', 'KBKI123', 'Indonesia', 50, 'Unique123', 'Active', 'Category A');
+<div class="col-lg-3 col-6">
+    <div class="small-box bg-success" style="height: 150px;">
+        <div class="inner">
+            <h3>{{ $totalAktif }}</h3>
+            <p>Produk Aktif</p>
+        </div>
+        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<div class="col-lg-3 col-6">
+    <div class="small-box bg-warning" style="height: 150px;">
+        <div class="inner">
+            <h3>{{ $totalNonAktif }}</h3>
+            <p>Total Produk Non-Aktif</p>
+        </div>
+        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<div class="col-lg-3 col-6">
+    <div class="small-box bg-danger" style="height: 150px;">
+        <div class="inner">
+            <h3>{{ $totalDraft }}</h3>
+            <p>Draft Produk</p>
+        </div>
+        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>

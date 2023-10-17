@@ -9,18 +9,23 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
     const STATUS_NOT_ACTIVE = 1;
     const STATUS_ACTIVE = 2;
     const STATUS_DELETED = 3;
-    const ROLE_USER = 0;
-    const ROLE_SELLER = 1;
-    const ROLE_MITRA = 2;
-    const ROLE_ADMIN = 3;
-    const ROLE_OWNER_STORE = 'owner_store';
-    const ROLE_USER_STORE = 'user_store';
+
+    const ROLE_BUYER = 'buyer';
+    const ROLE_MANAGER = 'manager';
+    const ROLE_ADMINISTRATOR = 'administrator';
+    const ROLE_OWNER_STORE = 'ownerStore';
+    const ROLE_USER_STORE = 'userStore';
+
+    const EVENT_AFTER_SIGNUP = 'afterSignup';
+    const EVENT_AFTER_LOGIN = 'afterLogin';
 
     use HasFactory, HasRoles, Notifiable;
 
@@ -102,5 +107,65 @@ class User extends Authenticatable
         }
 
         return 0;
+    }
+
+    public function jumlahPenggunaByStatus($status)
+    {
+        $storeDetail = $this->storeDetail;
+
+        if ($storeDetail) {
+            $store_id = $storeDetail->store_id;
+            return UserSekolah::where('sekolah_id', $store_id)
+                ->join('users', 'user_sekolah.user_id', '=', 'users.id')
+                ->where('users.status', $status)
+                ->distinct()
+                ->count();
+        }
+
+        return 0;
+    }
+
+    public function jumlahPenggunaSeller()
+    {
+        $userId = Auth::user()->id;
+        $storeId = Store::getStoreIdByUserLogin();
+
+        $query = User::where('status', self::STATUS_ACTIVE)
+            ->join('store_user as su', 'su.user_id', '=', 'users.id')
+            ->where('su.store_id', $storeId)
+            ->count();
+
+        return $query;
+    }
+
+    public function jumlahPenggunaSellerAktif()
+    {
+        $userId = Auth::user()->id;
+        $storeId = Store::getStoreIdByUserLogin();
+
+        $query = User::where('status', self::STATUS_ACTIVE)
+            ->join('store_user as su', 'su.user_id', '=', 'users.id')
+            ->where('su.store_id', $storeId)
+            ->count();
+        return $query;
+    }
+
+    public function jumlahPenggunaSellerTidakAktif()
+    {
+        $userId = Auth::user()->id;
+
+        $storeId = Store::getStoreIdByUserLogin();
+
+        $query = User::where('status', self::STATUS_NOT_ACTIVE)
+            ->join('store_user as su', 'su.user_id', '=', 'users.id')
+            ->where('su.store_id', $storeId)
+            ->count();
+
+        return $query;
+    }
+
+    public function storeUser()
+    {
+        return $this->hasMany(StoreUser::class, 'user_id');
     }
 }

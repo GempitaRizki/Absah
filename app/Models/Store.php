@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\StoreUser;
+use Illuminate\Support\Facades\DB;
+
 
 class Store extends Model
 {
@@ -65,19 +68,25 @@ class Store extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'seller_type', 'name');
     }
+
     public static function getStoreIdByUserLogin()
     {
-        $userId = auth()->user()->id;
-
-        $storeUser = StoreUser::join('rbac_auth_assignment as raa', 'store_user.user_id', '=', 'raa.user_id')
-            ->whereIn('raa.item_name', [User::ROLE_OWNER_STORE, User::ROLE_USER_STORE])
-            ->where('store_user.user_id', $userId)
+        $user = auth()->user();
+        $user_id = $user->id;
+    
+        $storeUser = DB::table('store_user as su')
+            ->join('rbac_auth_assignment as raa', 'su.user_id', '=', 'raa.user_id')
+            ->where('raa.item_name', User::ROLE_OWNER_STORE)
+            ->where('su.user_id', $user_id)
+            ->select('su.store_id') 
             ->first();
-
+    
         if ($storeUser) {
-            return $storeUser->store_id;
+            $storeId = $storeUser->store_id;
+            return $storeId;
         }
-
-        return null;
+    
+        return redirect()->route('handle404');
     }
+     
 }

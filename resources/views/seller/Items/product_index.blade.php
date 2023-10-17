@@ -5,51 +5,78 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
+                    <div class="small-box bg-info" style="height: 150px;">
                         <div class="inner">
                             <h3>{{ $totalAll }}</h3>
                             <p>Total Produk</p>
                         </div>
-                        <a href=# class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- Add similar blocks for other statistics -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success" style="height: 150px;">
+                        <div class="inner">
+                            <h3>{{ $totalAktif }}</h3>
+                            <p>Produk Aktif</p>
+                        </div>
+                        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning" style="height: 150px;">
+                        <div class="inner">
+                            <h3>{{ $totalNonAktif }}</h3>
+                            <p>Total Produk Non-Aktif</p>
+                        </div>
+                        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-danger" style="height: 150px;">
+                        <div class="inner">
+                            <h3>{{ $totalDraft }}</h3>
+                            <p>Draft Produk</p>
+                        </div>
+                        <a href="#" class="small-box-footer">Detail info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="product-index">
-                <div class="card">
-                    <div class="card-header">
-                        <a href="#" class="btn btn-success">Add Product</a>
-                        <a href="#" class="btn btn-info">Add Product Puskurbuk</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <table class="table text-nowrap table-striped table-bordered mb-0">
-                            <tbody>
-                                {{-- @foreach ($products as $product) --}}
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <a href=# class="btn btn-warning btn-xs">
-                                            <span class="fa-fw fas fa-edit"></span>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href=# class="btn btn-danger btn-xs"
-                                            data-confirm="Apakah anda ingin menghapus produk ini?">
-                                            <span class="fa-fw fas fa-trash"></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                                {{-- @endforeach --}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        {{-- {{ $dataProvider->summary }} --}}
-                    </div>
+
+
+        <div class="product-index">
+            <div class="card">
+                <div class="card-header">
+                    <a href="{{ route('product-awal') }}" class="btn btn-success">Add Product</a>
+                    <a href="#" class="btn btn-info">Add Product Puskurbuk</a>
+                    <a href="#" class="btn btn-warning">Cari Bundle</a>
+
+                </div>
+                <div class="card-body p-0">
+                    <table class="table text-nowrap table-striped table-bordered mb-0">
+                        <tbody>
+                            <tr>
+                                <th>#</th>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Sku</th>
+                                <th>Product Type</th>
+                                <th>Condition Id</th>
+                                <th>Price Type</th>
+                                <th>Ppn</th>
+                                <th>Status</th>
+                                <th>Attribute</th>
+                                <th>Stok</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    {{-- {{ $dataProvider->summary }} --}}
                 </div>
             </div>
+        </div>
         </div>
     </section>
 @endsection

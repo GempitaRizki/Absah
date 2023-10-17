@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ProductSku extends Model
 {
@@ -54,12 +55,29 @@ class ProductSku extends Model
 
     ];
 
-    const HAPUS = 0;
-    const ENABLE_STATUS_ID = 1;
+    const DEFAULT_HAS_PPN = '33';
+    const DEFAULT_HAS_SHIPPING = '35';
+    const DEFAULT_STATUS_ID = '46';
+    const DEFAULT_PREORDER = '27';
+    const DEFAULT_WEIGHT = '0';
+    const DEFAULT_UNIT_WEIGHT = '28';
+    const DEFAULT_PRODUSEN_TYPE = '55';
 
-    const PENDING_REVIEW_STATUS_ID = 2;
+    const ENABLE_STATUS_ID = '44';
+    const DISABLE_STATUS_ID = '45';
+    const PENDING_REVIEW_STATUS_ID = '47';
+    const HAPUS = '120';
+    const DISABLE_MITRA = '138';
+    const BARU = '139';
+    const DRAFT = '46';
 
-    const DRAFT = 3;
+    const BER_PPN = '33';
+    const TIDAK_PPN = '34';
+    const BEBAS_PPN = '54';
+
+    const SCENARIO_CREATE = 'SCRENARIO_CREATE';
+    const SCENARIO_UPDATE = 'SCENARIO_UPDATE';
+
 
     public function createdByUser()
     {
@@ -100,21 +118,36 @@ class ProductSku extends Model
     {
         $storeId = Store::getStoreIdByUserLogin();
 
-        return self::join('product_store as pstore', 'pstore.product_sku_id', '=', 'product_sku.id')
-            ->where('pstore.store_id', $storeId)
-            ->when($type === 'all', function ($query) {
-                return $query->whereNotIn('status_id', [self::HAPUS]);
-            })
-            ->when($type === 'aktif', function ($query) {
-                return $query->where('status_id', self::ENABLE_STATUS_ID);
-            })
-            ->when($type === 'pending', function ($query) {
-                return $query->where('status_id', self::PENDING_REVIEW_STATUS_ID);
-            })
-            ->when($type === 'draft', function ($query) {
-                return $query->where('status_id', self::DRAFT);
-            })
-            ->groupBy('product_sku.id')
-            ->count();
+        if ($type == 'all') {
+            $count = DB::table('product_sku as ps')
+                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
+                ->where('pstore.store_id', $storeId)
+                ->whereNotIn('ps.status_id', [ProductSku::HAPUS])
+                ->groupBy('ps.id')
+                ->count();
+        } elseif ($type == 'aktif') {
+            $count = DB::table('product_sku as ps')
+                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
+                ->where('pstore.store_id', $storeId)
+                ->where('ps.status_id', ProductSku::ENABLE_STATUS_ID)
+                ->groupBy('ps.id')
+                ->count();
+        } elseif ($type == 'pending') {
+            $count = DB::table('product_sku as ps')
+                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
+                ->where('pstore.store_id', $storeId)
+                ->where('ps.status_id', ProductSku::PENDING_REVIEW_STATUS_ID)
+                ->groupBy('ps.id')
+                ->count();
+        } elseif ($type == 'draft') {
+            $count = DB::table('product_sku as ps')
+                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
+                ->where('pstore.store_id', $storeId)
+                ->where('ps.status_id', ProductSku::DRAFT)
+                ->groupBy('ps.id')
+                ->count();
+        }
+
+        return $count;
     }
 }

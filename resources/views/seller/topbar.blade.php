@@ -23,19 +23,13 @@
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('themes/ezone/assets/css/responsive.css') }}">
         <script src="{{ asset('themes/ezone/assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('asset/css/sellerlogin.css') }}">
 
         <meta name="csrf-token" content="{{ csrf_token()}}">
     </head>
     <body>
-        <!--[if lt IE 8]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
         @include('seller.header2');
-        {{-- <!-- @include('themes.ezone.partials.mini_cart') --> --}}
-
         @yield('content')
-
-        {{-- @include('partials.footer'); --}}
         @include('themes.ezone.partials.modals');
 
 

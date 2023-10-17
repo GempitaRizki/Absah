@@ -8,7 +8,6 @@
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>150</h3>
-
                             <p>New Orders</p>
                         </div>
                         <div class="icon">
@@ -21,7 +20,6 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>53<sup style="font-size: 20px">%</sup></h3>
-
                             <p>Bounce Rate</p>
                         </div>
                         <div class="icon">
@@ -34,7 +32,6 @@
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>44</h3>
-
                             <p>User Registrations</p>
                         </div>
                         <div class="icon">
@@ -47,7 +44,6 @@
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>65</h3>
-
                             <p>Unique Visitors</p>
                         </div>
                         <div class="icon">
@@ -68,7 +64,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header border-transparent">
+                        <div class="card-header">
                             <h3 class="card-title">Dokumen Toko</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -76,7 +72,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="card-body p-0" style="display: block;">
+                        <div class="card-body p-0">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -86,13 +82,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <td>1</td>
-                                    <td><a href="{{ asset('asset/KBLI.pdf') }}" download>Detail KBLI</a></td>
-                                    <td>KBLI</td>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><a href="{{ asset('asset/KBLI.pdf') }}" download>Detail KBLI</a></td>
+                                        <td>KBLI</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer clearfix" style="display: block;">
+                        <div class="card-footer clearfix">
                             <a href="#" class="btn btn-sm btn-secondary float-right">Detail Profil</a>
                         </div>
                     </div>
@@ -100,4 +98,4 @@
             </div>
         </div>
     </section>
-    @endsection
+@endsection
