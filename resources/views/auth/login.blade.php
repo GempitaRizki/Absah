@@ -26,7 +26,7 @@
                                 <img src="{{ url('assets/img/logo/pembeli.png') }}" alt="pembeli.png" width="50px"
                                     height="50px">
                                 <br>
-                                <a href=#>Login Sebagai Pembeli</a>
+                                <a href={{ route('user.login') }}>Login Sebagai Pembeli</a>
                             </center>
                         </div>
                         </a>

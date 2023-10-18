@@ -1,36 +1,37 @@
-<?php
+use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-class StoreDataController extends Controller
+class ProductCategory extends Model
 {
-    public function store(Request $request)
+    // ...
+
+    protected $fillable = [
+        'name',
+        'slug', 
+        'parent_id',
+        'parent_type_id', // Tambahkan kolom ini
+        'hierarchy',
+        'hierarchy_name',
+        'level',
+        'status_id',
+        'logo',
+        'bash_logo', 
+        'descriptions',
+        'type_category',
+        'dikbud_type',
+        'urut',
+        'dikbud',
+        'kat_agregasi'
+    ];
+
+    // ...
+
+    public function parentType()
     {
-        // Mendapatkan data yang dikirim dari formulir
-        $productTypeId = $request->input('product_type_id');
-        $priceTypeId = $request->input('price_type');
-        $conditionId = $request->input('condition_id');
-        $attributeId = $request->input('attribute');
+        return $this->belongsTo(ProductCategory::class, 'parent_type_id');
+    }
 
-        // Mengecek apakah data sudah ada dalam session
-        if (session()->has('temporaryData')) {
-            $temporaryData = session('temporaryData');
-        } else {
-            $temporaryData = [];
-        }
-
-        // Menyimpan data dalam session sesuai dengan ID yang dipilih
-        $temporaryData = [
-            'productTypeId' => $productTypeId,
-            'priceTypeId' => $priceTypeId,
-            'conditionId' => $conditionId,
-            'attributeId' => $attributeId,
-        ];
-
-        session(['temporaryData' => $temporaryData]);
-
-        // Redirect atau lakukan yang lain sesuai kebutuhan
-        return redirect()->route('index-awal');
+    public function children()
+    {
+        return $this->hasMany(ProductCategory::class, 'parent_id');
     }
 }

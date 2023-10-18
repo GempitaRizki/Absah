@@ -4,95 +4,118 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use Str;
 
 class ProductCategory extends Model
 {
+    const CHECK_YES = 'YES';
+    const CHECK_NO = 'NO';
+    const CAT_ENABLE = '40';
+    const CAT_DISABLE = '41';
+    const DEFAULT_PARENT = '0';
+
     use HasFactory;
 
-    protected $table = 'product_category';
+    protected $table = "product_category";
 
     protected $fillable = [
-        'name', 'slug', 'parent_id', 'hierarchy', 'hierarchy_name', 'level', 'status_id',
-        'logo', 'bash_logo', 'descriptions', 'type_category', 'dikbud_type',
-        'urut', 'dikbud', 'kat_agregasi',
+        'name',
+        'slug',
+        'parent_id',
+        'hierarchy',
+        'hierarchy_name',
+        'level',
+        'status_id',
+        'logo',
+        'bash_logo',
+        'descriptions',
+        'type_category',
+        'dikbud_type',
+        'urut',
+        'dikbud',
+        'kat_agregasi'
     ];
 
-    public static function checkCategoryAssignParent($id)
+    public static function getListHierarchy($sub = null)
     {
-        $model = ProductCategory::where('parent_id', $id)->first();
-
-        if ($model) {
-            $data = 'YES';
+        if ($sub) {
+            return ProductCategory::where('status_id', self::CAT_ENABLE)
+                ->where('id', $sub)
+                ->get();
         } else {
-            $data = 'NO';
+            return ProductCategory::where('status_id', self::CAT_ENABLE)
+                ->where('parent_id', 0)
+                ->get();
         }
-
-        return $data;
     }
 
     public static function getListCategory($parent, $statusId = false)
     {
-        $query = DB::table('product_category')
-            ->where('parent_id', $parent)
-            ->orderBy('id')
-            ->get();
-
-        $listCategory = [];
-        foreach ($query as $category) {
-            $listCategory[$category->id] = $category->name;
+        $query = ProductCategory::where('parent_id', $parent);
+        if ($statusId !== false) {
+            $query->where('status_id', $statusId);
         }
+        $categories = $query->orderBy('id')->get();
+        $listCategory = $categories->pluck('name', 'id');
 
         return $listCategory;
     }
 
     public static function updateHierarchy($id)
     {
-        $model = ProductCategory::find($id);
-        $parentId = $model->parent_id;
-
+        $category = ProductCategory::find($id);
+        $parentId = $category->parent_id;
         if ($parentId != 0) {
-            $modelParent = ProductCategory::where('id', $parentId)->first();
-            $hierarchyParent = $modelParent->hierarchy . '-' . $id;
+            $parentCategory = ProductCategory::find($parentId);
+            $hierarchyParent = $parentCategory->hierarchy;
+
+            $hierarchyParent .= '-' . $id;
         } else {
             $hierarchyParent = $id;
         }
 
-        $model->hierarchy = $hierarchyParent;
-        $model->save();
-
+        $category->hierarchy = $hierarchyParent;
+        $category->save();
         return true;
     }
 
     public static function explodeHirarchy($id)
     {
-        $data = ProductCategory::where('id', $id)->first();
-        $explodeHirarchy = explode('-', $data->hierarchy);
+        $category = ProductCategory::find($id);
+        $explodeHirarchy = explode('-', $category->hierarchy);
+
         if ($explodeHirarchy) {
             $dataArr = [];
+
             foreach ($explodeHirarchy as $value) {
-                $dataDetail = ProductCategory::where('id', $value)->first();
+                $dataDetail = ProductCategory::find($value);
                 $dataArr[] = $dataDetail->name;
             }
 
             $dataFinal = implode(' > ', $dataArr);
         } else {
-            $dataFinal = $data->name;
+            $dataFinal = $category->name;
         }
 
         return $dataFinal;
     }
 
-    public static function getListHirarchy($sub = 'null')
+    public static function getListHirarchy($sub = null)
     {
-        if ($sub != 'null') {
-            $productCategory = ProductCategory::where('status_id', '40')->where('id', $sub)->get();
+        if ($sub !== null) {
+            $productCategory = ProductCategory::where('status_id', self::CAT_ENABLE)
+                ->where('id', $sub)
+                ->get();
         } else {
-            $productCategory = ProductCategory::where('status_id', '40')->where('parent_id', '0')->get();
+            $productCategory = ProductCategory::where('status_id', self::CAT_ENABLE)
+                ->where('parent_id', self::DEFAULT_PARENT)
+                ->get();
         }
 
-        $listHierarchy = [];
+        $listHirarchy = [];
         foreach ($productCategory as $category) {
             $explodeHierarchy = explode('-', $category->hierarchy);
             if ($explodeHierarchy) {
@@ -102,59 +125,68 @@ class ProductCategory extends Model
                     $dataArr[] = $dataDetail->name;
                 }
 
-                $listHierarchy[$category->id] = implode(' > ', $dataArr);
+                $listHirarchy[$category->id] = implode(' > ', $dataArr);
             } else {
-                $listHierarchy[$category->id] = $catinfoegory->name;
+                $listHirarchy[$category->id] = $category->name;
             }
         }
 
-        return $listHierarchy;
+        return $listHirarchy;
     }
 
     public static function getListHirarchySelected($id)
     {
         $productCategory = ProductCategory::where('id', $id)->get();
-        $listHierarchy = [];
-        foreach ($productCategory as $category) {
-            $explodeHierarchy = explode('-', $category->hierarchy);
-            if ($explodeHierarchy) {
+        $listHirarchy = [];
+        foreach ($productCategory as $productCategory) {
+            $explodeHirarchy = explode('-', $productCategory->hierarchy);
+            if ($explodeHirarchy) {
                 $dataArr = [];
-                foreach ($explodeHierarchy as $value) {
+                foreach ($explodeHirarchy as $value) {
                     $dataDetail = ProductCategory::where('id', $value)->first();
                     $dataArr[] = $dataDetail->name;
                 }
 
-                $listHierarchy[$category->id] = implode(' > ', $dataArr);
+                $listHirarchy[$productCategory->id] = implode(' > ', $dataArr);
             } else {
-                $listHierarchy[$category->id] = $category->name;
+                $listHirarchy[$productCategory->id] = $productCategory->name;
             }
         }
 
-        return $listHierarchy;
+        return $listHirarchy;
     }
 
     public static function deleteCategory($id)
     {
-        DB::table('product_category')
-            ->where('id', $id)
-            ->delete();
+        DB::table('product_category')->where('id', $id)->delete();
 
         return true;
     }
 
+    public static function checkCategoryAssignParent($id)
+    {
+        $model = ProductCategory::where('parent_id', $id)->first();
+
+        if ($model) {
+            return self::CHECK_YES;
+        } else {
+            return self::CHECK_NO;
+        }
+    }
+
     public static function getListHirarchyAddProduct()
     {
-        $productCategory = ProductCategory::where('status_id', '40')->limit(40)->get();
+        $productCategories = ProductCategory::where('status_id', self::CAT_ENABLE)->limit(40)->get();
 
-        $listHierarchy = [];
-        foreach ($productCategory as $category) {
-            $explodeHierarchy = explode('-', $category->hierarchy);
+        $listHirarchy = [];
+        foreach ($productCategories as $productCategory) {
+            $explodeHierarchy = explode('-', $productCategory->hierarchy);
             if ($explodeHierarchy) {
                 $dataArr = [];
                 foreach ($explodeHierarchy as $value) {
                     $checkParent = ProductCategory::checkCategoryAssignParent($value);
 
-                    if ($checkParent == 'NO') {
+                    if ($checkParent == self::CHECK_NO) {
                         $listShow = ProductCategory::where('id', $value)->first();
                         $explodeListShow = explode('-', $listShow->hierarchy);
 
@@ -164,38 +196,39 @@ class ProductCategory extends Model
                                 $dataArr[] = $listShowDetail->name;
                             }
                         }
-
-                        $listHierarchy[$value] = implode(' > ', $dataArr);
+                        $listHirarchy[$value] = implode(' > ', $dataArr);
                     }
                 }
             }
         }
 
-        return $listHierarchy;
+        return $listHirarchy;
     }
 
-    public function uploadFile($catId)
+    public function uploadFile($catId, UploadedFile $logoUpload)
     {
-        if ($this->validate()) {
-            $directory = '/source/category/' . $catId . '#' . date('Y-m-d');
-            $directoryPlace = storage_path('app/public') . '/source/category/' . $catId . '#' . date('Y-m-d');
+        if ($logoUpload->isValid()) {
+            $directory = '/source/category/' . $catId . '#' . now()->format('Y-m-d');
+            $directoryPlace = storage_path('app/public') . $directory;
 
+            $component = 'fileStorage';
             $createdAt = now();
             $uploadIp = request()->ip();
+
             $storelogoUpload = storage_path('app/public') . $directory;
-            $storeFileBaseUrllogoUpload = 'storage/source/category/' . $catId . '#' . date('Y-m-d');
-            $storeFileExtensionlogoUpload = $this->logoUpload->extension();
-            $storeFileSizelogoUpload = $this->logoUpload->getSize();
-            $storeFileTypelogoUpload = $this->logoUpload->getMimeType();
-            $storeFileNamelogoUpload = str_random(40);
+            $storeFileBaseUrllogoUpload = Storage::url($directory);
+            $storeFileExtensionlogoUpload = $logoUpload->extension();
+            $storeFileSizelogoUpload = $logoUpload->getSize();
+            $storeFileTypelogoUpload = $logoUpload->getClientMimeType();
+            $storeFileNamelogoUpload = Str::random();
             $pathlogoUpload = $storelogoUpload . '/' . $storeFileNamelogoUpload . '.' . $storeFileExtensionlogoUpload;
-            $BashUrllogoUpload = $storeFileBaseUrllogoUpload . '/' . $storeFileNamelogoUpload . '.' . $storeFileExtensionlogoUpload;
+            $bashUrllogoUpload = $storeFileBaseUrllogoUpload . '/' . $storeFileNamelogoUpload . '.' . $storeFileExtensionlogoUpload;
 
             $bashUrlSistemLogoUpload = $directory . '/' . $storeFileNamelogoUpload . '.' . $storeFileExtensionlogoUpload;
-            $pathSistemLogoUpload = storage_path('app/public') . '/source/category/' . $catId . '#' . date('Y-m-d');
+            $pathSistemLogoUpload = storage_path('app/public');
 
             $this->insertStorageItem(
-                'fileStorage',
+                $component,
                 $bashUrlSistemLogoUpload,
                 $pathSistemLogoUpload,
                 $storeFileTypelogoUpload,
@@ -205,19 +238,18 @@ class ProductCategory extends Model
                 $createdAt
             );
 
-            if (!file_exists($storelogoUpload)) {
-                mkdir($storelogoUpload, 0775, true);
-            }
+            Storage::disk('public')->makeDirectory($directory);
+            $logoUpload->move($storelogoUpload, $storeFileNamelogoUpload . '.' . $storeFileExtensionlogoUpload);
 
-            $this->logoUpload->move($storelogoUpload, $storeFileNamelogoUpload . '.' . $storeFileExtensionlogoUpload);
-
-            ProductCategory::where('id', $catId)->update([
-                'logo' => $pathlogoUpload,
-                'bash_logo' => $BashUrllogoUpload,
-            ]);
+            $productCategory = ProductCategory::find($catId);
+            $productCategory->logo = $pathlogoUpload;
+            $productCategory->bash_logo = $bashUrllogoUpload;
+            $productCategory->save();
 
             return true;
         }
+
+        return false;
     }
 
     public function insertStorageItem($component, $baseUrl, $path, $type, $size, $name, $uploadIp, $createdAt)
@@ -238,64 +270,64 @@ class ProductCategory extends Model
 
     public static function getListCategoryNav($category = false)
     {
-        if ($category == false) {
-            $model = ProductCategory::where('parent_id', '0')
-                ->where('status_id', '40')
-                ->orderBy('urut', 'asc')
-                ->get();
+        $query = self::query()
+            ->where('status_id', self::CAT_ENABLE);
+
+        if ($category === false) {
+            $query->where('parent_id', 0)
+                ->orderBy('urut');
         } else {
-            $model = ProductCategory::where('parent_id', $category)
-                ->where('status_id', '40')
-                ->orderBy('urut', 'asc')
-                ->get();
+            $query->where('parent_id', $category)
+                ->orderBy('urut');
         }
 
-        return $model;
+        return $query->get();
     }
 
     public static function getListCategoryNavOne($category)
     {
-        $model = ProductCategory::where('id', $category)
-            ->orderBy('urut', 'asc')
+        return self::where('id', $category)
+            ->orderBy('urut')
             ->first();
-
-        return $model;
     }
 
     public static function getListTipeKategori()
     {
-        $listTipeKategori = DB::table('master_status')
-            ->where('label_status', 'TYPE_CATEGORY')
+        return MasterStatus::where('label_status', MasterStatus::TYPE_CATEGORY)
             ->orderBy('id')
-            ->pluck('name', 'id')
-            ->toArray();
-
-        return $listTipeKategori;
+            ->pluck('name', 'id');
     }
 
     public static function getListKategori($categoryType)
     {
-        $productCategory = ProductCategory::where('status_id', '40')
+        $productCategories = ProductCategory::where('status_id', self::CAT_ENABLE)
             ->where('type_category', $categoryType)
             ->limit(40)
             ->get();
 
         $listHierarchy = [];
-        foreach ($productCategory as $category) {
-            $explodeHierarchy = explode('-', $category->hierarchy);
+
+        foreach ($productCategories as $productCategory) {
+            $explodeHierarchy = explode('-', $productCategory->hierarchy);
+
             if ($explodeHierarchy) {
                 $dataArr = [];
-                foreach ($explodeHierarchy as $value) {
-                    $checkParent = ProductCategory::checkCategoryAssignParent($value);
-                    if ($checkParent == 'NO') {
+
+                foreach ($explodeHierarchy as $key => $value) {
+                    $checkParent = self::checkCategoryAssignParent($value);
+
+                    if ($checkParent == self::CHECK_NO) {
                         $listShow = ProductCategory::where('id', $value)->first();
                         $explodeListShow = explode('-', $listShow->hierarchy);
-                        foreach ($explodeListShow as $valueListShow) {
+
+                        foreach ($explodeListShow as $keyListShow => $valueListShow) {
                             $listShowDetail = ProductCategory::where('id', $valueListShow)->first();
+
                             if (!empty($listShowDetail->name)) {
                                 $dataArr[] = $listShowDetail->name;
                             }
                         }
+
                         $listHierarchy[$value] = implode(' > ', $dataArr);
                     }
                 }
@@ -315,16 +347,17 @@ class ProductCategory extends Model
 
     public static function getListKategoriNew($categoryType)
     {
-        $productCategory = ProductCategory::where('status_id', '40')
+        $productCategories = ProductCategory::where('status_id', self::CAT_ENABLE)
             ->where('parent_id', $categoryType)
-            ->orderBy('urut', 'asc')
+            ->orderBy('urut', 'ASC')
             ->get();
 
         $dataFix = [];
-        foreach ($productCategory as $key) {
+
+        foreach ($productCategories as $productCategory) {
             $dataFix[] = [
-                'id' => $key->id,
-                'name' => $key->name,
+                'id' => $productCategory->id,
+                'name' => $productCategory->name,
             ];
         }
 

@@ -31,7 +31,7 @@
     </div>
     <div class="container-fluid">
         <div class="col-12 mx-auto">
-            {!! Form::open(['route' => 'store-umum', 'method' => 'post']) !!}
+            {!! Form::open(['route' => 'info-umum-store', 'method' => 'post']) !!}
             <div class="product-form">
                 <div class="card">
                     <div class="card-header">
@@ -55,33 +55,43 @@
                                 </ul>
                             </div>
                         @endif
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    {!! Form::label('tipe_kategori_id', 'Tipe Kategori', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('tipe_kategori_id', $listHierarchy, null, [
-                                        'class' => 'form-control',
-                                        'placeholder' => 'Pilih Tipe Kategori',
-                                        'name' => 'tipe_kategori_id',
-                                    ]) !!}
-                                </div>
+                        <div class="card-body">
+
+                        
+                            <div class="form-group">
+                                {!! Form::label('tipe_kategori_id', 'Tipe Kategori', ['class' => 'mb-1 h6']) !!}
+                                {!! Form::select('tipe_kategori_id', $tipeKategoriData, $tipeKategoriId, [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Pilih Tipe Kategori',
+                                    'name' => 'tipe_kategori_id',
+                                    'id' => 'tipe_kategori_id', 
+                                ]) !!}
                             </div>
+                            
+                            </div>
+                            
+                            @if (!is_null($kategoriData))
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('kategori_id', 'Kategori', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('kategori_id', $listHierarchy, null, [
+                                    {!! Form::select('kategori_id', $kategoriData, null, [
                                         'class' => 'form-control',
-                                        'placeholder' => '',
+                                        'placeholder' => 'Pilih Kategori',
                                         'name' => 'kategori_id',
+                                        'id' => 'kategori_id',
                                     ]) !!}
                                 </div>
                             </div>
-                        </div>
+                        @endif
+                        
+                        
+                            
+                                       
                         <div class="d-flex">
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('sub_category_satu', 'Sub Kategori Satu', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('sub_category_satu', $listHierarchy, null, [
+                                    {!! Form::select('sub_category_satu', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => '',
                                         'name' => 'sub_category_satu',
@@ -91,7 +101,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('sub_category_dua', 'Sub Kategori Dua', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('sub_category_dua', $listHierarchy, null, [
+                                    {!! Form::select('sub_category_dua', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => '',
                                         'name' => 'sub_category_dua',
@@ -101,7 +111,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('sub_category_tiga', 'Sub Kategori Tiga', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('sub_category_tiga', $listHierarchy, null, [
+                                    {!! Form::select('sub_category_tiga', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => '',
                                         'name' => 'sub_category_tiga',
@@ -111,7 +121,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('sub_category_empat', 'Sub Kategori Empat', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('sub_category_empat', $listHierarchy, null, [
+                                    {!! Form::select('sub_category_empat', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => '',
                                         'name' => 'sub_category_empat',
@@ -121,7 +131,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('sub_category_lima', 'Sub Kategori Lima', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('sub_category_lima', $listHierarchy, null, [
+                                    {!! Form::select('sub_category_lima', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => '',
                                         'name' => 'sub_category_lima',
@@ -131,7 +141,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('sub_category_enam', 'Sub Kategori enam', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('sub_category_enam', $listHierarchy, null, [
+                                    {!! Form::select('sub_category_enam', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => '',
                                         'name' => 'sub_category_enam',
@@ -156,7 +166,6 @@
                                             'class' => 'form-control',
                                             'placeholder' => 'Nama Product',
                                             'name' => 'name',
-                                            'required' => true,
                                         ]) !!}
                                     </div>
                                 </div>
@@ -168,7 +177,6 @@
                                             'style' => 'font-size: 0.85rem;',
                                             'placeholder' => 'SKU',
                                             'name' => 'sku',
-                                            'required' => true,
                                         ]) !!}
                                     </div>
                                 </div>
@@ -178,7 +186,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('has_ppn', 'Has Ppn', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('has_ppn', $listHierarchy, null, [
+                                    {!! Form::select('has_ppn', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Pilih Ppn',
                                         'name' => 'has_ppn',
@@ -188,7 +196,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('has_shipping', 'Has Shipping', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('has_shipping', $listHierarchy, null, [
+                                    {!! Form::select('has_shipping', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Pilih Ongkos Kirim',
                                         'name' => 'has_shipping',
@@ -198,7 +206,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     {!! Form::label('produsen_type', 'Produsen Type', ['class' => 'mb-1 h6']) !!}
-                                    {!! Form::select('produsen_type', $listHierarchy, null, [
+                                    {!! Form::select('produsen_type', [], null, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Pilih Produsen',
                                         'name' => 'produsen_type',
@@ -302,7 +310,7 @@
                                     <div class="card-body" style="width: 25%;">
                                         <div class="form-group">
                                             {!! Form::label('madein', 'Made In', ['class' => 'mb-1 h6']) !!}
-                                            {!! Form::select('madein', $listHierarchy, null, [
+                                            {!! Form::select('madein', [], null, [
                                                 'class' => 'form-control',
                                                 'name' => 'madein',
                                             ]) !!}
@@ -311,7 +319,7 @@
                                     <div class="card-body" style="width: 25%;">
                                         <div class="form-group">
                                             {!! Form::label('garansi', 'Garansi', ['class' => 'mb-1 h6']) !!}
-                                            {!! Form::select('garansi', $listHierarchy, null, [
+                                            {!! Form::select('garansi', [], null, [
                                                 'class' => 'form-control',
                                                 'name' => 'garansi',
                                             ]) !!}
@@ -320,7 +328,7 @@
                                     <div class="card-body" style="width: 25%;">
                                         <div class="form-group">
                                             {!! Form::label('brand', 'Brand', ['class' => 'mb-1 h6']) !!}
-                                            {!! Form::select('brand', $listHierarchy, null, [
+                                            {!! Form::select('brand', [], null, [
                                                 'class' => 'form-control',
                                                 'name' => 'brand',
                                             ]) !!}
@@ -367,7 +375,7 @@
                                     <div class="card-body" style="width: 25%;">
                                         <div class="form-group">
                                             {!! Form::label('status_ongkir', 'Status Ongkir', ['class' => 'mb-1 h6']) !!}
-                                            {!! Form::select('status_ongkir', $listHierarchy, null, [
+                                            {!! Form::select('status_ongkir', [], null, [
                                                 'class' => 'form-control',
                                                 'placeholder' => 'Status Ongkir',
                                                 'name' => 'status_ongkir',
@@ -416,7 +424,6 @@
                                                                             'class' => 'form-control',
                                                                             'placeholder' => '0',
                                                                             'name' => 'stok',
-                                                                            'required' => true,
                                                                         ]) !!}
                                                                     </div>
                                                                     <div class="col-md-4">
@@ -425,7 +432,6 @@
                                                                             'class' => 'form-control',
                                                                             'placeholder' => '0',
                                                                             'name' => 'Limit',
-                                                                            'required' => true,
                                                                         ]) !!}
                                                                     </div>
                                                                     <div class="col-md-4">
@@ -434,7 +440,6 @@
                                                                             'class' => 'form-control',
                                                                             'placeholder' => '0',
                                                                             'name' => 'minqty',
-                                                                            'required' => true,
                                                                         ]) !!}
                                                                     </div>
                                                                 </div>
@@ -453,7 +458,7 @@
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         {!! Form::label('tipe_kategori_id', 'Tipe Kategori', ['class' => 'mb-1 h6']) !!}
-                                                        {!! Form::select('tipe_kategori_id', $listHierarchy, null, [
+                                                        {!! Form::select('tipe_kategori_id', [], null, [
                                                             'class' => 'form-control',
                                                             'placeholder' => 'Pilih Tipe Kategori',
                                                             'name' => 'tipe_kategori_id',
@@ -492,7 +497,7 @@
                                                 ?>
                                                 <div class="form-group">
                                                     {!! Form::label('etalase_id', 'Etalase', ['class' => 'mb-0 h6']) !!}
-                                                    {!! Form::select('etalase_id', $listHierarchy, null, [
+                                                    {!! Form::select('etalase_id', [], null, [
                                                         'class' => 'form-control',
                                                         'placeholder' => 'Choose Etalase',
                                                         'name' => 'etalase_id',
@@ -517,7 +522,7 @@
                                             ]) }}
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -527,4 +532,5 @@
             {!! Form::close() !!}
         </div>
     </div>
+
 @endsection

@@ -33,6 +33,7 @@ class Controller extends BaseController
 
     private function _initUserMenu()
     {
+        $this->data['currentUserMenu'] = 'dashboarduser';
         $this->data['currentUserMenu'] = 'category';
         $this->data['currentUserSubMenu'] = '';
     }

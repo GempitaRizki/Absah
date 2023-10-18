@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Seller;
 
+use Illuminate\Support\Facades\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ProductSku;
@@ -9,6 +10,7 @@ use App\Models\Store;
 use App\Models\MasterStatus;
 use App\Models\ProductCategory;
 use App\Models\Option;
+use App\Models\AssignProductCat;
 
 class ProductSellerController extends Controller
 {
@@ -19,108 +21,104 @@ class ProductSellerController extends Controller
 
     public function index()
     {
-        $storeId = Store::getStoreIdByUserLogin();
-
-        $totalAll = ProductSku::getTotalProduct('all');
-        $totalAktif = ProductSku::getTotalProduct('aktif');
-        $totalNonAktif = ProductSku::getTotalProduct('pending');
-        $totalDraft = ProductSku::getTotalProduct('draft');
-
-        // \Log::info('Total All: ' . $totalAll);
-        // \Log::info('Total Aktif: ' . $totalAktif);
-        // \Log::info('Total Non-Aktif: ' . $totalNonAktif);
-        // \Log::info('Total Draft: ' . $totalDraft);
-
-        $this->data['totalAll'] = $totalAll;
-        $this->data['totalAktif'] = $totalAktif;
-        $this->data['totalNonAktif'] = $totalNonAktif;
-        $this->data['totalDraft'] = $totalDraft;
-
         return view('seller.items.product_index', $this->data);
     }
 
     public function indexinfo()
     {
-        $productTypeList = MasterStatus::getListMasterProductType();
-        $conditionList = MasterStatus::getListMasterCondition();
-        $priceTypeList = MasterStatus::getListPriceType();
-        $shippingTypeList = MasterStatus::getListShippingType();
-        $attributeList = Option::getListOption();
+        $this->data['currentSellerMenu'] = 'productseller';
+        $this->data['productTypes'] = MasterStatus::getListMasterProductType();
+        $this->data['priceTypes'] = MasterStatus::getListPriceType();
+        $this->data['productConditionType'] = MasterStatus::getListMasterCondition();
+        $this->data['listOptions'] = Option::getListOption();
 
-        return view('seller.daftarproduk.info_awal', compact(
-            'productTypeList',
-            'conditionList',
-            'priceTypeList',
-            'shippingTypeList',
-            'attributeList'
-        ));
+        return view('seller.daftarproduk.info_awal', $this->data);
+    }
+
+    public function actionListPriceType(Request $request)
+    {
+        $out = [];
+        if ($request->has('depdrop_parents')) {
+            $parents = $request->input('depdrop_parents');
+            if ($parents != null && isset($parents[0])) {
+                $cat_id = $parents[0];
+
+                if ($cat_id == '32') {
+                    $out = [
+                        ['id' => '37', 'name' => 'Zonasi'],
+                        ['id' => '38', 'name' => 'General / Nasional'],
+                        ['id' => '39', 'name' => 'Grosir'],
+                    ];
+                } elseif ($cat_id == '31') {
+                    $out = [
+                        ['id' => '38', 'name' => 'General / Nasional'],
+                        ['id' => '39', 'name' => 'Grosir'],
+                    ];
+                } elseif ($cat_id == '30') {
+                    $out = [
+                        ['id' => '37', 'name' => 'Zonasi'],
+                        ['id' => '38', 'name' => 'General / Nasional / Berdasarkan Item'],
+                    ];
+                }
+
+                return response()->json(['output' => $out, 'selected' => '']);
+            }
+        }
+
+        return response()->json(['output' => '', 'selected' => '']);
     }
 
 
-    public function infoawalStore(Request $request)
+    public function indexinfoStore(Request $request)
     {
-        $productTypeId = $request->input('product_type_id');
-        $priceTypeId = $request->input('price_type');
-        $conditionId = $request->input('condition_id');
-        $attributeId = $request->input('attribute');
+        $productTypesId = $request->input('product_type_id');
+        $priceTypesId = $request->input('price_types_id');
+        $productConditionTypeId = $request->input('condition_id');
+        $listOptionsId = $request->input('attributes_id');
 
-        if (session()->has('temporaryData')) {
-            $temporaryData = session('temporaryData');
-        } else {
-            $temporaryData = [];
-        }
+        session(['indexInfoSession' => [
+            'product_type_id' => $productTypesId,
+            'price_types_id' => $priceTypesId,
+            'condition_id' => $productConditionTypeId,
+            'attributes_id' => $listOptionsId,
+        ]]);
 
-        $temporaryData = [
-            'productTypeId' => $productTypeId,
-            'priceTypeId' => $priceTypeId,
-            'conditionId' => $conditionId,
-            'attributeId' => $attributeId,
-        ];
-
-        session(['temporaryData' => $temporaryData]);
-
-        // dd(session('temporaryData'));
+        // dd(session('indexInfoSession'));
 
         return redirect()->route('info-umum');
     }
 
-
-    public function infoumumindex()
+    public function infoumumindex(Request $request)
     {
-        $categoryId = 1;
-        $selectedCategory = ProductCategory::find($categoryId);
-        $pathKategori = $this->getPathKategori($selectedCategory);
+        $productSkuId = $request->input('product_sku_id');
+        $categoryDetail = AssignProductCat::where('product_sku_id', $productSkuId)->first();
+
         $tipeKategoriData = [
             '1' => 'Barang',
             '2' => 'Jasa',
         ];
 
-        $listHierarchy = ProductCategory::getListHirarchy();
+        $kategoriData = [];
+        $tipeKategoriId = null;
+        $dataArrToString = null;
+        $categoryMessage = null;
 
-        return view('seller.daftarproduk.info_umum', [
-            'listHierarchy' => $listHierarchy,
-            'pathKategori' => $pathKategori,
-            'tipeKategoriData' => $tipeKategoriData,
-        ]);
-    }
-
-
-    private function getPathKategori($category)
-    {
-        $path = [];
-
-        while ($category) {
-            $path[] = $category->name;
-            $category = ProductCategory::find($category->parent_id);
+        if ($categoryDetail) {
+            $dataKategoriArr = ProductCategory::getListHirarchySelected($categoryDetail->category_id);
+            $dataArrToString = implode(' > ', $dataKategoriArr);
+            $tipeKategoriId = 1;
+            $kategoriData = ProductCategory::where('hierarchy', 'LIKE', $dataArrToString . '%')
+                ->pluck('name', 'id');
+        } else {
+            $categoryMessage = "Kategori belum dibuat";
         }
 
-        return implode(' > ', array_reverse($path));
+        return view('seller.daftarproduk.info_umum', [
+            'tipeKategoriData' => $tipeKategoriData,
+            'dataArrToString' => $dataArrToString,
+            'tipeKategoriId' => $tipeKategoriId,
+            'kategoriData' => $kategoriData,
+            'categoryMessage' => $categoryMessage,
+        ]);
     }
-
-
-    // public function fetchCategories($categoryTypeId)
-    // {
-    //     $categories = ProductCategory::where('parent_id', $categoryTypeId)->pluck('name', 'id');
-    //     return response()->json($categories);
-    // }
 }

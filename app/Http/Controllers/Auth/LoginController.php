@@ -36,7 +36,7 @@ class LoginController extends Controller
             } else if (auth()->user()->role == 'seller') {
                 return redirect()->route('seller.dashboard');
             } else {
-                return redirect()->route('seller.login');
+                return redirect()->route('dashboard.user');
             }
         } else {
             return redirect()

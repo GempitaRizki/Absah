@@ -29,8 +29,11 @@ use App\Http\Controllers\Seller\KomplainSellerController;
 use App\Http\Controllers\ControllerForTestingView;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Seller\partials\DownloadFormatController;
+use App\Http\Controllers\User\DashboardUserController;
+use App\Http\Controllers\User\LoginUserController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
 
 //Route Keranjang
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -41,6 +44,10 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('update-to-cart', [CartController::class, 'updatetocart'])->name('updatetocart');
     Route::get('/mini-cart', [CartController::class, 'show'])->name('mini_cart.show');
     Route::get('carts/remove', [CartController::class, 'destroyAll'])->name('cart.destroy-all');
+
+    //dashboard user
+    Route::get('/user/dashboard', [DashboardUserController::class, 'index'])->name('dashboard.user');
+
 });
 
 //menampilkan gambar pertama pada database
@@ -74,6 +81,7 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
 // User route // ini nanti buat cms user
 Route::middleware(['auth', 'role:user'])->group(function () {
     //user control
+
 });
 
 
@@ -143,6 +151,8 @@ Route::get('/seller/login', [SellerController::class, 'index'])->name('seller.lo
 Route::post('/seller/login', [SellerController::class, 'login'])->name('seller-post');
 Route::post('/seller/logout', [SellerController::class, 'logout'])->name('seller.logout');
 
+//user Login Controller
+Route::get('/user/login', [LoginUserController::class, 'index'])->name('user.login');
 
 //Seller Content Management System
 Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller')->prefix('seller')->group(function () {
@@ -165,9 +175,12 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     //product
     Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
     Route::get('/product/info-awal', [ProductSellerController::class, 'indexinfo'])->name('index-awal');
-    Route::post('/store/info-awal', [ProductSellerController::class, 'infoawalStore'])->name('store-awal');
-    Route::get('/product/info-umum', [ProductSellerController::class, 'infoumumindex'])->name('info-umum');
-    Route::post('product/info-umum', [ProductSellerController::class, 'infoumumStore'])->name('store-umum');
+    Route::post('product/info-awal', [ProductSellerController::class, 'indexInfoStore'])->name('store-index-awal');
+    Route::post('/seller/product/info-awal/get-price-types', [ProductSellerController::class, 'actionListPriceType'])->name('get-price-types');
+
+    //info umum 
+    Route::get('/product/info-umum', [ProductSellerController::class, 'infoUmumIndex'])->name('info-umum');
+    Route::post('/product/info-umum', [ProductSellerController::class, 'infoumumStore'])->name('info-umum-store');
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
     Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');

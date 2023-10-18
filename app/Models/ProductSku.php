@@ -115,43 +115,6 @@ class ProductSku extends Model
         return $this->belongsTo(MasterStatus::class, 'status_id');
     }
 
-    public static function getTotalProduct($type)
-    {
-        $storeId = Store::getStoreIdByUserLogin();
-
-        if ($type == 'all') {
-            $count = DB::table('product_sku as ps')
-                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
-                ->where('pstore.store_id', $storeId)
-                ->whereNotIn('ps.status_id', [ProductSku::HAPUS])
-                ->groupBy('ps.id')
-                ->count();
-        } elseif ($type == 'aktif') {
-            $count = DB::table('product_sku as ps')
-                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
-                ->where('pstore.store_id', $storeId)
-                ->where('ps.status_id', ProductSku::ENABLE_STATUS_ID)
-                ->groupBy('ps.id')
-                ->count();
-        } elseif ($type == 'pending') {
-            $count = DB::table('product_sku as ps')
-                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
-                ->where('pstore.store_id', $storeId)
-                ->where('ps.status_id', ProductSku::PENDING_REVIEW_STATUS_ID)
-                ->groupBy('ps.id')
-                ->count();
-        } elseif ($type == 'draft') {
-            $count = DB::table('product_sku as ps')
-                ->join('product_store as pstore', 'pstore.product_sku_id', '=', 'ps.id')
-                ->where('pstore.store_id', $storeId)
-                ->where('ps.status_id', ProductSku::DRAFT)
-                ->groupBy('ps.id')
-                ->count();
-        }
-
-        return $count;
-    }
-
     public static function getWilayahJual()
     {
         $storeId = Store::getStoreIdByUserLogin();
@@ -163,14 +126,5 @@ class ProductSku extends Model
             ->toArray();
 
         return $listWilayahJual;
-    }
-
-    public static function getTypeOngkir()
-    {
-        $listTypeOngkir = TypeOngkir::all()
-            ->pluck('type', 'type')
-            ->toArray();
-
-        return $listTypeOngkir;
     }
 }

@@ -3,16 +3,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10 mx-auto">
-                {!! Form::open(['route' => 'store-awal', 'method' => 'post']) !!}
+                {!! Form::open(['route' => 'store-index-awal', 'method' => 'post']) !!}
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <a href={{ route('index-awal') }}
+                        <a href="{{ route('index-awal') }}"
                             class="btn btn-app {{ request()->routeIs('product-awal') ? 'bg-secondary' : '' }}">
                             <i class="fas fa-cog"></i> Info Awal
                         </a>
-                        <a href={{ route('downloadtemplate') }}
+                        <a href="{{ route('downloadtemplate') }}"
                             class="btn btn-app {{ request()->routeIs('product-download-template') ? 'bg-secondary' : '' }}">
-                            <i class="fa fa-info-circle"></i> Info Umum
+                            <i class="fa fa-info-circle"></i> Download
                         </a>
                         <a href="#"
                             class="btn btn-app {{ request()->routeIs('product-import-product') || request()->routeIs('product-proses-import') ? 'bg-secondary' : '' }}">
@@ -46,27 +46,38 @@
                             </div>
 
                             <div id="more-category"></div>
-
                             <div class="form-group">
                                 {!! Form::label('product_type_id', 'Product Type') !!}
-                                {!! Form::select('product_type_id', $productTypeList, null, [
+                                {!! Form::select('product_type_id', $productTypes, null, [
                                     'class' => 'form-control',
                                     'id' => 'product_type_id',
+                                    'required' => 'required',
                                 ]) !!}
                             </div>
                             <div class="form-group">
-                                {!! Form::label('price_type', 'Price Type') !!}
-                                {!! Form::select('price_type', $priceTypeList, null, ['class' => 'form-control', 'id' => 'price_type']) !!}
+                                {!! Form::label('price_types_id', 'Price Type') !!}
+                                {!! Form::select('price_types_id', [], null, [
+                                    'class' => 'form-control',
+                                    'id' => 'price_types_id',
+                                    'required' => 'required',
+                                    'disabled' => true,
+                                ]) !!}
                             </div>
-
                             <div class="form-group">
                                 {!! Form::label('condition_id', 'Condition') !!}
-                                {!! Form::select('condition_id', $conditionList, null, ['class' => 'form-control', 'id' => 'condition_id']) !!}
+                                {!! Form::select('condition_id', $productConditionType, null, [
+                                    'class' => 'form-control',
+                                    'id' => 'condition_id',
+                                    'required' => 'required',
+                                ]) !!}
                             </div>
 
-                            <div class="form-group">
-                                {!! Form::label('attribute', 'Attribute') !!}
-                                {!! Form::select('attribute', $attributeList, null, ['class' => 'form-control', 'id' => 'attribute']) !!}
+                            <div class="form-group" id="attributes-group">
+                                {!! Form::label('attributes_id', 'Attribute') !!}
+                                {!! Form::select('attributes_id', $listOptions, null, [
+                                    'class' => 'form-control',
+                                    'id' => 'attributes_id',
+                                ]) !!}
                             </div>
                         </div>
                         <div class="card-footer">
@@ -78,4 +89,64 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#product_type_id').on('change', function() {
+                var productTypeId = $(this).val();
+                var priceTypesSelect = $('#price_types_id');
+                var attributesGroup = $('#attributes-group');
+
+                if (productTypeId === '31') {
+                    attributesGroup.show();
+                } else {
+                    attributesGroup.hide();
+                }
+
+                var priceTypeData = [];
+                if (productTypeId === '32') {
+                    priceTypeData = [{
+                            id: '37',
+                            name: 'Zonasi'
+                        },
+                        {
+                            id: '38',
+                            name: 'General / Nasional'
+                        },
+                        {
+                            id: '39',
+                            name: 'Grosir'
+                        }
+                    ];
+                } else if (productTypeId === '31') {
+                    priceTypeData = [{
+                            id: '38',
+                            name: 'General / Nasional'
+                        },
+                        {
+                            id: '39',
+                            name: 'Grosir'
+                        }
+                    ];
+                } else if (productTypeId === '30') {
+                    priceTypeData = [{
+                            id: '37',
+                            name: 'Zonasi'
+                        },
+                        {
+                            id: '38',
+                            name: 'General / Nasional / Berdasarkan Item'
+                        }
+                    ];
+                }
+                priceTypesSelect.empty();
+                priceTypesSelect.append('<option value="">Pilih Price Type</option>');
+                $.each(priceTypeData, function(index, option) {
+                    priceTypesSelect.append('<option value="' + option.id + '">' + option.name +
+                        '</option>');
+                });
+                priceTypesSelect.prop('disabled', false);
+            });
+        });
+    </script>
 @endsection

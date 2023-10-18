@@ -68,25 +68,5 @@ class Store extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'seller_type', 'name');
     }
-
-    public static function getStoreIdByUserLogin()
-    {
-        $user = auth()->user();
-        $user_id = $user->id;
-    
-        $storeUser = DB::table('store_user as su')
-            ->join('rbac_auth_assignment as raa', 'su.user_id', '=', 'raa.user_id')
-            ->where('raa.item_name', User::ROLE_OWNER_STORE)
-            ->where('su.user_id', $user_id)
-            ->select('su.store_id') 
-            ->first();
-    
-        if ($storeUser) {
-            $storeId = $storeUser->store_id;
-            return $storeId;
-        }
-    
-        return redirect()->route('handle404');
-    }
      
 }

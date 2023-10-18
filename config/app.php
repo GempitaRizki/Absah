@@ -167,13 +167,11 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Laravolt\Indonesia\ServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GeneralServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class
+        Spatie\Permission\PermissionServiceProvider::class,
 
 
 
@@ -195,6 +193,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
 		'General' => App\Helpers\General::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+
 
 
     ])->toArray(),
