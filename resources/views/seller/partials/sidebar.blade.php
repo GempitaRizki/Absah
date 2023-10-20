@@ -80,7 +80,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>                
                 <li class="nav-item">
                     <a href="{{ route('product.index') }}" class="nav-link">
                         <i class="fas fa-book" style="min-width: 2.5rem;"></i>

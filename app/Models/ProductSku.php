@@ -55,7 +55,6 @@ class ProductSku extends Model
 
 
     ];
-
     const DEFAULT_HAS_PPN = '33';
     const DEFAULT_HAS_SHIPPING = '35';
     const DEFAULT_STATUS_ID = '46';

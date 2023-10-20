@@ -193,6 +193,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
 		'General' => App\Helpers\General::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Livewire' => \Livewire\Livewire::class,
+
 
 
 

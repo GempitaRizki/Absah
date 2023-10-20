@@ -18,8 +18,6 @@ class Etalase extends Model
         'name', 'parent_id', 'store_id', 'status_id'
     ];
 
-    // Jika Anda memiliki hubungan dengan model lain, tambahkan metode relasinya di sini.
-
     public static function getListEtalase()
     {
         $storeId = (new Store)->getStoreIdByUserLogin();

@@ -26,11 +26,11 @@ use App\Http\Controllers\Seller\NegoSellerController;
 use App\Http\Controllers\Seller\ChatSellerController;
 use App\Http\Controllers\Seller\DaftarPenggunaSellerController;
 use App\Http\Controllers\Seller\KomplainSellerController;
-use App\Http\Controllers\ControllerForTestingView;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Seller\DummySellerController;
 use App\Http\Controllers\Seller\partials\DownloadFormatController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\LoginUserController;
+
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -47,7 +47,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
     //dashboard user
     Route::get('/user/dashboard', [DashboardUserController::class, 'index'])->name('dashboard.user');
-
 });
 
 //menampilkan gambar pertama pada database
@@ -170,17 +169,20 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
 
     //pajak
     Route::get('/pajak', [PajakSellerController::class, 'index'])->name('pajak.index');
-
+    Route::post('/pajak', [PajakSellerController::class, 'store'])->name('store-pajak');
 
     //product
     Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
     Route::get('/product/info-awal', [ProductSellerController::class, 'indexinfo'])->name('index-awal');
     Route::post('product/info-awal', [ProductSellerController::class, 'indexInfoStore'])->name('store-index-awal');
-    Route::post('/seller/product/info-awal/get-price-types', [ProductSellerController::class, 'actionListPriceType'])->name('get-price-types');
 
     //info umum 
-    Route::get('/product/info-umum', [ProductSellerController::class, 'infoUmumIndex'])->name('info-umum');
-    Route::post('/product/info-umum', [ProductSellerController::class, 'infoumumStore'])->name('info-umum-store');
+    // routes/web.php
+    // routes/web.php
+    Route::get('/info-umum', [ProductSellerController::class, 'showindexumum'])->name('getInfoUmum');
+    Route::get('/product/get-kategori-id', [ProductSellerController::class, 'getKategoriId'])->name('get-kategori-id');
+    Route::post('/get-sub-kategori', [ProductSellerController::class, 'getSubKategori'])->name('get.sub.kategori');    
+    Route::post('/save-info-umum', [ProductSellerController::class, 'saveInfoUmum'])->name('save_info_umum');
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
     Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');
@@ -204,8 +206,6 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::post('/daftarpengguna', [DaftarPenggunaSellerController::class, 'store'])->name('daftarpengguna.store');
 
 
-
-
     //aktifitas pengguna
     Route::get('/aktivitaspengguna', [AktivitasPenggunaSellerController::class, 'index'])->name('aktivitaspengguna.index');
     Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
@@ -213,3 +213,7 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
 
 
 // Route::get('mumetbanget/setan', [ControllerForTestingView::class, 'index']);
+
+
+Route::get('/test/wae', [DummySellerController::class, 'queryType1'])->name('queryType1');
+Route::get('/info-umum', [ProductSellerController::class, 'indexParent'])->name('getInfoSubParent');

@@ -1,73 +1,14 @@
-namespace App\Http\Controllers\location;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Province;
-use App\Models\Districts;
-use App\Models\SubDistricts;
-use App\Models\Village;
-
-class LocationController extends Controller
-{
-    public function getProvinces()
-    {
-        $provinces = LocationService::getProvinces();
-        return response()->json($provinces);
+// Kirim permintaan AJAX dengan tipeKategoriId
+$.ajax({
+    url: '/seller/get-kategori-options/' + tipeKategoriId, 
+    method: 'GET',
+    success: function(data) {
+        $('#kategori_id').empty();
+        $.each(data, function(key, value) {
+            $('#kategori_id').append($('<option>', {
+                value: key,
+                text: value
+            }));
+        });
     }
-
-    public function getDistrictsByProvince($provinceId)
-    {
-        $districts = LocationService::getDistrictsByProvince($provinceId);
-        return response()->json($districts);
-    }
-
-    public function getSubDistrictsByDistrict($districtId)
-    {
-        $subdistricts = LocationService::getSubDistrictsByDistrict($districtId);
-        return response()->json($subdistricts);
-    }
-
-    public function getVillagesBySubDistrict($subdistrictId)
-    {
-        $villages = LocationService::getVillagesBySubDistrict($subdistrictId);
-        return response()->json($villages);
-    }
-}
-
-class LocationService
-{
-    public static function getProvinces()
-    {
-        return Province::all();
-    }
-
-    public static function getDistrictsByProvince($provinceId)
-    {
-        return Districts::where('province_id', $provinceId)->get();
-    }
-
-    public static function getSubDistrictsByDistrict($districtId)
-    {
-        return SubDistricts::where('districts_id', $districtId)->get();
-    }
-
-    public static function getVillagesBySubDistrict($subdistrictId)
-    {
-        return Village::where('subdistrict_id', $subdistrictId)->get();
-    }
-}
-
-
-public function storeLocation(Request $request)
-{
-    $province = $request->input('province');
-    $district = $request->input('districts');
-    $subdistrict = $request->input('subdistricts');
-    $village = $request->input('villages');
-    $latitude = $request->input('latitude');
-    $longitude = $request->input('longitude');
-
-    // Simpan data ke session atau lakukan operasi lain sesuai kebutuhan Anda
-
-    return redirect()->back()->with('success', 'Data lokasi berhasil disimpan');
-}
+});

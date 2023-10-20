@@ -20,7 +20,7 @@ class MasterStatus extends Model
         'is_status',
         'is_visible',
     ];
-    const TYPE_CATEGORY = 32; 
+    const TYPE_CATEGORY = 32;
 
     const PRODUCT_TYPE = 20;
     const PRODUCT_CONDITION = 17;
@@ -30,6 +30,8 @@ class MasterStatus extends Model
     const IS_VISIBLE_TRUE = 1;
     const PRODUCT_PRICE_TYPE = 23;
 
+    const ORDER_FAKTUR = 66;
+
 
 
     private static $_statuses = [
@@ -38,6 +40,7 @@ class MasterStatus extends Model
         self::PRODUCT_CONDITION => 'Kondisi Produk',
         self::PRODUCT_SHIPPING_TYPE => 'Product Shipping Type',
         self::TYPE_CATEGORY => 'Tipe Kategori',
+        self::ORDER_FAKTUR => '(Non Set)'
 
 
     ];
@@ -76,5 +79,23 @@ class MasterStatus extends Model
         return $listMasterCondition;
     }
 
+    public static function getTypeFaktur()
+    {
+        $listFaktur = [
+            151 => 'E-Faktur Approval',
+            152 => 'Belum E-Faktur',
+            153 => 'E-Faktur Batal',
+            154 => 'E-Faktur Reject',
+            155 => 'E-Faktur Belum Approve',
+        ];
 
+        return $listFaktur;
+    }
+
+    public static function getStatusFaktur()
+    {
+        $orderStatus = self::where(self::ORDER_FAKTUR);
+
+        return $orderStatus;
+    }
 }

@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Seller;
 
-use Illuminate\Support\Facades\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\AssignProductCat;
+use App\Models\ProductEtalase;
 use Illuminate\Http\Request;
 use App\Models\ProductSku;
 use App\Models\Store;
 use App\Models\MasterStatus;
 use App\Models\ProductCategory;
 use App\Models\Option;
-use App\Models\AssignProductCat;
+use App\Models\ProductTag;
+use App\Models\ProductStore;
+use Illuminate\Support\Facades\DB;
 
 class ProductSellerController extends Controller
 {
@@ -75,7 +78,7 @@ class ProductSellerController extends Controller
         $priceTypesId = $request->input('price_types_id');
         $productConditionTypeId = $request->input('condition_id');
         $listOptionsId = $request->input('attributes_id');
-
+        
         session(['indexInfoSession' => [
             'product_type_id' => $productTypesId,
             'price_types_id' => $priceTypesId,
@@ -85,40 +88,33 @@ class ProductSellerController extends Controller
 
         // dd(session('indexInfoSession'));
 
-        return redirect()->route('info-umum');
+        return redirect()->route('getInfoUmum');
     }
 
-    public function infoumumindex(Request $request)
+    public function showindexumum()
     {
-        $productSkuId = $request->input('product_sku_id');
-        $categoryDetail = AssignProductCat::where('product_sku_id', $productSkuId)->first();
-
-        $tipeKategoriData = [
-            '1' => 'Barang',
-            '2' => 'Jasa',
+        $productCategory = [
+            1 => "Barang",
+            2 => "Jasa"
         ];
-
-        $kategoriData = [];
-        $tipeKategoriId = null;
-        $dataArrToString = null;
-        $categoryMessage = null;
-
-        if ($categoryDetail) {
-            $dataKategoriArr = ProductCategory::getListHirarchySelected($categoryDetail->category_id);
-            $dataArrToString = implode(' > ', $dataKategoriArr);
-            $tipeKategoriId = 1;
-            $kategoriData = ProductCategory::where('hierarchy', 'LIKE', $dataArrToString . '%')
-                ->pluck('name', 'id');
-        } else {
-            $categoryMessage = "Kategori belum dibuat";
-        }
-
-        return view('seller.daftarproduk.info_umum', [
-            'tipeKategoriData' => $tipeKategoriData,
-            'dataArrToString' => $dataArrToString,
-            'tipeKategoriId' => $tipeKategoriId,
-            'kategoriData' => $kategoriData,
-            'categoryMessage' => $categoryMessage,
-        ]);
+    
+        $parent_ids = [1, 2];
+        $categories = ProductCategory::whereIn('parent_id', $parent_ids)->get();
+        $productCategories = $categories->where('parent_id', 0)->map(function ($category) {
+            return [
+                'value' => $category->id,
+                'text' => $category->name,
+            ];
+        })->toArray();
+    
+        $subProductCategories = $categories->whereIn('parent_id', [1, 2])->map(function ($subCategory) {
+            return [
+                'value' => $subCategory->id,
+                'text' => $subCategory->name,
+            ];
+        })->toArray();
+    
+        return view('seller.daftarproduk.info_umum', compact('productCategory', 'productCategories', 'subProductCategories'));
     }
+    
 }

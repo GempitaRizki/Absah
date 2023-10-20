@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductCategory extends Model
+class ProductCategoryExtended extends Model
 {
     use HasFactory;
 
-    protected $table = 'product_category';
+    protected $table = "product_category";
+
+    public $timestamps = true;
 
     protected $fillable = [
         'name',
@@ -26,8 +28,11 @@ class ProductCategory extends Model
         'dikbud_type',
         'urut',
         'dikbud',
-        'kat_agregasi',
+        'kat_agregasi'
     ];
 
+    public function children()
+    {
+        
+    }
 }
-
