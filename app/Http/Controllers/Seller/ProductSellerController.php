@@ -78,7 +78,7 @@ class ProductSellerController extends Controller
         $priceTypesId = $request->input('price_types_id');
         $productConditionTypeId = $request->input('condition_id');
         $listOptionsId = $request->input('attributes_id');
-        
+
         session(['indexInfoSession' => [
             'product_type_id' => $productTypesId,
             'price_types_id' => $priceTypesId,
@@ -91,30 +91,97 @@ class ProductSellerController extends Controller
         return redirect()->route('getInfoUmum');
     }
 
-    public function showindexumum()
+    public function updateParentIds()
     {
-        $productCategory = [
-            1 => "Barang",
-            2 => "Jasa"
-        ];
-    
-        $parent_ids = [1, 2];
-        $categories = ProductCategory::whereIn('parent_id', $parent_ids)->get();
-        $productCategories = $categories->where('parent_id', 0)->map(function ($category) {
-            return [
-                'value' => $category->id,
-                'text' => $category->name,
-            ];
-        })->toArray();
-    
-        $subProductCategories = $categories->whereIn('parent_id', [1, 2])->map(function ($subCategory) {
-            return [
-                'value' => $subCategory->id,
-                'text' => $subCategory->name,
-            ];
-        })->toArray();
-    
-        return view('seller.daftarproduk.info_umum', compact('productCategory', 'productCategories', 'subProductCategories'));
+        $productCategoryBarang = ProductCategory::where('name', 'Barang')->first();
+        $productCategoryJasa = ProductCategory::where('name', 'Jasa')->first();
+
+        if ($productCategoryBarang) {
+            $productCategoryBarang->parent_id = 1;
+            $productCategoryBarang->save();
+        }
+
+        if ($productCategoryJasa) {
+            $productCategoryJasa->parent_id = 2;
+            $productCategoryJasa->save();
+        }
     }
-    
+
+    public function showindexumum(Request $request)
+    {
+        $this->data['currentSellerMenu'] = 'productseller';
+        $this->data['productTypes'] = [
+            1 => 'Barang',
+            2 => 'Jasa',
+        ];
+        $this->data['priceTypes'] = MasterStatus::getListPriceType();
+        $this->data['productConditionType'] = MasterStatus::getListMasterCondition();
+        $this->data['listOptions'] = Option::getListOption();
+
+        $selectedProductType = $request->input('tipe_kategori_id');
+
+        if ($selectedProductType === 1 || $selectedProductType === 2) {
+            $subCategories = ProductCategory::where('parent_id', $selectedProductType)->pluck('name', 'id');
+        } else {
+            $subCategories = [];
+        }
+
+        $this->data['subCategories'] = $subCategories;
+
+        return view('seller.daftarproduk.info_umum', $this->data);
+    }
+
+    public function getSubCategories(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subCategories = ProductCategory::where('parent_id', $parent_id)->pluck('name', 'id');
+        return response()->json(['subCategories' => $subCategories]);
+    }
+
+    public function getSubCategorySatu(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+        $subCategorySatu = ProductCategory::where('parent_id', $categoryId)->pluck('name', 'id');
+
+        return response()->json(['subCategorySatu' => $subCategorySatu]);
+    }
+
+    public function getSubCategoryDua(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subCategoryDua = ProductCategory::where('parent_id', $parent_id)->pluck('name', 'id');
+
+        return response()->json(['subCategoryDua' => $subCategoryDua]);
+    }
+
+    public function getSubCategoryTiga(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subCategoryTiga = ProductCategory::where('parent_id', $parent_id)->pluck('name', 'id');
+
+        return response()->json(['subCategoryTiga' => $subCategoryTiga]);
+    }
+    public function getSubCategoryEmpat(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subCategoryEmpat = ProductCategory::where('parent_id', $parent_id)->pluck('name', 'id');
+
+        return response()->json(['subCategoryEmpat' => $subCategoryEmpat]);
+    }
+
+    public function getSubCategoryLima(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subCategoryLima = ProductCategory::where('parent_id', $parent_id)->pluck('name', 'id');
+
+        return response()->json(['subCategoryLima' => $subCategoryLima]);
+    }
+
+    public function getSubCategoryEnam(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subCategoryEnam = ProductCategory::where('parent_id', $parent_id)->pluck('name', 'id');
+
+        return response()->json(['subCategoryEnam' => $subCategoryEnam]);
+    }
 }

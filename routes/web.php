@@ -179,9 +179,19 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     //info umum 
     // routes/web.php
     // routes/web.php
-    Route::get('/info-umum', [ProductSellerController::class, 'showindexumum'])->name('getInfoUmum');
-    Route::get('/product/get-kategori-id', [ProductSellerController::class, 'getKategoriId'])->name('get-kategori-id');
-    Route::post('/get-sub-kategori', [ProductSellerController::class, 'getSubKategori'])->name('get.sub.kategori');    
+
+    Route::get('/get-sub-categories', [ProductSellerController::class, 'getSubCategories'])->name('get-sub-categories');
+    Route::get('/get-sub-category-satu', [ProductSellerController::class, 'getSubCategorySatu'])->name('get-sub-categories-satu');
+    Route::get('/get-sub-category-dua', [ProductSellerController::class, 'getSubCategoryDua'])->name('get-sub-categories-dua');
+    Route::get('/get-sub-category-tiga', [ProductSellerController::class, 'getSubCategoryTiga'])->name('get-sub-categories-tiga');
+    Route::get('/get-sub-category-empat', [ProductSellerController::class, 'getSubCategoryEmpat'])->name('get-sub-categories-empat');
+    Route::get('/get-sub-category-lima', [ProductSellerController::class, 'getSubCategoryLima'])->name('get-sub-categories-lima');
+    Route::get('/get-sub-category-enam', [ProductSellerController::class, 'getSubCategoryEnam'])->name('get-sub-categories-enam');
+
+
+    Route::get('/showindexumum', [ProductSellerController::class, 'showindexumum'])->name('getInfoUmum');
+    Route::get('/getTipeKategori', [ProductSellerController::class, 'getTipeKategori']);
+    Route::get('/getKategoriByType', [ProductSellerController::class, 'getCategoriesByType']);
     Route::post('/save-info-umum', [ProductSellerController::class, 'saveInfoUmum'])->name('save_info_umum');
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
@@ -214,6 +224,3 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
 
 // Route::get('mumetbanget/setan', [ControllerForTestingView::class, 'index']);
 
-
-Route::get('/test/wae', [DummySellerController::class, 'queryType1'])->name('queryType1');
-Route::get('/info-umum', [ProductSellerController::class, 'indexParent'])->name('getInfoSubParent');
