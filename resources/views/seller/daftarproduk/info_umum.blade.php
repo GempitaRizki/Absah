@@ -60,7 +60,7 @@
                             {!! Form::select('tipe_kategori_id', $productTypes, null, [
                                 'class' => 'form-control',
                                 'id' => 'tipe_kategori_id',
-                                'placeholder' => 'Pilih Tipe Kategori', 
+                                'placeholder' => 'Pilih Tipe Kategori',
                             ]) !!}
                         </div>
                         <div class="form-group">
@@ -68,7 +68,7 @@
                             {!! Form::select('kategori_id', $subCategories, null, [
                                 'class' => 'form-control',
                                 'id' => 'kategori_id',
-                                'placeholder' => 'Pilih Kategori', 
+                                'placeholder' => 'Pilih Kategori',
                             ]) !!}
                         </div>
                     </div>
@@ -172,7 +172,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 {!! Form::label('has_ppn', 'Has Ppn', ['class' => 'mb-1 h6']) !!}
-                                {!! Form::select('has_ppn', [], null, [
+                                {!! Form::select('has_ppn', \App\Models\MasterStatus::getListPpn(), null, [
                                     'class' => 'form-control',
                                     'placeholder' => 'Pilih Ppn',
                                     'name' => 'has_ppn',
@@ -182,13 +182,13 @@
                         <div class="card-body">
                             <div class="form-group">
                                 {!! Form::label('has_shipping', 'Has Shipping', ['class' => 'mb-1 h6']) !!}
-                                {!! Form::select('has_shipping', [], null, [
+                                {!! Form::select('has_shipping', $productSku->hasShippingStatus->getListShipping(), null, [
                                     'class' => 'form-control',
                                     'placeholder' => 'Pilih Ongkos Kirim',
                                     'name' => 'has_shipping',
                                 ]) !!}
                             </div>
-                        </div>
+                        </div>                                               
                         <div class="card-body">
                             <div class="form-group">
                                 {!! Form::label('produsen_type', 'Produsen Type', ['class' => 'mb-1 h6']) !!}
@@ -521,174 +521,178 @@
     <script>
         $(document).ready(function() {
             $('#tipe_kategori_id').change(function() {
-                var parent_id = $(this).val();
-                var url = "{!! route('get-sub-categories') !!}";
-
-                $.ajax({
-                    url: url,
-                    method: 'get',
-                    data: {
-                        parent_id: parent_id
-                    },
-                    success: function(data) {
-                        $('#kategori_id').empty().append(
-                            '<option value="">Pilih Kategori</option>');
-                        $.each(data.subCategories, function(id, name) {
-                            $('#kategori_id').append('<option value="' + id + '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
+                loadSubCategories();
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            function loadSubCategorySatu() {
-                var selectedCategoryId = $('#kategori_id').val();
-
-                $.ajax({
-                    url: '{{ route('get-sub-categories-satu') }}',
-                    method: 'get',
-                    data: {
-                        category_id: selectedCategoryId
-                    },
-                    success: function(data) {
-                        $('#sub_category_satu').empty().append(
-                            '<option value="">Pilih Tipe Kategori</option>');
-                        $.each(data.subCategorySatu, function(id, name) {
-                            $('#sub_category_satu').append('<option value="' + id + '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
-            }
-
             $('#kategori_id').change(function() {
                 loadSubCategorySatu();
             });
-
-            loadSubCategorySatu();
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
             $('#sub_category_satu').change(function() {
-                var parent_id = $(this).val();
-                $.ajax({
-                    url: '{{ route('get-sub-categories-dua') }}',
-                    method: 'get',
-                    data: {
-                        parent_id: parent_id
-                    },
-                    success: function(data) {
-                        $('#sub_category_dua').empty().append(
-                            '<option value="">Pilih Sub Kategori Dua</option>');
-                        $.each(data.subCategoryDua, function(id, name) {
-                            $('#sub_category_dua').append('<option value="' + id +
-                                '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
+                loadSubCategoryDua();
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+
             $('#sub_category_dua').change(function() {
-                var parent_id = $(this).val();
-
-                $.ajax({
-                    url: '{{ route('get-sub-categories-tiga') }}',
-                    method: 'get',
-                    data: {
-                        parent_id: parent_id
-                    },
-                    success: function(data) {
-                        $('#sub_category_tiga').empty().append(
-                            '<option value="">Pilih Sub Kategori Tiga</option>');
-                        $.each(data.subCategoryTiga, function(id, name) {
-                            $('#sub_category_tiga').append('<option value="' + id +
-                                '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
+                loadSubCategoryTiga();
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+
             $('#sub_category_tiga').change(function() {
-                var parent_id = $(this).val();
-
-                $.ajax({
-                    url: '{{ route('get-sub-categories-empat') }}',
-                    method: 'get',
-                    data: {
-                        parent_id: parent_id
-                    },
-                    success: function(data) {
-                        $('#sub_category_empat').empty().append(
-                            '<option value="">Pilih Sub Kategori Empat</option>');
-                        $.each(data.subCategoryEmpat, function(id, name) {
-                            $('#sub_category_empat').append('<option value="' + id +
-                                '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
+                loadSubCategoryEmpat();
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+
             $('#sub_category_empat').change(function() {
-                var parent_id = $(this).val();
-
-                $.ajax({
-                    url: '{{ route('get-sub-categories-lima') }}',
-                    method: 'get',
-                    data: {
-                        parent_id: parent_id
-                    },
-                    success: function(data) {
-                        $('#sub_category_lima').empty().append(
-                            '<option value="">Pilih Sub Kategori Lima</option>');
-                        $.each(data.subCategoryLima, function(id, name) {
-                            $('#sub_category_lima').append('<option value="' + id +
-                                '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
+                loadSubCategoryLima();
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+
             $('#sub_category_lima').change(function() {
-                var parent_id = $(this).val();
-
-                $.ajax({
-                    url: '{{ route('get-sub-categories-enam') }}',
-                    method: 'get',
-                    data: {
-                        parent_id: parent_id
-                    },
-                    success: function(data) {
-                        $('#sub_category_enam').empty().append(
-                            '<option value="">Pilih Sub Kategori Enam</option>');
-                        $.each(data.subCategoryEnam, function(id, name) {
-                            $('#sub_category_enam').append('<option value="' + id +
-                                '">' +
-                                name + '</option>');
-                        });
-                    }
-                });
+                loadSubCategoryEnam();
             });
+            loadSubCategories();
+            loadSubCategorySatu();
+            loadSubCategoryDua();
+            loadSubCategoryTiga();
+            loadSubCategoryEmpat();
+            loadSubCategoryLima();
+            loadSubCategoryEnam();
         });
+
+        function loadSubCategories() {
+            var parent_id = $('#tipe_kategori_id').val();
+            var url = "{!! route('get-sub-categories') !!}";
+
+            $.ajax({
+                url: url,
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#kategori_id').empty().append(
+                        '<option value="">Pilih Kategori</option>');
+                    $.each(data.subCategories, function(id, name) {
+                        $('#kategori_id').append('<option value="' + id + '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+
+        function loadSubCategorySatu() {
+            var selectedCategoryId = $('#kategori_id').val();
+
+            $.ajax({
+                url: '{{ route('get-sub-categories-satu') }}',
+                method: 'get',
+                data: {
+                    category_id: selectedCategoryId
+                },
+                success: function(data) {
+                    $('#sub_category_satu').empty().append(
+                        '<option value="">Pilih Tipe Kategori</option>');
+                    $.each(data.subCategorySatu, function(id, name) {
+                        $('#sub_category_satu').append('<option value="' + id + '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+
+        function loadSubCategoryDua() {
+            var parent_id = $('#sub_category_satu').val();
+            $.ajax({
+                url: '{{ route('get-sub-categories-dua') }}',
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#sub_category_dua').empty().append(
+                        '<option value="">Pilih Sub Kategori Dua</option>');
+                    $.each(data.subCategoryDua, function(id, name) {
+                        $('#sub_category_dua').append('<option value="' + id +
+                            '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+
+        function loadSubCategoryTiga() {
+            var parent_id = $('#sub_category_dua').val();
+            $.ajax({
+                url: '{{ route('get-sub-categories-tiga') }}',
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#sub_category_tiga').empty().append(
+                        '<option value="">Pilih Sub Kategori Tiga</option>');
+                    $.each(data.subCategoryTiga, function(id, name) {
+                        $('#sub_category_tiga').append('<option value="' + id +
+                            '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+
+        function loadSubCategoryEmpat() {
+            var parent_id = $('#sub_category_tiga').val();
+            $.ajax({
+                url: '{{ route('get-sub-categories-empat') }}',
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#sub_category_empat').empty().append(
+                        '<option value="">Pilih Sub Kategori Empat</option>');
+                    $.each(data.subCategoryEmpat, function(id, name) {
+                        $('#sub_category_empat').append('<option value="' + id +
+                            '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+
+        function loadSubCategoryLima() {
+            var parent_id = $('#sub_category_empat').val();
+            $.ajax({
+                url: '{{ route('get-sub-categories-lima') }}',
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#sub_category_lima').empty().append(
+                        '<option value="">Pilih Sub Kategori Lima</option>');
+                    $.each(data.subCategoryLima, function(id, name) {
+                        $('#sub_category_lima').append('<option value="' + id +
+                            '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+
+        function loadSubCategoryEnam() {
+            var parent_id = $('#sub_category_lima').val();
+            $.ajax({
+                url: '{{ route('get-sub-categories-enam') }}',
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#sub_category_enam').empty().append(
+                        '<option value="">Pilih Sub Kategori Enam</option>');
+                    $.each(data.subCategoryEnam, function(id, name) {
+                        $('#sub_category_enam').append('<option value="' + id +
+                            '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
     </script>
 @endsection

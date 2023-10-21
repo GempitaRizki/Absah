@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Districts;
 
 class WilayahJual extends Model
 {
@@ -21,6 +22,6 @@ class WilayahJual extends Model
 
     public function district()
     {
-        return $this->belongsTo(District::class, 'districts_id');
+        return $this->belongsTo(Districts::class, 'districts_id');
     }
 }

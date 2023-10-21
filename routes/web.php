@@ -30,7 +30,7 @@ use App\Http\Controllers\Seller\DummySellerController;
 use App\Http\Controllers\Seller\partials\DownloadFormatController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\LoginUserController;
-
+use App\Http\Controllers\Seller\ParentSellerController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -180,13 +180,13 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     // routes/web.php
     // routes/web.php
 
-    Route::get('/get-sub-categories', [ProductSellerController::class, 'getSubCategories'])->name('get-sub-categories');
-    Route::get('/get-sub-category-satu', [ProductSellerController::class, 'getSubCategorySatu'])->name('get-sub-categories-satu');
-    Route::get('/get-sub-category-dua', [ProductSellerController::class, 'getSubCategoryDua'])->name('get-sub-categories-dua');
-    Route::get('/get-sub-category-tiga', [ProductSellerController::class, 'getSubCategoryTiga'])->name('get-sub-categories-tiga');
-    Route::get('/get-sub-category-empat', [ProductSellerController::class, 'getSubCategoryEmpat'])->name('get-sub-categories-empat');
-    Route::get('/get-sub-category-lima', [ProductSellerController::class, 'getSubCategoryLima'])->name('get-sub-categories-lima');
-    Route::get('/get-sub-category-enam', [ProductSellerController::class, 'getSubCategoryEnam'])->name('get-sub-categories-enam');
+    Route::get('/get-sub-categories', [ParentSellerController::class, 'getSubCategories'])->name('get-sub-categories');
+    Route::get('/get-sub-category-satu', [ParentSellerController::class, 'getSubCategorySatu'])->name('get-sub-categories-satu');
+    Route::get('/get-sub-category-dua', [ParentSellerController::class, 'getSubCategoryDua'])->name('get-sub-categories-dua');
+    Route::get('/get-sub-category-tiga', [ParentSellerController::class, 'getSubCategoryTiga'])->name('get-sub-categories-tiga');
+    Route::get('/get-sub-category-empat', [ParentSellerController::class, 'getSubCategoryEmpat'])->name('get-sub-categories-empat');
+    Route::get('/get-sub-category-lima', [ParentSellerController::class, 'getSubCategoryLima'])->name('get-sub-categories-lima');
+    Route::get('/get-sub-category-enam', [ParentSellerController::class, 'getSubCategoryEnam'])->name('get-sub-categories-enam');
 
 
     Route::get('/showindexumum', [ProductSellerController::class, 'showindexumum'])->name('getInfoUmum');

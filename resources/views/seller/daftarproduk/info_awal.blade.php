@@ -102,7 +102,6 @@
                 } else {
                     attributesGroup.hide();
                 }
-
                 var priceTypeData = [];
                 if (productTypeId === '32') {
                     priceTypeData = [{

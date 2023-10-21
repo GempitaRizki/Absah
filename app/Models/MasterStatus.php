@@ -20,17 +20,15 @@ class MasterStatus extends Model
         'is_status',
         'is_visible',
     ];
+    const IS_VISIBLE_TRUE = 1;
     const TYPE_CATEGORY = 32;
-
     const PRODUCT_TYPE = 20;
     const PRODUCT_CONDITION = 17;
-
     const PRODUCT_SHIPPING_TYPE = 25;
-
-    const IS_VISIBLE_TRUE = 1;
     const PRODUCT_PRICE_TYPE = 23;
-
-    const ORDER_FAKTUR = 66;
+    const PRODUCT_PPN = 21;
+    const PRODUCT_SHIPPING = 22; 
+    const PRODUCT_PRODUSEN_TYPE = 26; 
 
 
 
@@ -40,7 +38,10 @@ class MasterStatus extends Model
         self::PRODUCT_CONDITION => 'Kondisi Produk',
         self::PRODUCT_SHIPPING_TYPE => 'Product Shipping Type',
         self::TYPE_CATEGORY => 'Tipe Kategori',
-        self::ORDER_FAKTUR => '(Non Set)'
+        self::PRODUCT_PPN => 'Product PPn',
+        self::PRODUCT_SHIPPING => 'Product Shipping',
+        self::PRODUCT_SHIPPING_TYPE => 'Product Shipping Type', 
+        self::PRODUCT_PRODUSEN_TYPE => 'Produsen Type',
 
 
     ];
@@ -92,10 +93,33 @@ class MasterStatus extends Model
         return $listFaktur;
     }
 
-    public static function getStatusFaktur()
-    {
-        $orderStatus = self::where(self::ORDER_FAKTUR);
 
-        return $orderStatus;
+
+    public static function getListPpn()
+    {
+        $listPpn = self::where('label_status', self::PRODUCT_PPN)
+            ->where('is_visible', self::IS_VISIBLE_TRUE)
+            ->orderBy('id')
+            ->pluck('name', 'id');
+
+        return $listPpn->all();
+    }
+
+    public static function getListShipping()
+    {
+        return self::where('label_status', self::PRODUCT_SHIPPING)
+            ->where('is_visible', self::IS_VISIBLE_TRUE)
+            ->orderBy('id')
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    public static function getProductProdusenType()
+    {
+        return self::where('label_status', self::PRODUCT_PRODUSEN_TYPE)
+        ->where('is_visible' , self::IS_VISIBLE_TRUE)
+        ->orderBy('id')
+        ->pluck('name', 'id')
+        ->toArray();
     }
 }
