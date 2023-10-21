@@ -31,6 +31,7 @@ use App\Http\Controllers\Seller\partials\DownloadFormatController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\LoginUserController;
 use App\Http\Controllers\Seller\ParentSellerController;
+use App\Http\Controllers\Seller\VariantSellerController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -221,6 +222,7 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
 });
 
+//Variant Seller
+Route::get('/variant', [VariantSellerController::class, 'index'])->name('IndexVariant');
 
-// Route::get('mumetbanget/setan', [ControllerForTestingView::class, 'index']);
 

@@ -68,5 +68,19 @@ class Store extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'seller_type', 'name');
     }
-     
+
+    public static function getStoreIdByUserLogin()
+    {
+        $user = Auth::user(); 
+        if (!$user) {
+            return null;
+        }
+        $storeUser = StoreUser::where('user_id', $user->id)
+            ->first();
+        if ($storeUser) {
+            return $storeUser->store_id;
+        } else {
+            return null;
+        }
+    }
 }

@@ -27,8 +27,10 @@ class MasterStatus extends Model
     const PRODUCT_SHIPPING_TYPE = 25;
     const PRODUCT_PRICE_TYPE = 23;
     const PRODUCT_PPN = 21;
-    const PRODUCT_SHIPPING = 22; 
-    const PRODUCT_PRODUSEN_TYPE = 26; 
+    const PRODUCT_SHIPPING = 22;
+    const PRODUCT_PRODUSEN_TYPE = 26;
+    const MADE_IN = 33; 
+
 
 
 
@@ -40,8 +42,10 @@ class MasterStatus extends Model
         self::TYPE_CATEGORY => 'Tipe Kategori',
         self::PRODUCT_PPN => 'Product PPn',
         self::PRODUCT_SHIPPING => 'Product Shipping',
-        self::PRODUCT_SHIPPING_TYPE => 'Product Shipping Type', 
+        self::PRODUCT_SHIPPING_TYPE => 'Product Shipping Type',
         self::PRODUCT_PRODUSEN_TYPE => 'Produsen Type',
+        self::MADE_IN => 'Made In',
+
 
 
     ];
@@ -117,9 +121,19 @@ class MasterStatus extends Model
     public static function getProductProdusenType()
     {
         return self::where('label_status', self::PRODUCT_PRODUSEN_TYPE)
-        ->where('is_visible' , self::IS_VISIBLE_TRUE)
-        ->orderBy('id')
-        ->pluck('name', 'id')
-        ->toArray();
+            ->where('is_visible', self::IS_VISIBLE_TRUE)
+            ->orderBy('id')
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    public static function getMadeInType()
+    {
+        $listMadeIn = self::where('label_status', self::MADE_IN)
+            ->orderBy('id')
+            ->pluck('name', 'id')
+            ->toArray();
+
+        return $listMadeIn;
     }
 }

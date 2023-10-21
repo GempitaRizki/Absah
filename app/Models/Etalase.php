@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Etalase extends Model
 {
@@ -21,13 +22,23 @@ class Etalase extends Model
     public static function getListEtalase()
     {
         $storeId = (new Store)->getStoreIdByUserLogin();
-
-        $listEtalase = Etalase::where('status_id', SELF::STATUS_ETALASE_ENABLE)
+        $listEtalase = DB::table('etalase')
+            ->select('id', 'name')
+            ->where('status_id', self::STATUS_ETALASE_ENABLE)
             ->where('store_id', $storeId)
             ->orderBy('id')
             ->pluck('name', 'id')
             ->toArray();
 
         return $listEtalase;
+    }
+
+    public static function emptyEtalse($productId)
+    {
+        DB::table('product_etalase')
+            ->where('product_sku_id', $productId)
+            ->delete();
+
+        return true;
     }
 }
