@@ -193,7 +193,8 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/showindexumum', [ProductSellerController::class, 'showindexumum'])->name('getInfoUmum');
     Route::get('/getTipeKategori', [ProductSellerController::class, 'getTipeKategori']);
     Route::get('/getKategoriByType', [ProductSellerController::class, 'getCategoriesByType']);
-    Route::post('/save-info-umum', [ProductSellerController::class, 'saveInfoUmum'])->name('save_info_umum');
+    Route::post('/store-product', [ProductSellerController::class, 'storeProductData'])->name('store-product');
+
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
     Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');

@@ -31,6 +31,8 @@ class Product extends Model
 	public const DRAFT = 0;
 	public const ACTIVE = 1;
 	public const INACTIVE = 2;
+	public const PRODUCT_TYPE_VARIANT = 31;
+
 
 	public const STATUSES = [
 		self::DRAFT => 'draft',

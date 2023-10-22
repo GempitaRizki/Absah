@@ -34,12 +34,11 @@
     </div>
     <div class="container-fluid">
         <div class="col-12 mx-auto">
-            {!! Form::open(['route' => 'save_info_umum', 'method' => 'post']) !!}
+            {!! Form::open(['route' => 'store-product', 'method' => 'post']) !!}
             <div class="product-form">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-0 h6">Kategori</h5>
-                        <hr>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="alert alert-warning" role="alert">
@@ -81,7 +80,7 @@
                                 {!! Form::label('sub_category_satu', 'Sub Kategori Satu', ['class' => 'mb-1 h6']) !!}
                                 {!! Form::select('sub_category_satu', [], null, [
                                     'class' => 'form-control',
-                                    'placeholder' => '',
+                                    'placeholder' => 'Pilih Sub Kategori Satu',
                                     'name' => 'sub_category_satu',
                                     'id' => 'sub_category_satu',
                                 ]) !!}
@@ -138,14 +137,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="product-form">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0 h6">Info Umum</h5>
-                    <hr>
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">Info Umum</h5>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -171,6 +165,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="d-flex">
                         <div class="card-body">
                             <div class="form-group">
@@ -258,7 +253,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class= "form-group">
                                     {!! Form::label('width_packing', 'Width Packing (cm)', ['class' => 'mb-1 h6']) !!}
                                     {!! Form::text('width_packing', null, [
                                         'class' => 'form-control',
@@ -289,8 +284,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="product-form">
+                    <div class="product-form">
                         <div class="d-flex">
                             <div class="card-body" style="width: 25%;">
                                 <div class="form-group">
@@ -393,124 +387,101 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="container-fluid">
-                            <div class="col-12 mx-auto">
-                                <div class="product-form">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="mb-0 h6">Stock & Qty</h5>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                {!! Form::label('stok', 'Stok', ['class' => 'mb-1 h6']) !!}
-                                                                {!! Form::text('stok', null, [
-                                                                    'class' => 'form-control',
-                                                                    'placeholder' => '0',
-                                                                    'name' => 'stok',
-                                                                ]) !!}
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                {!! Form::label('limit', 'Limit', ['class' => 'mb-1 h6']) !!}
-                                                                {!! Form::text('limit', null, [
-                                                                    'class' => 'form-control',
-                                                                    'placeholder' => '0',
-                                                                    'name' => 'Limit',
-                                                                ]) !!}
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                {!! Form::label('minqty', 'Min Qty', ['class' => 'mb-1 h6']) !!}
-                                                                {!! Form::text('minqty', null, [
-                                                                    'class' => 'form-control',
-                                                                    'placeholder' => '0',
-                                                                    'name' => 'minqty',
-                                                                ]) !!}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="card-header">
+                            <h5 class="mb-0 h6">Stock & Qty</h5>
                         </div>
-                        <div class="container-fluid">
-                            <div class="col-12 mx-auto">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            {!! Form::label('tipe_kategori_id', 'Store ID', ['class' => 'mb-1 h6']) !!}
-                                            {!! Form::select('tipe_kategori_id', $listStoreByLogin, null, [
-                                                'class' => 'form-control',
-                                                'name' => 'tipe_kategori_id',
-                                            ]) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0 h6">Link Youtube Video & Etalase</h5>
-                            </div>
+                        <div class="d-flex">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            {!! Form::label('url_video', 'Link Youtube Video', ['class' => 'mb-0 h6']) !!}
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">https://www.youtube.com/watch?v=
-                                                    </span>
-                                                </div>
-                                                {!! Form::text('url_video', null, [
-                                                    'class' => 'form-control',
-                                                    'placeholder' => 'Video ID',
-                                                    'name' => 'url_video',
-                                                ]) !!}
-                                            </div>
-                                        </div>
+                                    <div class="col-md-4">
+                                        {!! Form::label('stok', 'Stok', ['class' => 'mb-1 h6']) !!}
+                                        {!! Form::text('stok', null, [
+                                            'class' => 'form-control',
+                                            'placeholder' => '0',
+                                            'name' => 'stok',
+                                        ]) !!}
                                     </div>
-                                    <div class="col-lg-6">
-                                        <?php
-                                        $hintEtalase = "Daftar etalase tidak ditemukan ? <a href='" . url('etalase/add') . "'>Tambah etalase</a>";
-                                        ?>
-                                        <div class="form-group">
-                                            {!! Form::label('etalase_id', 'Etalase', ['class' => 'mb-0 h6']) !!}
-                                            {!! Form::select('etalase_id', $listEtalase, null, [
-                                                'class' => 'form-control',
-                                                'placeholder' => 'Pilih Etalase',
-                                                'name' => 'etalase_id',
-                                            ]) !!}
-                                            <small class="form-text text-muted">Daftar etalase tidak ditemukan ? <a
-                                                    href="{{ url('etalase/add') }}">Tambah etalase</a></small>
-                                        </div>
+                                    <div class="col-md-4">
+                                        {!! Form::label('limit', 'Limit', ['class' => 'mb-1 h6']) !!}
+                                        {!! Form::text('limit', null, [
+                                            'class' => 'form-control',
+                                            'placeholder' => '0',
+                                            'name' => 'Limit',
+                                        ]) !!}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {!! Form::label('minqty', 'Min Qty', ['class' => 'mb-1 h6']) !!}
+                                        {!! Form::text('minqty', null, [
+                                            'class' => 'form-control',
+                                            'placeholder' => '0',
+                                            'name' => 'minqty',
+                                        ]) !!}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0 h6">Deskripsi / Spesifikasi & Tags</h5>
+                        <div class="card-body">
+                            <div class="form-group">
+                                {!! Form::label('tipe_kategori_id', 'Store ID', ['class' => 'mb-1 h6']) !!}
+                                {!! Form::select('tipe_kategori_id', $listStoreByLogin, null, [
+                                    'class' => 'form-control',
+                                    'name' => 'tipe_kategori_id',
+                                ]) !!}
                             </div>
-                            <div class="card-body">
-                                <div class="col-lg-12">
-                                    {{ Form::textarea('descriptions', '', [
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">Link Youtube Video & Etalase</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {!! Form::label('url_video', 'Link Youtube Video', ['class' => 'mb-0 h6']) !!}
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">https://www.youtube.com/watch?v=</span>
+                                        </div>
+                                        {!! Form::text('url_video', null, [
+                                            'class' => 'form-control',
+                                            'placeholder' => 'Video ID',
+                                            'name' => 'url_video',
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {!! Form::label('etalase_id', 'Etalase', ['class' => 'mb-0 h6']) !!}
+                                    {!! Form::select('etalase_id', $listEtalase, null, [
                                         'class' => 'form-control',
-                                        'id' => 'descriptions',
-                                        'rows' => 5,
-                                    ]) }}
+                                        'placeholder' => 'Pilih Etalase',
+                                        'name' => 'etalase_id',
+                                    ]) !!}
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">Deskripsi / Spesifikasi & Tags</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{ Form::textarea('descriptions', '', [
+                                    'class' => 'form-control',
+                                    'id' => 'descriptions',
+                                ]) }}
+                            </div>
+                        </div>
+                    </div>
+                    {!! Form::submit('Save', ['class' => 'btn btn-success']) !!}
+
                 </div>
+                {!! Form::close() !!}
             </div>
-            {!! Form::submit('Save', ['class' => 'btn btn-success']) !!}
         </div>
-        {!! Form::close() !!}
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

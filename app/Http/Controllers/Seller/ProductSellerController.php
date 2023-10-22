@@ -97,24 +97,24 @@ class ProductSellerController extends Controller
         $this->data['priceTypes'] = MasterStatus::getListPriceType();
         $this->data['productConditionType'] = MasterStatus::getListMasterCondition();
         $this->data['listOptions'] = Option::getListOption();
-    
+
         $selectedProductType = $request->input('tipe_kategori_id');
-    
+
         if ($selectedProductType === 1 || $selectedProductType === 2) {
             $subCategories = ProductCategory::where('parent_id', $selectedProductType)->pluck('name', 'id');
         } else {
             $subCategories = [];
         }
-    
+
         $this->data['subCategories'] = $subCategories;
-    
-        $uniqueSKU = 'SKUDEFAULT-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
+
+        $uniqueSKU = 'SKUDEFAULT' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
         $this->data['generatedSKU'] = $uniqueSKU;
         $productSku = ProductSku::with('hasPpnStatus', 'hasShippingStatus')->first();
         $this->data['productSku'] = $productSku;
-    
+
         $this->data['madeInTypes'] = MasterStatus::getMadeInType();
-    
+
         $statusOngkir = [
             '1' => 'Bebas Ongkir',
             '3' => 'Ongkir Dari Klaten',
@@ -122,15 +122,26 @@ class ProductSellerController extends Controller
             '5' => 'Produk Buku Nonteks E-Katalog',
         ];
         $this->data['statusOngkir'] = $statusOngkir;
-    
+
         $listStoreByLogin = ProductStore::listStoreByLogin();
         $this->data['listStoreByLogin'] = $listStoreByLogin;
-    
+
         $listEtalase = Etalase::getListEtalase();
         $this->data['listEtalase'] = $listEtalase;
-    
+
         return view('seller.daftarproduk.info_umum', $this->data);
     }
-    
+
+    public function storeProductData(Request $request)
+    {
+        $productData = $request->all();
+        session(['product_data' => $productData]);
+
+        // dd(session('product_data'));
+
+        return redirect()->route('nama_routemu');
+    }
+
+
     
 }
