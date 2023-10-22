@@ -29,5 +29,31 @@ class ProductCategory extends Model
         'kat_agregasi',
     ];
 
+
+    public static function getListHierarchySelected($id)
+    {
+        $productCategory = ProductCategory::find($id);
+
+        $listHierarchy = [];
+
+        if ($productCategory) {
+            $explodeHierarchy = explode('-', $productCategory->hierarchy);
+            if ($explodeHierarchy) {
+                $dataArr = [];
+                foreach ($explodeHierarchy as $value) {
+                    $dataDetail = ProductCategory::find($value);
+                    if ($dataDetail) {
+                        $dataArr[] = $dataDetail->name;
+                    }
+                }
+
+                $listHierarchy[$productCategory->id] = implode(' > ', $dataArr);
+            } else {
+                $listHierarchy[$productCategory->id] = $productCategory->name;
+            }
+        }
+
+        return $listHierarchy;
+    }
 }
 

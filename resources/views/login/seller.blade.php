@@ -8,8 +8,8 @@
             </div>
             <form method="post" class="form" action="{{ route('seller-post') }}">
                 @csrf 
-                @if(session('login')) <!-- Menampilkan pesan kesalahan jika ada -->
-                    <div class="alert alert-danger">
+                @if(session('login')) 
+                    <div class="alert alert-warning">
                         {{ session('login') }}
                     </div>
                 @endif
@@ -20,7 +20,7 @@
                 <div class="form-border"></div>
                 <label for="user-password" style="padding-top:22px">&nbsp;Password
                 </label>
-                <input id="user-password" class="form-content" type="password" name="password" required />
+                <input id="user-password" class= "form-content" type="password" name="password" required />
                 <div class="form-border"></div>
                 <a href="#">
                     <legend id="forgot-pass">Forgot password?</legend>

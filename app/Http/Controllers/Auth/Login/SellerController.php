@@ -19,9 +19,9 @@ class SellerController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
+    
         $credentials = $request->only('email', 'password');
-
+    
         if (auth()->attempt($credentials)) {
             if (auth()->user()->role === 'seller') {
                 return redirect()->route('handle403');
@@ -32,5 +32,4 @@ class SellerController extends Controller
             return redirect()->route('seller.login')->with('login', 'Email atau password salah.');
         }
     }
-    
 }

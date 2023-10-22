@@ -194,6 +194,7 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/getTipeKategori', [ProductSellerController::class, 'getTipeKategori']);
     Route::get('/getKategoriByType', [ProductSellerController::class, 'getCategoriesByType']);
     Route::post('/store-product', [ProductSellerController::class, 'storeProductData'])->name('store-product');
+    Route::get('/variant', [ProductSellerController::class, 'showindexVariant'])->name('IndexVariant');
 
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
@@ -223,7 +224,5 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
 });
 
-//Variant Seller
-Route::get('/variant', [VariantSellerController::class, 'index'])->name('IndexVariant');
 
 

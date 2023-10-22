@@ -20,12 +20,9 @@ class PajakSellerController extends Controller
     {
         $Fakturs = Faktur::all();
         $statusFakturList = MasterStatus::getTypeFaktur();
-        $fakturOrder = MasterStatus::getStatusFaktur();
 
-        return view('seller.Items.pajakIndex', compact('Fakturs', 'statusFakturList', 'fakturOrder'));
+        return view('seller.Items.pajakIndex', compact('Fakturs', 'statusFakturList'));
     }
-
-
 
     public function store(Request $request)
     {

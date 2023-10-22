@@ -139,9 +139,13 @@ class ProductSellerController extends Controller
 
         // dd(session('product_data'));
 
-        return redirect()->route('nama_routemu');
+        return redirect()->route('IndexVariant');
     }
 
+    public function showindexVariant()
+    {
+        $this->data['currentSellerMenu'] = 'productseller';
 
-    
+        return view('seller.daftarproduk.variant');
+    }
 }
