@@ -4,17 +4,17 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 text-center">
-            <a href="{{ route('index-awal') }}"
-                class="btn btn-app {{ request()->routeIs('product-awal') ? 'bg-secondary' : '' }}">
+            <a href="{{ route('index-awal') }}" class="btn btn-app {{ Request::is('index-awal') ? 'active' : '' }}">
                 <i class="fas fa-cog"></i> Info Awal
             </a>
-            <a href="#"
-                class="btn btn-app {{ request()->routeIs('product-import-product') || request()->routeIs('product-proses-import') ? 'bg-secondary' : '' }}">
+            <a href="{{ route('downloadtemplate') }}" class="btn btn-app {{ Request::is('download-template') ? 'active' : '' }}">
+                <i class="fas fa-cloud-download-alt"></i> Download
+            </a>
+            <a href="{{ route('downloadtemplate') }}" class="btn btn-app {{ Request::is('import-product') ? 'active' : '' }}">
                 <i class="fas fa-cloud-upload-alt"></i> Import Product
             </a>
         </div>
     </div>
-
     <div class="col-md-10 mx-auto">
         <div class="product-form">
             <div class="card mb-4">

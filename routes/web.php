@@ -31,10 +31,13 @@ use App\Http\Controllers\Seller\partials\DownloadFormatController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\LoginUserController;
 use App\Http\Controllers\Seller\ParentSellerController;
-use App\Http\Controllers\Seller\VariantSellerController;
+use App\Http\Controllers\Seller\UserProfileController;
+use App\Http\Controllers\Seller\WizardController;
+use App\Http\Controllers\Seller\UploadController;
+use App\Http\Controllers\Seller\PriceController; 
+
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-
 
 //Route Keranjang
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -173,9 +176,18 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::post('/pajak', [PajakSellerController::class, 'store'])->name('store-pajak');
 
     //product
+    
+
+    //wizard view
+    Route::get('/wizard', [WizardController::class, 'index']);
+
+
+
     Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
     Route::get('/product/info-awal', [ProductSellerController::class, 'indexinfo'])->name('index-awal');
     Route::post('product/info-awal', [ProductSellerController::class, 'indexInfoStore'])->name('store-index-awal');
+    Route::get('/price', [ProductSellerController::class, 'indexPrice'])->name('IndexPrice');
+    Route::post('/price', [ProductSellerController::class,'storePrice'])->name('product-prices.store');
 
     //info umum 
     // routes/web.php
@@ -196,10 +208,15 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::post('/store-product', [ProductSellerController::class, 'storeProductData'])->name('store-product');
     Route::get('/variant', [ProductSellerController::class, 'showindexVariant'])->name('IndexVariant');
 
+
+
+
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
     Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');
 
+    //Upload File , just view
+    Route::get('/upload', [UploadController::class, 'index'])->name('upload.index');
 
 
     //Nego
@@ -222,6 +239,10 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     //aktifitas pengguna
     Route::get('/aktivitaspengguna', [AktivitasPenggunaSellerController::class, 'index'])->name('aktivitaspengguna.index');
     Route::get('/pdf/user-activities', [AktivitasPenggunaSellerController::class, 'generatePDF'])->name('download.pdf');
+
+
+    //profile
+    Route::get('/profile', [UserProfileController::class, 'index'])->name('profile.index');
 });
 
 

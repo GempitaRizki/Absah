@@ -4,22 +4,7 @@
         <div class="row">
             <div class="col-md-10 mx-auto">
                 {!! Form::open(['route' => 'store-index-awal', 'method' => 'post']) !!}
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <a href="{{ route('index-awal') }}"
-                            class="btn btn-app {{ request()->routeIs('product-awal') ? 'bg-secondary' : '' }}">
-                            <i class="fas fa-cog"></i> Info Awal
-                        </a>
-                        <a href="{{ route('downloadtemplate') }}"
-                            class="btn btn-app {{ request()->routeIs('product-download-template') ? 'bg-secondary' : '' }}">
-                            <i class="fa fa-info-circle"></i> Download
-                        </a>
-                        <a href="#"
-                            class="btn btn-app {{ request()->routeIs('product-import-product') || request()->routeIs('product-proses-import') ? 'bg-secondary' : '' }}">
-                            <i class="fas fa-cloud-upload-alt"></i> Import Product
-                        </a>
-                    </div>
-                </div>
+                @include('seller.Items.wizard')
                 <div class="product-form">
                     <div class="card">
                         <div class="card-header">
@@ -145,6 +130,26 @@
                         '</option>');
                 });
                 priceTypesSelect.prop('disabled', false);
+            });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#product_type_id').on('change', function() {
+                var productTypeId = $(this).val();
+                var $wizardSteps = $('#wizard-steps');
+                var $productType32 = $('#product-type-32');
+                var $productTypeOther = $('#product-type-other');
+                $wizardSteps.hide();
+                $productType32.hide();
+                $productTypeOther.hide();
+
+                if (productTypeId === '32') {
+                    $productType32.show();
+                } else {
+                    $productTypeOther.show();
+                }
             });
         });
     </script>

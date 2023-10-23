@@ -30,6 +30,9 @@
             <a href=# class="btn btn-app {{ Request::is('import-product') ? 'active' : '' }}">
                 <i class="fas fa-upload"></i> Import Product
             </a>
+            <a href={{ Route('IndexPrice') }} class="btn btn-app {{ Request::is('prices') ? 'active' : '' }}">
+                <i class="fas fa-money-bill-wave"></i> Harga
+            </a>
         </div>
     </div>
     <div class="container-fluid">
@@ -59,7 +62,7 @@
                         @endif
                         <div class="form-group">
                             <label for="tipe_kategori_id" class="mb-1 h6">Tipe Kategori</label>
-                            {!! Form::select('tipe_kategori_id', $productTypes, null, [
+                            {!! Form::select('tipe_kategori_id', ['1' => 'Barang', '2' => 'Jasa'], null, [
                                 'class' => 'form-control',
                                 'id' => 'tipe_kategori_id',
                                 'placeholder' => 'Pilih Tipe Kategori',
@@ -180,13 +183,13 @@
                         <div class="card-body">
                             <div class="form-group">
                                 {!! Form::label('has_shipping', 'Has Shipping', ['class' => 'mb-1 h6']) !!}
-                                {!! Form::select('has_shipping', $productSku->hasShippingStatus->getListShipping(), null, [
+                                {!! Form::select('has_shipping', $hasShipping, null, [
                                     'class' => 'form-control',
                                     'placeholder' => 'Pilih Ongkos Kirim',
                                     'name' => 'has_shipping',
                                 ]) !!}
                             </div>
-                        </div>
+                        </div>                        
                         <div class="card-body">
                             <div class="form-group">
                                 {!! Form::label('produsen_type', 'Produsen Type', ['class' => 'mb-1 h6']) !!}
@@ -422,10 +425,10 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                {!! Form::label('tipe_kategori_id', 'Store ID', ['class' => 'mb-1 h6']) !!}
-                                {!! Form::select('tipe_kategori_id', $listStoreByLogin, null, [
+                                {!! Form::label('store_id', 'Store ID', ['class' => 'mb-1 h6']) !!}
+                                {!! Form::select('store_id', $listStoreByLogin, null, [
                                     'class' => 'form-control',
-                                    'name' => 'tipe_kategori_id',
+                                    'name' => 'store_id',
                                 ]) !!}
                             </div>
                         </div>
@@ -495,19 +498,19 @@
             $('#sub_category_satu').change(function() {
                 loadSubCategoryDua();
             });
-
+    
             $('#sub_category_dua').change(function() {
                 loadSubCategoryTiga();
             });
-
+    
             $('#sub_category_tiga').change(function() {
                 loadSubCategoryEmpat();
             });
-
+    
             $('#sub_category_empat').change(function() {
                 loadSubCategoryLima();
             });
-
+    
             $('#sub_category_lima').change(function() {
                 loadSubCategoryEnam();
             });
@@ -519,11 +522,11 @@
             loadSubCategoryLima();
             loadSubCategoryEnam();
         });
-
+    
         function loadSubCategories() {
             var parent_id = $('#tipe_kategori_id').val();
             var url = "{!! route('get-sub-categories') !!}";
-
+    
             $.ajax({
                 url: url,
                 method: 'get',
@@ -540,10 +543,10 @@
                 }
             });
         }
-
+    
         function loadSubCategorySatu() {
             var selectedCategoryId = $('#kategori_id').val();
-
+    
             $.ajax({
                 url: '{{ route('get-sub-categories-satu') }}',
                 method: 'get',
@@ -655,6 +658,28 @@
                     $.each(data.subCategoryEnam, function(id, name) {
                         $('#sub_category_enam').append('<option value="' + id +
                             '">' +
+                            name + '</option>');
+                    });
+                }
+            });
+        }
+    </script>
+    <script>
+        function loadSubCategories() {
+            var parent_id = $('#tipe_kategori_id').val();
+            var url = "{!! route('get-sub-categories') !!}";
+
+            $.ajax({
+                url: url,
+                method: 'get',
+                data: {
+                    parent_id: parent_id
+                },
+                success: function(data) {
+                    $('#kategori_id').empty().append(
+                        '<option value="">Pilih Kategori</option>');
+                    $.each(data.subCategories, function(id, name) {
+                        $('#kategori_id').append('<option value="' + id + '">' +
                             name + '</option>');
                     });
                 }

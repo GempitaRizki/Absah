@@ -33,6 +33,9 @@ class Product extends Model
 	public const INACTIVE = 2;
 	public const PRODUCT_TYPE_VARIANT = 31;
 
+	public const PRODUCT_TYPE_PRICE_ZONASI = '';  
+
+	public const PRODUCT_TYPE_PRICE_NASIONAL = '';
 
 	public const STATUSES = [
 		self::DRAFT => 'draft',

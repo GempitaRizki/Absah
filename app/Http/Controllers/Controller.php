@@ -19,10 +19,15 @@ class Controller extends BaseController
 
     public function __construct()
     {
-
+        $this->_initWizardMenu();
         $this->_initAdminMenu();
         $this->_initUserMenu();
         $this->_initSellerMenu();
+    }
+
+    private function _initWizardMenu()
+    {
+        $this->data['currentWizardMenu'] = 'dashboardWizard';
     }
 
     private function _initAdminMenu()

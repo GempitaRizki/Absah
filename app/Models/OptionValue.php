@@ -21,4 +21,16 @@ class OptionValue extends Model
     {
         return $this->belongsTo(Option::class, 'option_id');
     }
+
+    public static function getListOptionValue($data)
+    {
+        $listOptionValue = collect(OptionValue::where('option_id', $data)
+            ->orderBy('id')
+            ->get())
+            ->mapWithKeys(function ($item) {
+                return [$item['id'] => $item['name']];
+            });
+
+        return $listOptionValue;
+    }
 }

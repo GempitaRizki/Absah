@@ -111,12 +111,15 @@ class MasterStatus extends Model
 
     public static function getListShipping()
     {
-        return self::where('label_status', self::PRODUCT_SHIPPING)
+        $listShipping = MasterStatus::where('label_status', self::PRODUCT_SHIPPING)
             ->where('is_visible', self::IS_VISIBLE_TRUE)
             ->orderBy('id')
             ->pluck('name', 'id')
             ->toArray();
+    
+        return $listShipping;
     }
+    
 
     public static function getProductProdusenType()
     {
