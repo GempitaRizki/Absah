@@ -97,8 +97,6 @@ class MasterStatus extends Model
         return $listFaktur;
     }
 
-
-
     public static function getListPpn()
     {
         $listPpn = self::where('label_status', self::PRODUCT_PPN)

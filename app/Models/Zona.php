@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Zona extends Model
 {
+
+    protected $table = 'zona';
+
     const ZONA_DIKBUD = 1;
 
     private static $_statuses = [

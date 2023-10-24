@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ProductSku extends Model
 {
     protected $table = 'product_sku';
+    protected $primaryKey = 'product_id';
 
     protected $fillable = [
         'product_id',
@@ -125,5 +126,10 @@ class ProductSku extends Model
             ->toArray();
 
         return $listWilayahJual;
+    }
+
+    public function iprProduct()
+    {
+        return $this->belongsTo(IprProduct::class, 'product_id', 'id');
     }
 }

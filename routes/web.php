@@ -143,7 +143,7 @@ Route::post('/delete-file/{key}', [AuthSellerController::class, 'DeleteFile'])->
 //handle error 
 Route::get('/error/404', [HandleErrorController::class, 'index404'])->name('handle404');
 Route::get('/error/403', [HandleErrorController::class, 'index403'])->name('handle403');
-
+Route::get('/error/500', [HandleErrorController::class, 'codeError'])->name('syntaxError');
 
 //store add db 
 Route::post('/save-and-continue', [AuthSellerController::class, 'store'])->name('saveAndContinue');
@@ -188,7 +188,7 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::post('product/info-awal', [ProductSellerController::class, 'indexInfoStore'])->name('store-index-awal');
     Route::get('/price', [ProductSellerController::class, 'indexPrice'])->name('IndexPrice');
     Route::post('/price', [ProductSellerController::class,'storePrice'])->name('product-prices.store');
-
+    Route::get('/fileupload', [ProductSellerController::class,'uploadFile'])->name('product-upload-file');
     //info umum 
     // routes/web.php
     // routes/web.php
@@ -215,9 +215,13 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
     Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');
 
-    //Upload File , just view
-    Route::get('/upload', [UploadController::class, 'index'])->name('upload.index');
+    //Upload view on wizard
+    Route::get('/upload', [ProductSellerController::class, 'indexFileUpload'])->name('upload.index');
 
+
+    //upload view on Product
+    Route::get('/product-upload-file', 'ProductSellerController@uploadForm')->name('upload.product.index');
+    Route::post('/product-upload-file', 'ProductSellerController@storeImage')->name('upload.product.store');    
 
     //Nego
     Route::get('/nego', [NegoSellerController::class, 'index'])->name('nego.index');

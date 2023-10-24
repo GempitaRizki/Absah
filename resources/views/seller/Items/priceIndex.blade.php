@@ -17,15 +17,15 @@
                                 </div>
                             </div>
                             <div class="d-flex">
-                                @foreach ($productPrices as $productPrice)
+                                @foreach ($zonas as $zona)
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="price_{{ $productPrice->zona_id }}" class="mb-1 h6">Price {{ $productPrice->zona_id }}</label>
+                                        <label for="price_{{ $zona->id }}" class="mb-1 h6">Price {{ $zona->name }}</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">Rp</span>
                                             </div>
-                                            <input type="text" name="price_{{ $productPrice->zona }}" class="form-control" required>
+                                            <input type="text" name="price_{{ $zona->id }}" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>

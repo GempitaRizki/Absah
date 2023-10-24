@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class IprProduct extends Model
 {
     protected $table = 'ipr_product';
+    protected $primaryKey = 'id';
+
 
     protected $fillable = [
         'product_type',
@@ -48,4 +50,15 @@ class IprProduct extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'price_type');
     }
-}
+
+    public function ProductSkuId()
+    {
+        return $this->hasMany(ProductSku::class, 'product_sku_id');
+    }
+
+    public function iprProduct()
+    {
+        return $this->belongsTo(IprProduct::class, 'product_id', 'id');
+    }
+    
+}    

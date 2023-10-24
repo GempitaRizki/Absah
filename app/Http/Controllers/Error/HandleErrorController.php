@@ -16,4 +16,9 @@ class HandleErrorController extends Controller
     {
         return view('error.403');
     }
+
+    public function codeError()
+    {
+        return view('error.500');
+    }
 }

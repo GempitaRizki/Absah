@@ -13,28 +13,6 @@
             transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         }
     </style>
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <a href="{{ route('index-awal') }}" class="btn btn-app {{ Request::is('index-awal') ? 'active' : '' }}">
-                <i class="fas fa-cog"></i> Info Awal
-            </a>
-            <a href="{{ route('getInfoUmum') }}" class="btn btn-app {{ Request::is('info-umum') ? 'active' : '' }}">
-                <i class="fa fa-info-circle"></i> Info Umum
-            </a>
-            <a href="{{ route('IndexVariant') }}" class="btn btn-app {{ Request::is('IndexVariant') ? 'active' : '' }}">
-                <i class="fas fa-object-group"></i> Variant
-            </a>
-            <a href="#" class="btn btn-app {{ Request::is('file-gambar') ? 'active' : '' }}">
-                <i class="fas fa-images"></i> File & Gambar
-            </a>
-            <a href=# class="btn btn-app {{ Request::is('import-product') ? 'active' : '' }}">
-                <i class="fas fa-upload"></i> Import Product
-            </a>
-            <a href={{ Route('IndexPrice') }} class="btn btn-app {{ Request::is('prices') ? 'active' : '' }}">
-                <i class="fas fa-money-bill-wave"></i> Harga
-            </a>
-        </div>
-    </div>
     <div class="container-fluid">
         <div class="col-12 mx-auto">
             {!! Form::open(['route' => 'store-product', 'method' => 'post']) !!}
@@ -69,10 +47,10 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            <label for="kategori_id" class="mb-1 h6">Kategori</label>
-                            {!! Form::select('kategori_id', $subCategories, null, [
+                            <label for="category_id" class="mb-1 h6">Kategori</label>
+                            {!! Form::select('category_id', $subCategories, null, [
                                 'class' => 'form-control',
-                                'id' => 'kategori_id',
+                                'id' => 'category_id',
                                 'placeholder' => 'Pilih Kategori',
                             ]) !!}
                         </div>
@@ -189,7 +167,7 @@
                                     'name' => 'has_shipping',
                                 ]) !!}
                             </div>
-                        </div>                        
+                        </div>
                         <div class="card-body">
                             <div class="form-group">
                                 {!! Form::label('produsen_type', 'Produsen Type', ['class' => 'mb-1 h6']) !!}
@@ -492,25 +470,25 @@
             $('#tipe_kategori_id').change(function() {
                 loadSubCategories();
             });
-            $('#kategori_id').change(function() {
+            $('#category_id').change(function() {
                 loadSubCategorySatu();
             });
             $('#sub_category_satu').change(function() {
                 loadSubCategoryDua();
             });
-    
+
             $('#sub_category_dua').change(function() {
                 loadSubCategoryTiga();
             });
-    
+
             $('#sub_category_tiga').change(function() {
                 loadSubCategoryEmpat();
             });
-    
+
             $('#sub_category_empat').change(function() {
                 loadSubCategoryLima();
             });
-    
+
             $('#sub_category_lima').change(function() {
                 loadSubCategoryEnam();
             });
@@ -522,11 +500,11 @@
             loadSubCategoryLima();
             loadSubCategoryEnam();
         });
-    
+
         function loadSubCategories() {
             var parent_id = $('#tipe_kategori_id').val();
             var url = "{!! route('get-sub-categories') !!}";
-    
+
             $.ajax({
                 url: url,
                 method: 'get',
@@ -534,19 +512,19 @@
                     parent_id: parent_id
                 },
                 success: function(data) {
-                    $('#kategori_id').empty().append(
+                    $('#category_id').empty().append(
                         '<option value="">Pilih Kategori</option>');
                     $.each(data.subCategories, function(id, name) {
-                        $('#kategori_id').append('<option value="' + id + '">' +
+                        $('#category_id').append('<option value="' + id + '">' +
                             name + '</option>');
                     });
                 }
             });
         }
-    
+
         function loadSubCategorySatu() {
-            var selectedCategoryId = $('#kategori_id').val();
-    
+            var selectedCategoryId = $('#category_id').val();
+
             $.ajax({
                 url: '{{ route('get-sub-categories-satu') }}',
                 method: 'get',
@@ -676,10 +654,10 @@
                     parent_id: parent_id
                 },
                 success: function(data) {
-                    $('#kategori_id').empty().append(
+                    $('#category_id').empty().append(
                         '<option value="">Pilih Kategori</option>');
                     $.each(data.subCategories, function(id, name) {
-                        $('#kategori_id').append('<option value="' + id + '">' +
+                        $('#category_id').append('<option value="' + id + '">' +
                             name + '</option>');
                     });
                 }

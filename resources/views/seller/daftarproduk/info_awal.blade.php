@@ -32,18 +32,18 @@
 
                             <div id="more-category"></div>
                             <div class="form-group">
-                                {!! Form::label('product_type_id', 'Product Type') !!}
-                                {!! Form::select('product_type_id', $productTypes, null, [
+                                {!! Form::label('product_type', 'Product Type') !!}
+                                {!! Form::select('product_type', $productTypes, null, [
                                     'class' => 'form-control',
-                                    'id' => 'product_type_id',
+                                    'id' => 'product_type',
                                     'required' => 'required',
                                 ]) !!}
                             </div>
                             <div class="form-group">
-                                {!! Form::label('price_types_id', 'Price Type') !!}
-                                {!! Form::select('price_types_id', [], null, [
+                                {!! Form::label('price_type', 'Price Type') !!}
+                                {!! Form::select('price_type', [], null, [
                                     'class' => 'form-control',
-                                    'id' => 'price_types_id',
+                                    'id' => 'price_type',
                                     'required' => 'required',
                                     'disabled' => true,
                                 ]) !!}
@@ -77,9 +77,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#product_type_id').on('change', function() {
+            $('#product_type').on('change', function() {
                 var productTypeId = $(this).val();
-                var priceTypesSelect = $('#price_types_id');
+                var priceTypesSelect = $('#price_type');
                 var attributesGroup = $('#attributes-group');
 
                 if (productTypeId === '31') {
@@ -136,7 +136,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#product_type_id').on('change', function() {
+            $('#product_type').on('change', function() {
                 var productTypeId = $(this).val();
                 var $wizardSteps = $('#wizard-steps');
                 var $productType32 = $('#product-type-32');
