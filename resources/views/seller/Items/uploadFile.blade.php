@@ -6,24 +6,26 @@
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
         <div class="text-center">
-            <form action="{{ route('upload.product.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('upload.product.file.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                    @foreach ([
-            'Image' => 'logo',
-            'Gambar TKDN' => 'banner',
-            'Gambar BMP' => 'ktp',
-            'Pdf Spec' => 'npwp',
-        ] as $label => $type)
+                    @foreach (['Image' => 'logo', 'Gambar TKDN' => 'banner', 'Gambar BMP' => 'ktp', 'Pdf Spec' => 'npwp'] as $label => $type)
                         @if (isset($uploaded_files[$type]))
                             <div class="file-info">
                                 <div class="file-box">
                                     <h3>{{ $label }}</h3>
-                                    <a href="{{ $uploaded_files[$type]['path'] }}" target="_blank">Lihat</a>
-                                    <form action="{{ route('deleteFile', $type) }}" method="POST">
+                                    @if (isset($uploaded_files[$type]['type']) && $uploaded_files[$type]['type'] === 'image')
+                                        <img src="{{ asset('storage/product_files/' . $uploaded_files[$type]['path']) }}" alt="{{ $label }}" class="file-thumbnail">
+                                    @else
+                                        <a href="{{ asset('storage/product_files/' . $uploaded_files[$type]['path']) }}" target="_blank">Lihat</a>
+                                    @endif
+                                    <form action="{{ route('product-deleteFile-product', $type) }}" method="POST">
                                         @csrf
+                                        @method('delete') 
                                         <button type="submit" class="btn btn-danger">Hapus</button>
                                     </form>
                                 </div>
@@ -32,10 +34,10 @@
                             <div class="file-info">
                                 <div class="file-box">
                                     <h3>{{ $label }}</h3>
-                                    <form action="{{ route('upload.product.store') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('upload.product.file.store') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="file_type" value="{{ $type }}">
-                                        <input type="file" name="file" class="form-control-file" accept=".pdf">
+                                        <input type="file" name="file" class="form-control-file" accept=".jpeg, .jpg, .png, .pdf">
                                         <button type="submit" class="btn btn-primary">Unggah</button>
                                     </form>
                                 </div>
@@ -48,26 +50,30 @@
         <hr>
         <div class="text-center">
             @if (Session::has('uploaded_files') && is_array(Session::get('uploaded_files')))
-                <div class="file-container">
-                    @foreach (Session::get('uploaded_files') as $key => $file)
-                        <div class="file-info">
-                            <div class="file-box">
-                                <h3>{{ $file['name'] }}</h3>
-                                @if (isset($file['type']) && in_array($file['type'], ['image', 'gambartkdn', 'gambarbmp', 'pdfspec']))
-                                    <a href="{{ $file['path'] }}" target="_blank">Lihat</a>
-                                @endif
-                                @if (isset($file['thumbnail']))
-                                    <img src="{{ $file['thumbnail'] }}" alt="{{ $file['name'] }}" class="file-thumbnail">
-                                @endif
-                                <form action="{{ route('deleteFile', $key) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">Hapus</button>
-                                </form>
-                            </div>
+            <div class="file-container">
+                @foreach (Session::get('uploaded_files') as $key => $file)
+                    <div class="file-info">
+                        <div class="file-box">
+                            <h3>{{ $file['name'] }}</h3>
+                            @if (isset($file['type']) && $file['type'] === 'image')
+                                <a href="{{ asset('storage/product_files/' . $file['path']) }}" target="_blank">Lihat</a>
+                                <img src="{{ route('thumbnail', ['key' => $key]) }}" alt="{{ $file['name'] }}" class="file-thumbnail">
+                            @else
+                                <a href="{{ asset('storage/product_files/' . $file['path']) }}" target="_blank">Lihat</a>
+                            @endif
+                            <form action="{{ route('deleteFile', $key) }}" method="POST">
+                                @csrf
+                                @method('delete') 
+                                <button type="submit" class="btn btn-danger">Hapus</button>
+                            </form>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
+            </div>
             @endif
+        </div>
+        <div class="text-center">
+            <a href="{{ route('summary.publish') }}" class="btn btn-primary">Selanjutnya</a>
         </div>
     </div>
 @endsection

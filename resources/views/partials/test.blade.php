@@ -1,23 +1,115 @@
-use App\Models\YourModel; // Gantilah YourModel dengan model yang sesuai
+<?
 
-public function storeInfo(Request $request)
+public function storeProductData(Request $request)
 {
-    // Validasi data yang diterima dari request
     $request->validate([
-        'field1' => 'required',
-        'field2' => 'required',
-        // tambahkan validasi sesuai kebutuhan Anda
+        'tipe_kategori_id' => 'required',
+        'category_id' => 'required',
     ]);
 
-    // Simpan data ke dalam model
-    $yourModel = new YourModel(); // Gantilah YourModel dengan model yang sesuai
-    $yourModel->field1 = $request->input('field1');
-    $yourModel->field2 = $request->input('field2');
-    // Tambahkan atribut lain sesuai dengan kebutuhan
+    // Mengambil data yang dibutuhkan dari request
+    $data = $request->all();
 
-    $yourModel->save();
+    // Mendapatkan ID dari user yang membuat data
+    $createdBy = Auth::id();
 
-    // Redirect ke halaman yang sesuai
-    return redirect()->route('nama_rute_tujuan');
+    // Mendapatkan ID produk dari session
+    $iprProductId = session('ipr_product_id');
+
+    // Mengelompokkan kategori
+    $categories = $this->groupCategories($data);
+
+    // Mencari ProductSku berdasarkan ID
+    $productSku = ProductSku::find($iprProductId);
+
+    if (!$productSku) {
+        return redirect()->route('syntaxError');
+    }
+
+    // Memasukkan kategori ke dalam AssignProductCat
+    $this->assignCategories($categories, $productSku);
+
+    // Membuat dan menyimpan ProductSku baru
+    $newProductSku = $this->createProductSku($data, $createdBy, $iprProductId);
+
+    // Membuat dan menyimpan ProductStock
+    $this->createProductStock($newProductSku, $data);
+
+    return redirect()->route('IndexPrice');
 }
-`
+
+// Fungsi untuk mengelompokkan kategori
+private function groupCategories($data)
+{
+    $parentParts = [
+        $data['tipe_kategori_id'],
+        $data['category_id'],
+        $data['sub_category_satu'],
+        $data['sub_category_dua'],
+        $data['sub_category_tiga'],
+        $data['sub_category_empat'],
+        $data['sub_category_lima'],
+        $data['sub_category_enam'],
+    ];
+
+    $categories = [];
+    $parent = 0;
+
+    foreach ($parentParts as $part) {
+        if (!empty($part)) {
+            $categories[] = [
+                'category_id' => $part,
+                'parent' => $parent,
+            ];
+            $parent = $part;
+        }
+    }
+
+    return $categories;
+}
+
+// Fungsi untuk memasukkan kategori ke dalam AssignProductCat
+private function assignCategories($categories, $productSku)
+{
+    foreach ($categories as $category) {
+        $productInfoUmum = new AssignProductCat();
+        $productInfoUmum->category_id = $category['category_id'];
+        $productInfoUmum->parent = $category['parent'];
+        $productInfoUmum->product_sku_id = $productSku->id;
+        $productInfoUmum->save();
+    }
+}
+
+// Fungsi untuk membuat dan menyimpan ProductSku baru
+private function createProductSku($data, $createdBy, $iprProductId)
+{
+    $productSku = new ProductSku();
+    $productSku->fill($data);
+    $productSku->created_by = $createdBy;
+    $productSku->type_ppn = 1;
+    $productSku->preorder = ProductSku::DEFAULT_PREORDER;
+
+    if ($iprProduct) {
+        $productSku->product_id = $iprProduct->id;
+        $productSku->product_id_reference = $iprProduct->id;
+    }
+
+    $slug = Str::slug($data['name'], '-') . '-' . $iprProductId;
+    $productSku->slug = $slug;
+
+    $defaultStatus = MasterStatus::where('id', ProductSku::PENDING_REVIEW_STATUS_ID)->first();
+    $productSku->status()->associate($defaultStatus);
+    $productSku->save();
+
+    return $productSku;
+}
+
+// Fungsi untuk membuat dan menyimpan ProductStock
+private function createProductStock($productSku, $data)
+{
+    $productStock = new ProductStock();
+    $productStock->product_sku_id = $productSku->id;
+    $productStock->stock = $data['stok'];
+    $productStock->limit_stock = $data['limit_stock'];
+    $productStock->save();
+}

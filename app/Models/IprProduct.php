@@ -60,5 +60,4 @@ class IprProduct extends Model
     {
         return $this->belongsTo(IprProduct::class, 'product_id', 'id');
     }
-    
 }    

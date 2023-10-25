@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 class ProductSku extends Model
 {
     protected $table = 'product_sku';
-    protected $primaryKey = 'product_id';
-
     protected $fillable = [
         'product_id',
         'product_id_reference',
@@ -49,7 +47,8 @@ class ProductSku extends Model
         'tgl_sk',
         'code_kbki',
         'made_in',
-        'min_qty',
+        'qty_min',
+        'qty_max',
         'unique_id',
         'agregasi_status',
         'kat_produk',
@@ -128,8 +127,21 @@ class ProductSku extends Model
         return $listWilayahJual;
     }
 
+
+    public function assignProductCats()
+    {
+        if ($this->id) {
+            return $this->hasMany(AssignProductCat::class, 'product_sku_id', 'id');
+        }
+        return collect();
+    }
+
     public function iprProduct()
     {
         return $this->belongsTo(IprProduct::class, 'product_id', 'id');
+    }
+    public function qtyMin()
+    {
+        return $this->hasOne(QtyMin::class, 'product_sku_id', 'id');
     }
 }

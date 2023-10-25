@@ -213,7 +213,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    {!! Form::label('weight', 'Weight(cm)', ['class' => 'mb-1 h6']) !!}
+                                    {!! Form::label('weight', 'Weight(g)', ['class' => 'mb-1 h6']) !!}
                                     {!! Form::text('weight', null, [
                                         'class' => 'form-control',
                                         'placeholder' => '0.00',
@@ -383,19 +383,19 @@
                                         ]) !!}
                                     </div>
                                     <div class="col-md-4">
-                                        {!! Form::label('limit', 'Limit', ['class' => 'mb-1 h6']) !!}
-                                        {!! Form::text('limit', null, [
+                                        {!! Form::label('limit_stock', 'Limit', ['class' => 'mb-1 h6']) !!}
+                                        {!! Form::text('limit_stock', null, [
                                             'class' => 'form-control',
                                             'placeholder' => '0',
-                                            'name' => 'Limit',
+                                            'name' => 'limit_stock', 
                                         ]) !!}
                                     </div>
                                     <div class="col-md-4">
-                                        {!! Form::label('minqty', 'Min Qty', ['class' => 'mb-1 h6']) !!}
-                                        {!! Form::text('minqty', null, [
+                                        {!! Form::label('qty_min', 'Min Qty', ['class' => 'mb-1 h6']) !!}
+                                        {!! Form::text('qty_min', null, [
                                             'class' => 'form-control',
                                             'placeholder' => '0',
-                                            'name' => 'minqty',
+                                            'name' => 'qty_min',
                                         ]) !!}
                                     </div>
                                 </div>

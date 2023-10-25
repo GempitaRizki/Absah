@@ -20,7 +20,7 @@ class ProductPrice extends Model
     const ZONA_4_VALUE = '4';
     const ZONA_5_VALUE = '5';
 
-    
+
     const SCENARIO_PRICE_ZONASI = 'PRICE_ZONASI';
     const SCENARIO_PRICE_NASIONAL = 'PRICE_NASIONAL';
     const SCENARIO_PRICE_GROSIR = 'PRICE_GROSIR';
@@ -52,14 +52,5 @@ class ProductPrice extends Model
         return self::where('zona', $zona)
             ->where('product_sku_id', $productSkuId)
             ->first();
-    }
-
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_PRICE_ZONASI] = ['product_sku_id', 'price', 'hargaPpn', 'harga_2023'];
-        $scenarios[self::SCENARIO_PRICE_NASIONAL] = ['product_sku_id', 'price', 'price_after_discount', 'hargaPpn', 'harga_2023'];
-        $scenarios[self::SCENARIO_PRICE_GROSIR] = ['product_sku_id', 'price', 'qty_min', 'qty_max', 'priceGrosir', 'hargaPpn', 'harga_2023'];
-        return $scenarios;
     }
 }
