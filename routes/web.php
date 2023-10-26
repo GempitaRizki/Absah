@@ -33,8 +33,6 @@ use App\Http\Controllers\User\LoginUserController;
 use App\Http\Controllers\Seller\ParentSellerController;
 use App\Http\Controllers\Seller\UserProfileController;
 use App\Http\Controllers\Seller\WizardController;
-use App\Http\Controllers\Seller\UploadController;
-use App\Http\Controllers\Seller\PriceController;
 
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -166,7 +164,6 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     //order
     Route::get('/order', [OrderSellerController::class, 'index'])->name('order.index');
 
-
     //pembayaran 
     Route::get('/pembayaran', [PembayaranSellerController::class, 'index'])->name('pembayaran.index');
 
@@ -183,14 +180,15 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
 
 
 
+
     Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
     Route::get('/product/info-awal', [ProductSellerController::class, 'indexinfo'])->name('index-awal');
     Route::post('product/info-awal', [ProductSellerController::class, 'indexInfoStore'])->name('store-index-awal');
     Route::get('/price', [ProductSellerController::class, 'indexPrice'])->name('IndexPrice');
     Route::post('product-prices/store', [ProductSellerController::class, 'storePrice'])->name('product-prices.store');
     Route::get('/fileupload', [ProductSellerController::class, 'uploadFile'])->name('product-upload-file');
+   
     //info umum 
-    // routes/web.php
     // routes/web.php
 
     Route::get('/get-sub-categories', [ParentSellerController::class, 'getSubCategories'])->name('get-sub-categories');
@@ -208,7 +206,7 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::post('/store-product', [ProductSellerController::class, 'storeProductData'])->name('store-product');
     Route::get('/variant', [ProductSellerController::class, 'showindexVariant'])->name('IndexVariant');
 
-
+    
 
 
     //product navbar download 
@@ -217,20 +215,8 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
 
     //Upload view on wizard
     Route::get('/upload', [ProductSellerController::class, 'indexFileUpload'])->name('upload.index');
-    Route::post('/upload-product-file', [ProductSellerController::class, 'storeProductFile'])->name('upload.product.file.store');
-    Route::post('/delete-product-file/{id}', [ProductSellerController::class, 'deleteProductFile'])->name('deleteFile-product');
-
-    //image tumbnail 
-    Route::get('thumbnail/{key}', 'ProductSellerController@generateThumbnail')->name('thumbnail');
-    Route::post('deleteFile-product/{type}', 'ProductSellerController@deleteProductFile')->name('product-deleteFile-product');
-    Route::get('upload-product-file', 'ProductSellerController@uploadFile')->name('upload.product.file');
-    Route::post('upload-product-file', 'ProductSellerController@storeProductFile')->name('upload.product.file.store');
-
-    //upload view on Product
-    Route::get('/product-upload-file', 'ProductSellerController@uploadForm')->name('upload.product.index');
-    Route::post('/product-upload-file', 'ProductSellerController@storeImage')->name('upload.product.store');
-
-
+    Route::post('/upload-file', [ProductSellerController::class, 'uploadFile'])
+    ->name('upload-file');
     //summary 
     Route::get('/product/pubish', [ProductSellerController::class, 'SummaryProduct'])->name('summary.publish');
 

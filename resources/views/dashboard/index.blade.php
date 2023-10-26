@@ -28,11 +28,11 @@
 </head>
 
 <body>
-    @include('partials.header');
-    @include('partials.slider');
-    @include('partials.category');
-    @include('partials.product');
-    @include('partials.footer');
+    @include('partials.header')
+    @include('partials.slider')
+    @include('partials.category')
+    @include('partials.dummy')
+    @include('partials.footer')
     <!-- modal -->
     <!-- all js here -->
     <script src="{{url('assets/js/vendor/jquery-1.12.0.min.js')}}"></script>

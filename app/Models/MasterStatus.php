@@ -137,4 +137,15 @@ class MasterStatus extends Model
 
         return $listMadeIn;
     }
+
+    public static function getListProductSku()
+    {
+        $listProductSku = [
+            44 => 'Enable',
+            45 => 'Disable',
+            46 => 'Draft',
+            47 => 'Pending Review',
+        ];
+        return $listProductSku;
+    }
 }

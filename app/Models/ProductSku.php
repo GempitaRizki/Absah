@@ -65,6 +65,9 @@ class ProductSku extends Model
 
     const ENABLE_STATUS_ID = '44';
     const DISABLE_STATUS_ID = '45';
+
+    const DRAFT_STATUS_ID = '46';
+
     const PENDING_REVIEW_STATUS_ID = '47';
     const HAPUS = '120';
     const DISABLE_MITRA = '138';
@@ -140,8 +143,6 @@ class ProductSku extends Model
     {
         return $this->belongsTo(IprProduct::class, 'product_id', 'id');
     }
-    public function qtyMin()
-    {
-        return $this->hasOne(QtyMin::class, 'product_sku_id', 'id');
-    }
+
+    
 }

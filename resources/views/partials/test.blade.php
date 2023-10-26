@@ -1,115 +1,15 @@
-<?
+HTTP/1.1 dan HTTP/2 adalah dua versi dari protokol HTTP (Hypertext Transfer Protocol) yang digunakan untuk mengirim data antara klien (browser) dan server di web. Berikut adalah perbedaan singkat antara keduanya:
 
-public function storeProductData(Request $request)
-{
-    $request->validate([
-        'tipe_kategori_id' => 'required',
-        'category_id' => 'required',
-    ]);
+Multiplexing: Salah satu perbedaan utama adalah dalam cara mereka menangani koneksi multiplexing. HTTP/1.1 menggunakan metode berurutan, yang berarti klien dan server harus menunggu permintaan atau respons sebelum melanjutkan ke yang berikutnya. HTTP/2, di sisi lain, mendukung multiplexing, yang memungkinkan beberapa permintaan dan respons berjalan secara bersamaan dalam satu koneksi. Ini meningkatkan efisiensi dan mempercepat waktu muat halaman web.
 
-    // Mengambil data yang dibutuhkan dari request
-    $data = $request->all();
+Header Compression: HTTP/2 menggunakan kompresi header, yang mengurangi overhead dari informasi header yang dikirim dalam setiap permintaan dan respons. HTTP/1.1 tidak memiliki kompresi header, yang berarti lebih banyak data yang perlu dikirim, terutama pada permintaan berulang.
 
-    // Mendapatkan ID dari user yang membuat data
-    $createdBy = Auth::id();
+Prioritization: HTTP/2 memiliki mekanisme untuk memberikan prioritas pada permintaan, memungkinkan klien untuk mengindikasikan permintaan mana yang lebih penting dan harus diproses terlebih dahulu. HTTP/1.1 tidak memiliki konsep prioritas bawaan.
 
-    // Mendapatkan ID produk dari session
-    $iprProductId = session('ipr_product_id');
+Server Push: HTTP/2 memungkinkan server untuk mendorong sumber daya ke klien tanpa permintaan sebelumnya. Ini dapat mengurangi jumlah permintaan yang diperlukan untuk memuat halaman web. HTTP/1.1 tidak memiliki fitur ini.
 
-    // Mengelompokkan kategori
-    $categories = $this->groupCategories($data);
+Binary Protocol: HTTP/2 adalah protokol biner, yang lebih efisien dalam parsing dan pengiriman data dibandingkan dengan format teks HTTP/1.1.
 
-    // Mencari ProductSku berdasarkan ID
-    $productSku = ProductSku::find($iprProductId);
+Backward Compatibility: Keduanya dirancang untuk menjaga kompatibilitas dengan HTTP/1.1, yang berarti server yang mendukung HTTP/2 juga dapat melayani klien yang menggunakan HTTP/1.1. Ini memungkinkan transisi bertahap ke versi yang lebih baru.
 
-    if (!$productSku) {
-        return redirect()->route('syntaxError');
-    }
-
-    // Memasukkan kategori ke dalam AssignProductCat
-    $this->assignCategories($categories, $productSku);
-
-    // Membuat dan menyimpan ProductSku baru
-    $newProductSku = $this->createProductSku($data, $createdBy, $iprProductId);
-
-    // Membuat dan menyimpan ProductStock
-    $this->createProductStock($newProductSku, $data);
-
-    return redirect()->route('IndexPrice');
-}
-
-// Fungsi untuk mengelompokkan kategori
-private function groupCategories($data)
-{
-    $parentParts = [
-        $data['tipe_kategori_id'],
-        $data['category_id'],
-        $data['sub_category_satu'],
-        $data['sub_category_dua'],
-        $data['sub_category_tiga'],
-        $data['sub_category_empat'],
-        $data['sub_category_lima'],
-        $data['sub_category_enam'],
-    ];
-
-    $categories = [];
-    $parent = 0;
-
-    foreach ($parentParts as $part) {
-        if (!empty($part)) {
-            $categories[] = [
-                'category_id' => $part,
-                'parent' => $parent,
-            ];
-            $parent = $part;
-        }
-    }
-
-    return $categories;
-}
-
-// Fungsi untuk memasukkan kategori ke dalam AssignProductCat
-private function assignCategories($categories, $productSku)
-{
-    foreach ($categories as $category) {
-        $productInfoUmum = new AssignProductCat();
-        $productInfoUmum->category_id = $category['category_id'];
-        $productInfoUmum->parent = $category['parent'];
-        $productInfoUmum->product_sku_id = $productSku->id;
-        $productInfoUmum->save();
-    }
-}
-
-// Fungsi untuk membuat dan menyimpan ProductSku baru
-private function createProductSku($data, $createdBy, $iprProductId)
-{
-    $productSku = new ProductSku();
-    $productSku->fill($data);
-    $productSku->created_by = $createdBy;
-    $productSku->type_ppn = 1;
-    $productSku->preorder = ProductSku::DEFAULT_PREORDER;
-
-    if ($iprProduct) {
-        $productSku->product_id = $iprProduct->id;
-        $productSku->product_id_reference = $iprProduct->id;
-    }
-
-    $slug = Str::slug($data['name'], '-') . '-' . $iprProductId;
-    $productSku->slug = $slug;
-
-    $defaultStatus = MasterStatus::where('id', ProductSku::PENDING_REVIEW_STATUS_ID)->first();
-    $productSku->status()->associate($defaultStatus);
-    $productSku->save();
-
-    return $productSku;
-}
-
-// Fungsi untuk membuat dan menyimpan ProductStock
-private function createProductStock($productSku, $data)
-{
-    $productStock = new ProductStock();
-    $productStock->product_sku_id = $productSku->id;
-    $productStock->stock = $data['stok'];
-    $productStock->limit_stock = $data['limit_stock'];
-    $productStock->save();
-}
+HTTP/2 adalah evolusi dari HTTP/1.1 dengan peningkatan signifikan dalam hal kinerja, efisiensi, dan pengalaman pengguna. HTTP/2 banyak digunakan di web modern, tetapi HTTP/1.1 masih digunakan secara luas, terutama di lingkungan yang memerlukan dukungan mundur untuk perangkat lama atau aplikasi khusus.

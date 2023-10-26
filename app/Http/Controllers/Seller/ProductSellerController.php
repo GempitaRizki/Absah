@@ -27,13 +27,30 @@ class ProductSellerController extends Controller
 
     public function __construct()
     {
-        $this->data['currentSellerMenu'] = 'productseller';
+        $this->middleware('auth');
     }
 
     public function index()
     {
-        return view('seller.items.product_index', $this->data);
+        $user = auth()->user();
+        $totalProducts = ProductSku::where('created_by', $user->id)->count();
+        $totalActiveProducts = ProductSku::where('status_id', 44)
+            ->where('created_by', $user->id)
+            ->count();
+        $totalPendingProducs = ProductSku::where('status_id', 47)
+            ->where('created_by', $user->id)
+            ->count();
+        $totalDraftProducts = ProductSku::where('status_id', 46)
+            ->where('created_by', $user->id)
+            ->count();
+
+        $productSkus = ProductSku::where('created_by', $user->id)->get();
+
+        return view('seller.items.product_index', compact('totalProducts', 'totalActiveProducts', 'totalPendingProducs', 'totalDraftProducts', 'productSkus'));
     }
+
+
+
 
     public function indexinfo()
     {
@@ -159,7 +176,6 @@ class ProductSellerController extends Controller
 
         $name = $request->input('name');
         $sku = $request->input('sku');
-        $has_ppn = $request->input('has_ppn');
         $has_shipping = $request->input('has_shipping');
         $produsen_type = $request->input('produsen_type');
         $length = $request->input('length');
@@ -186,7 +202,6 @@ class ProductSellerController extends Controller
         $qty_max = $request->input('qty_max');
 
         $iprProduct = IprProduct::find($iprProductId);
-
         $productSku = new ProductSku();
         $productSku->name = $name;
         $productSku->sku = $sku;
@@ -225,12 +240,20 @@ class ProductSellerController extends Controller
 
         $slug = Str::slug($name, '-') . '-' . $iprProduct->id;
         $productSku->slug = $slug;
-        $defaultStatus = MasterStatus::where('id', ProductSku::PENDING_REVIEW_STATUS_ID)->first();
-        $productSku->status()->associate($defaultStatus);
+        $draftStatus = MasterStatus::where('id', ProductSku::DRAFT_STATUS_ID)->first();
+        $productSku->status()->associate($draftStatus);
+        session(['default_status' => $draftStatus]);
         $productSku->save();
 
         session(['product_sku_name' => $productSku->name]);
+        session(['product_descriptions' => $productSku->descriptions]);
 
+        //ganti stase nda
+        if (request()->is('product/publish')) {
+            $pendingReviewStatus = MasterStatus::where('id', ProductSku::PENDING_REVIEW_STATUS_ID)->first();
+            $productSku->status()->associate($pendingReviewStatus);
+            $productSku->save();
+        }
 
         $stock = $request->input('stok');
         $limitStock = $request->input('limit_stock');
@@ -312,7 +335,7 @@ class ProductSellerController extends Controller
         $price = $request->input('price');
         $priceAfterDiscount = $request->input('price_after_discount');
 
-        if ($price >= $priceAfterDiscount) {
+        if ($priceAfterDiscount >= $price) {
             return redirect()->back()->with('error', 'Gagal simpan. Harga setelah diskon tidak boleh lebih besar dari harga.')->withInput();
         }
 
@@ -336,100 +359,53 @@ class ProductSellerController extends Controller
 
             session(['product_price' => $price]);
 
-            return redirect()->route('product-upload-file')->with('success', 'Data Price berhasil disimpan.');
+            return redirect()->route('upload.index')->with('success', 'Data Price berhasil disimpan.');
         }
     }
 
 
 
-    public function uploadFile()
+    public function indexFileUpload()
     {
-        $price = session('product_price');
-
-        return view('seller.items.uploadFile', compact('price'));
+        return view('seller.items.uploadFile');
     }
 
-
-    public function storeProductFile(Request $request)
+    public function uploadFile(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:jpeg,png,jpg,pdf',
+            'path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
-        if ($request->hasFile('file')) {
-            $productSku = ProductSku::first();
-            $file = $request->file('file');
-            $fileName = Str::random(10) . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/product_files', $fileName);
-
-            $productFile = new ProductFile([
-                'path' => $fileName,
+        $productSku = ProductSku::first();
+        
+        if (!$productSku) {
+            return back()->with('error', 'No product SKU found.');
+        }
+        $existingFile = ProductFile::where('product_sku_id', $productSku->id)->first();
+        if ($existingFile) {
+            $oldFilePath = public_path('images/' . $existingFile->path);
+            if (File::exists($oldFilePath)) {
+                File::delete($oldFilePath);
+            }
+            $pathName = time() . '.' . $request->path->extension();
+            $request->path->move(public_path('images'), $pathName);
+    
+            $existingFile->update([
+                'path' => $pathName,
+            ]);
+        } else {
+            $pathName = time() . '.' . $request->path->extension();
+            $request->path->move(public_path('images'), $pathName);
+            ProductFile::create([
+                'path' => $pathName,
                 'product_sku_id' => $productSku->id,
             ]);
-
-            $productFile->save();
-            $this->createThumbnail($fileName);
-
-            return redirect()->back()->with('success', 'File berhasil diunggah.');
         }
-
-        return redirect()->back()->with('error', 'Gagal mengunggah file.');
+        session(['uploaded_image' => $pathName]);
+        return back()
+            ->with('success', 'You have successfully uploaded an image.')
+            ->with('path', $pathName);
     }
-
-    public function deleteProductFile($id)
-    {
-        $productFile = ProductFile::find($id);
-
-        if ($productFile) {
-            $filePath = storage_path('app/public/product_files/' . $productFile->path);
-            if (File::exists($filePath)) {
-                File::delete($filePath);
-            }
-
-            $thumbnailPath = $this->generateThumbnailPath($productFile->path);
-            if (File::exists($thumbnailPath)) {
-                File::delete($thumbnailPath);
-            }
-
-            $productFile->delete();
-
-            return redirect()->back()->with('success', 'File berhasil dihapus.');
-        }
-
-        return redirect()->back()->with('error', 'File tidak ditemukan.');
-    }
-
-    public function createThumbnail($fileName)
-    {
-        $imagePath = storage_path('app/public/product_files/' . $fileName);
-        $thumbnailPath = $this->generateThumbnailPath($fileName);
-
-        if (File::exists($imagePath)) {
-            $this->resizeAndSaveImage($imagePath, $thumbnailPath, 100, 100);
-        }
-    }
-
-    public function resizeAndSaveImage($imagePath, $thumbnailPath, $width, $height)
-    {
-        $image = Image::make($imagePath);
-        $image->fit($width, $height);
-
-        $thumbnailDirectory = dirname($thumbnailPath);
-        if (!File::exists($thumbnailDirectory)) {
-            File::makeDirectory($thumbnailDirectory, 0755, true, true);
-        }
-
-        $image->save($thumbnailPath);
-    }
-
-
-    public function generateThumbnailPath($fileName)
-    {
-        $pathinfo = pathinfo($fileName);
-        return storage_path('app/public/product_files/thumbnails/' . $pathinfo['filename'] . '-thumbnail.' . $pathinfo['extension']);
-    }
-
-
+    
     public function SummaryProduct()
     {
         return view('seller.items.summaryProduct');

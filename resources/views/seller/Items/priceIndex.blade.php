@@ -7,7 +7,7 @@
             <div class="col-12 mx-auto">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
-                        <h2>Form Tambah Data Price</h2>
+                        <h2 class="text-center">Form Tambah Data Price</h2>
                         @if(session('error'))
                             <div class="alert alert-danger">
                                 {{ session('error') }}
