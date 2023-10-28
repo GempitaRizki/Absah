@@ -1,5 +1,4 @@
 @extends('cms.index')
-
 @section('content')
     <div class="px-15px px-lg-25px">
         <div class="col-md-10 mx-auto">
@@ -15,7 +14,7 @@
                                 @if (session()->has('uploaded_image'))
                                     <div class="card-body">
                                         <img src="{{ asset('images/' . session('uploaded_image')) }}"
-                                            alt="Uploaded Image" style="max-width: 200px;">
+                                            alt="Uploaded Image" style="max-width: 300px;">
                                     </div>
                             </div>
                             @endif

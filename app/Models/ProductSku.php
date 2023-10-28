@@ -10,6 +10,7 @@ class ProductSku extends Model
 {
     protected $table = 'product_sku';
     protected $fillable = [
+        'store_id',
         'product_id',
         'product_id_reference',
         'sku',
@@ -144,5 +145,15 @@ class ProductSku extends Model
         return $this->belongsTo(IprProduct::class, 'product_id', 'id');
     }
 
+    public function productPrice()
+    {
+        return $this->hasOne(ProductPrice::class, 'product_sku_id');
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
+    
     
 }

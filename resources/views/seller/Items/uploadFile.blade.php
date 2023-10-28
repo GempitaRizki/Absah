@@ -16,7 +16,6 @@
                     </div>
                     <img src="{{ asset('images/' . Session::get('path')) }}">
                 @endif
-
                 <form action="{{ route('upload-file') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">

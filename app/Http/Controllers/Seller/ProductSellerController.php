@@ -18,7 +18,7 @@ use App\Models\ProductFile;
 use App\Models\ProductStock;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use App\Models\Store;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -48,9 +48,6 @@ class ProductSellerController extends Controller
 
         return view('seller.items.product_index', compact('totalProducts', 'totalActiveProducts', 'totalPendingProducs', 'totalDraftProducts', 'productSkus'));
     }
-
-
-
 
     public function indexinfo()
     {
@@ -151,6 +148,8 @@ class ProductSellerController extends Controller
         $this->data['listEtalase'] = Etalase::getListEtalase();
         $this->data['hasShipping'] = MasterStatus::getListShipping();
 
+
+
         return view('seller.daftarproduk.info_umum', $this->data);
     }
 
@@ -201,6 +200,12 @@ class ProductSellerController extends Controller
         $qty_min = $request->input('qty_min');
         $qty_max = $request->input('qty_max');
 
+
+        $store_id = Store::getStoreIdByUserLogin();
+        if (!$store_id) {
+            return redirect()->route('syntaxError');
+        }
+
         $iprProduct = IprProduct::find($iprProductId);
         $productSku = new ProductSku();
         $productSku->name = $name;
@@ -229,6 +234,7 @@ class ProductSellerController extends Controller
         $productSku->descriptions = $descriptions;
         $productSku->qty_min = $qty_min;
         $productSku->qty_max = $qty_max;
+        $productSku->store_id = $store_id;
 
         $productSku->created_by = $createdBy;
         $productSku->type_ppn = 1;
@@ -248,7 +254,7 @@ class ProductSellerController extends Controller
         session(['product_sku_name' => $productSku->name]);
         session(['product_descriptions' => $productSku->descriptions]);
 
-        //ganti stase nda
+        //ganti staus nda
         if (request()->is('product/publish')) {
             $pendingReviewStatus = MasterStatus::where('id', ProductSku::PENDING_REVIEW_STATUS_ID)->first();
             $productSku->status()->associate($pendingReviewStatus);
@@ -268,7 +274,6 @@ class ProductSellerController extends Controller
         $productStore->store_id = $request->input('store_id');
         $productStore->product_sku_id = $productSku->id;
         $productStore->save();
-
 
         $parentParts = [
             $tipe_kategori_id,
@@ -294,6 +299,8 @@ class ProductSellerController extends Controller
             }
         }
 
+        //pastikan tetap menggunakan product_sku karena mbuh 
+        //kenopo nek nganggo product_sku_id ora iso
         foreach ($categories as $category) {
             $productInfoUmum = new AssignProductCat();
             $productInfoUmum->category_id = $category['Category_id'];
@@ -376,7 +383,7 @@ class ProductSellerController extends Controller
             'path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $productSku = ProductSku::first();
-        
+
         if (!$productSku) {
             return back()->with('error', 'No product SKU found.');
         }
@@ -388,7 +395,7 @@ class ProductSellerController extends Controller
             }
             $pathName = time() . '.' . $request->path->extension();
             $request->path->move(public_path('images'), $pathName);
-    
+
             $existingFile->update([
                 'path' => $pathName,
             ]);
@@ -405,7 +412,7 @@ class ProductSellerController extends Controller
             ->with('success', 'You have successfully uploaded an image.')
             ->with('path', $pathName);
     }
-    
+
     public function SummaryProduct()
     {
         return view('seller.items.summaryProduct');

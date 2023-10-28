@@ -16,16 +16,25 @@ class LoginUserController extends Controller
     {
         $this->validate($request, [
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
-
+    
         $credentials = $request->only('email', 'password');
+    
         if (auth()->attempt($credentials)) {
             if (auth()->user()->role === 'user') {
-                return redirect()->route('dashboard.user');
-            } else { 
                 return redirect()->route('handle403');
+            } else {
+                return redirect()->route('user.login.store');
             }
+        } else {
+            return redirect()->route('user.login')->with('login', 'Email atau password salah.');
         }
     }
+
+    public function DashoardUser()
+    {
+        return view('cms.user.index');
+    }
+
 }

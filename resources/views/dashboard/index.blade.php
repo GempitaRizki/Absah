@@ -10,7 +10,6 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{url('assets/img/favicon.png')}}">
 
-    <!-- all css here -->
     <link rel="stylesheet" href="{{url('assets/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{url('assets/css/magnific-popup.css')}}">
     <link rel="stylesheet" href="{{url('assets/css/animate.css')}}">

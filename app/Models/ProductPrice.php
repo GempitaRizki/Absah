@@ -44,7 +44,7 @@ class ProductPrice extends Model
 
     public function productSku()
     {
-        return $this->belongsTo(ProductSku::class, 'product_sku_id');
+        return $this->belongsTo(ProductSku::class, 'product_sku_id' , 'id');
     }
 
     public static function productPriceZonaDetail($zona, $productSkuId)

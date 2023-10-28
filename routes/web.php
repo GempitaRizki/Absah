@@ -28,14 +28,18 @@ use App\Http\Controllers\Seller\DaftarPenggunaSellerController;
 use App\Http\Controllers\Seller\KomplainSellerController;
 use App\Http\Controllers\Seller\DummySellerController;
 use App\Http\Controllers\Seller\partials\DownloadFormatController;
-use App\Http\Controllers\User\DashboardUserController;
+use App\Http\Controllers\User\OrderUserController;
 use App\Http\Controllers\User\LoginUserController;
 use App\Http\Controllers\Seller\ParentSellerController;
 use App\Http\Controllers\Seller\UserProfileController;
 use App\Http\Controllers\Seller\WizardController;
+use App\Http\Controllers\User\ProductDetailController;;
 
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+//dashboard user -> productDetail 
+
 
 //Route Keranjang
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -47,20 +51,25 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/mini-cart', [CartController::class, 'show'])->name('mini_cart.show');
     Route::get('carts/remove', [CartController::class, 'destroyAll'])->name('cart.destroy-all');
 
-    //dashboard user
-    Route::get('/user/dashboard', [DashboardUserController::class, 'index'])->name('dashboard.user');
+
+    //order user
+
 });
 
 //menampilkan gambar pertama pada database
 Route::get('image/{id}', [ImageController::class, 'show']);
 
 
+
+Route::get('/product/{slug}', [ProductDetailController::class, 'index'])->name('product.detail');
+
+
 //product Controller dari user / Di definisikan sebagai ControllersProductController // 05/09/2023 change to UserControllerProduct
-Route::controller(ProductUserController::class)->group(function () {
-    Route::get('/products', [ProductUserController::class, 'index']);
-    Route::get('/product/{slug}', [ProductUserController::class, 'show']);
-    Route::get('/products/quick-view/{slug}', [ProductUserController::class, 'quickView']);
-});
+// Route::controller(ProductUserController::class)->group(function () {
+//     Route::get('/products', [ProductUserController::class, 'index']);
+//     Route::get('/product/{slug}', [ProductUserController::class, 'show']);
+//     Route::get('/products/quick-view/{slug}', [ProductUserController::class, 'quickView']);
+// });
 
 
 //Admin middleware
@@ -81,8 +90,10 @@ Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->
 
 // User route // ini nanti buat cms user
 Route::middleware(['auth', 'role:user'])->group(function () {
-    //user control
+    Route::get('/user/order', [OrderUserController::class, 'index'])->name('order.user');
 
+
+    Route::get('/user/komplain', [KomplainSellerController::class, 'index'])->name('komplain.user');
 });
 
 
@@ -154,7 +165,10 @@ Route::post('/seller/logout', [SellerController::class, 'logout'])->name('seller
 
 //user Login Controller
 Route::get('/user/login', [LoginUserController::class, 'index'])->name('user.login');
+Route::post('/user/login', [LoginUserController::class, 'login'])->name('user.login.store');
 
+
+Route::get('/user/dashboard', [LoginUserController::class, 'DashoardUser'])->name('Dashboard.User');
 //Seller Content Management System
 Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller')->prefix('seller')->group(function () {
 
@@ -167,18 +181,13 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     //pembayaran 
     Route::get('/pembayaran', [PembayaranSellerController::class, 'index'])->name('pembayaran.index');
 
-
     //pajak
     Route::get('/pajak', [PajakSellerController::class, 'index'])->name('pajak.index');
     Route::post('/pajak', [PajakSellerController::class, 'store'])->name('store-pajak');
 
-    //product
-
 
     //wizard view
     Route::get('/wizard', [WizardController::class, 'index']);
-
-
 
 
     Route::get('/product', [ProductSellerController::class, 'index'])->name('product.index');
@@ -189,6 +198,7 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/fileupload', [ProductSellerController::class, 'uploadFile'])->name('product-upload-file');
    
     //info umum 
+
     // routes/web.php
 
     Route::get('/get-sub-categories', [ParentSellerController::class, 'getSubCategories'])->name('get-sub-categories');
@@ -207,8 +217,6 @@ Route::middleware(['auth', 'activity.logger', 'role:seller'])->namespace('Seller
     Route::get('/variant', [ProductSellerController::class, 'showindexVariant'])->name('IndexVariant');
 
     
-
-
     //product navbar download 
     Route::get('/product/downloadtemplate', [DownloadFormatController::class, 'index'])->name('downloadtemplate');
     Route::get('/download-template/{type}', [DownloadFormatController::class, 'download'])->name('download');

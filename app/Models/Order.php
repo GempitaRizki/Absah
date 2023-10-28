@@ -2,216 +2,191 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Order extends Model
 {
+
+    const PESANAN_AKTIF = ['57', '58', '59', '60', '159', '61', '62', '63', '135', '72', '156', '157'];
+    const PESANAN_BARU = '57';
+    const PESANAN_KONFIRMASI_PENGIRIMAN = '58';
+    const PESANAN_KONFIRMASI_PEMBELI = '108';
+    const PESANAN_KONFIRMASI_PENJUAL = '109';
+    const PESANAN_KONFIRMASI_BATAL_PENGIRIMAN_PENJUAL = '129';
+    const PESANAN_KONFIRMASI_BATAL_PENGIRIMAN_PEMBELI = '131';
+    const PESANAN_DITOLAK = '69';
+    const PESANAN_DITOLAK_PENJUAL = '130';
+    const PESANAN_DIKIRIM = '59';
+    const PESANAN_DITERIMA = '60';
+    const PESANAN_MENUNGGU_PEMBAYARAN = '61';
+    const PESANAN_TERBAYAR = '62';
+    const PESANAN_PESANAN_SELESAI = '63';
+    const PESANAN_VERIFIKASI_PEMBAYARAN = '72';
+    const PAYMENT_METHOD_TRANSFER = '64';
+    const SHIPPING_METHOD_KURIR_PRIBADI = '66';
+    const SHIPPING_METHOD_KURIR_JALADARA = '1';
+    const SHIPPING_METHOD_STATUS = '68';
+    const PESANAN_DALAM_KOMPLAIN = '135';
+    const PESANAN_DIBATALKAN_PEMBELI = '149';
+    const PESANAN_KONFIRMASI_PEMBATALAN_PEMBELI = '156';
+    const PESANAN_KONFIRMASI_PEMBATALAN_PENJUAL = '157';
+    const PESANAN_PEMBELI_MERUBAH_PESANAN = '167';
+    const PESANAN_SUDAH_BAST = '159';
+    const PESANAN_DITUTUP = '168';
+    const MIN_50 = '50000000';
+    const MAX_200 = '200000000';
+    const ESTIMASI_PEMBAYARAN = '1 Hari Setelah Barang Diterima';
+    const MSG_PESANAN_DIBUAT = 'Pesanan Dibuat';
+    const MSG_PESANAN_MENUNGGU_KONFIRMASI_PENGIRIMAN = 'Menunggu Konfirmasi Pengiriman';
+    const MSG_PESANAN_MENUNGGU_KONFIRMASI_PEMBELI = 'Menunggu Konfirmasi Pembeli';
+    const MSG_PESANAN_MENUNGGU_KONFIRMASI_PENJUAL = 'Menunggu Konfirmasi Penjual';
+    const MSG_PESANAN_DIKIRIM = 'Dalam Pengiriman';
+    const MSG_PESANAN_DITERIMA = 'Pesanan Diterima';
+    const MSG_PESANAN_SELESAI = 'Pesanan Selesai';
+    const MSG_PESANAN_DIBATALKAN_PEMBELI = 'Pesanan Dibatalkan Pembeli';
+    const MSG_PESANAN_DIBATALKAN_PENJUAL = 'Pesanan Dibatalkan Penjual';
+    const MSG_PESANAN_PEMBELI_MERUBAH_PESANAN = 'Pembeli Merubah Pesanan';
+    const MSG_PESANAN_RUSAK_DIBATALKAN_PEMBELI = 'Pesanan Dibatalkan Karena Barang Tidak Sesuai / Rusak Semua';
+    const MSG_PESANAN_KONFIRMASI_BATAL_PENGIRIMAN_PENJUAL = 'Penerimaan Pembatalan Pengiriman';
+    const MSG_PESANAN_KONFIRMASI_BATAL_PENGIRIMAN_PEMBELI = 'Konfirmasi Pembatalan Pengiriman';
+    const MSG_PESANAN_TOLAK_BATAL_PENGIRIMAN_PENJUAL = 'Penolakan Pembatalan Pengiriman';
+    const MSG_PESANAN_DALAM_KOMPLAIN = 'Pesanan Masih Dalam Komplain';
+    const MSG_KOMPLAIN_PESANAN_DITOLAK = 'Komplain Pesanan Ditolak Penjual';
+    const MSG_PESANAN_DIBATALKAN = 'Pesanan Dibatalkan';
+    const MSG_PESANAN_KONFIRMASI_PEMBATALAN_PEMBELI = 'Pesanan Menunggu Konfirmasi Pembatalan Pembeli';
+    const MSG_PESANAN_KONFIRMASI_PEMBATALAN_PENJUAL = 'Pesanan Menunggu Konfirmasi Pembatalan Penjual';
+    const MSG_PESANAN_SUDAH_BAST = 'BAST dibuat Sekolah';
+    const MSG_PESANAN_DITUTUP = 'Pesanan Ditutup';
+    const MSG_MENUNGGU_PEMBAYARAN = 'Menunggu Pembayaran';
+    const MSG_PEMBAYARAN_VERIFIKASI = 'Verifikasi Pembayaran';
+    const MSG_TERBAYAR = 'Terbayar';
+    const MSG_PEMBELI_KONFIRMASI_PEMBAYARAN = 'Pembeli Konfirmasi Pembayaran';
+    const MSG_PEMBELI_MELAKUKAN_NEGO = 'Pembeli Melakukan Nego';
+    const MSG_PENJUAL_MELAKUKAN_NEGO = 'Penjual Melakukan Nego';
+    const MSG_PENJUAL_TOTAL_NEGO = 'Nego di Tolak';
+    const MSG_PENJUAL_TERIMA_NEGO = 'Nego di Terima';
+    const TANGGAL_MULAI_PPN_SEBELAS_PERSEN = '2022-04-01';
+
+    protected $table = 'orders';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
+
     protected $fillable = [
-		'user_id',
-		'code',
-		'status',
-		'order_date',
-		'payment_due',
-		'payment_status',
-		'base_total_price',
-		'tax_amount',
-		'tax_percent',
-		'discount_amount',
-		'discount_percent',
-		'shipping_cost',
-		'grand_total',
-		'note',
-		'customer_first_name',
-		'customer_last_name',
-		'customer_address1',
-		'customer_address2',
-		'customer_phone',
-		'customer_email',
-		'customer_city_id',
-		'customer_province_id',
-		'customer_postcode',
-		'shipping_courier',
-		'shipping_service_name',
-		'approved_by',
-		'approved_at',
-		'cancelled_by',
-		'cancelled_at',
-		'cancellation_note',
-	];
+        'nomor_order',
+        'nomor_invoice',
+        'date_order',
+        'payment_method',
+        'user_id',
+        'status_id',
+        'store_id',
+        'shipping_data',
+        'shipping_method',
+        'shipping_status',
+        'shipping_cost',
+        'shipping_resi',
+        'shipping_estimate',
+        'confirm_shipping_date',
+        'sumber_dana_id',
+        'cart_id',
+        'denda',
+        'estimasi_pembayaran',
+        'is_edit',
+        'edit_confirm',
+        'sekolah_id',
+        'shipping_note',
+        'bank_id',
+        'is_beku',
+        'payment_note',
+        'reorder',
+        'gantung',
+        'tiba_disekolah',
+        'total_pesanan',
+    ];
 
-	protected $appends = ['customer_full_name'];
-	
-	public const CREATED = 'created';
-	public const CONFIRMED = 'confirmed';
-	public const DELIVERED = 'delivered';
-	public const COMPLETED = 'completed';
-	public const CANCELLED = 'cancelled';
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
-	public const ORDERCODE = 'INV';
+    public function status()
+    {
+        return $this->belongsTo(MasterStatus::class, 'status_id', 'id');
+    }
 
-	public const PAID = 'paid';
-	public const UNPAID = 'unpaid';
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
 
-	public const STATUSES = [
-		self::CREATED => 'Created',
-		self::CONFIRMED => 'Confirmed',
-		self::DELIVERED => 'Delivered',
-		self::COMPLETED => 'Completed',
-		self::CANCELLED => 'Cancelled',
-	];
-	/**
-	 * Define relationship with the Shipment
-	 *
-	 * @return void
-	 */
-	public function shipment()
-	{
-		return $this->hasOne('App\Models\Shipment');
-	}
+    public function shippingMethod()
+    {
+        return $this->belongsTo(MasterStatus::class, 'shipping_method', 'id');
+    }
 
-	/**
-	 * Define relationship with the OrderItem
-	 *
-	 * @return void
-	 */
-	public function orderItems()
-	{
-		return $this->hasMany('App\Models\OrderItem');
-	}
+    public function shippingStatus()
+    {
+        return $this->belongsTo(MasterStatus::class, 'shipping_status', 'id');
+    }
 
-	/**
-	 * Define relationship with the User
-	 *
-	 * @return void
-	 */
-	public function user()
-	{
-		return $this->belongsTo('App\Models\User');
-	}
+    public function sumberDana()
+    {
+        return $this->belongsTo(MasterStatus::class, 'sumber_dana_id', 'id');
+    }
 
-	/**
-	 * Define scope forUser
-	 *
-	 * @param Eloquent $query query builder
-	 * @param User     $user  limit
-	 *
-	 * @return void
-	 */
-	public function scopeForUser($query, $user)
-	{
-		return $query->where('user_id', $user->id);
-	}
+    public static function getTotalOrderBuyerByStatus($status = null)
+    {
+        $userId = auth()->user()->id;
+        $sekolahId = UserSekolah::where(['user_id' => $userId, 'status' => 1])->first();
 
-	/**
-	 * Generate order code
-	 *
-	 * @return string
-	 */
-	public static function generateCode()
-	{
-		$dateCode = self::ORDERCODE . '/' . date('Ymd') . '/' .\General::integerToRoman(date('m')). '/' .\General::integerToRoman(date('d')). '/';
+        $query = Order::where('sekolah_id', $sekolahId ? $sekolahId->sekolah_id : null);
 
-		$lastOrder = self::select([\DB::raw('MAX(orders.code) AS last_code')])
-			->where('code', 'like', $dateCode . '%')
-			->first();
+        if ($status !== null) {
+            $query->where('status_id', $status);
+        }
 
-		$lastOrderCode = !empty($lastOrder) ? $lastOrder['last_code'] : null;
-		
-		$orderCode = $dateCode . '00001';
-		if ($lastOrderCode) {
-			$lastOrderNumber = str_replace($dateCode, '', $lastOrderCode);
-			$nextOrderNumber = sprintf('%05d', (int)$lastOrderNumber + 1);
-			
-			$orderCode = $dateCode . $nextOrderNumber;
-		}
+        return $query->count();
+    }
 
-		if (self::_isOrderCodeExists($orderCode)) {
-			return generateOrderCode();
-		}
 
-		return $orderCode;
-	}
+    public static function getTotalOrderStoreByStatusBuyerPembekuan()
+    {
+        $userId = auth()->user()->id;
+        $userSekolah = UserSekolah::where(['user_id' => $userId, 'status' => 1])->first();
 
-	/**
-	 * Check if the generated order code is exists
-	 *
-	 * @param string $orderCode order code
-	 *
-	 * @return void
-	 */
-	private static function _isOrderCodeExists($orderCode)
-	{
-		return Order::where('code', '=', $orderCode)->exists();
-	}
+        if ($userSekolah) {
+            return Order::where(['is_beku' => 1, 'sekolah_id' => $userSekolah->sekolah_id])->count();
+        } else {
+            return 0;
+        }
+    }
 
-	/**
-	 * Check order is paid or not
-	 *
-	 * @return boolean
-	 */
-	public function isPaid()
-	{
-		return $this->payment_status == self::PAID;
-	}
+    public static function getTotalAmountOrderStoreByStatusBuyerPembukuan()
+    {
+        $userId = auth()->user()->id;
 
-	/**
-	 * Check order is created
-	 *
-	 * @return boolean
-	 */
-	public function isCreated()
-	{
-		return $this->status == self::CREATED;
-	}
+        if (Schema::hasTable('order_product')) {
+            $shippingCost = Order::where(['is_beku' => 1, 'user_id' => $userId])->sum('shipping_cost');
+            $productCost = Order::selectRaw('SUM(order_product.qty * order_product.price) as product_cost')
+                ->leftJoin('order_product', 'orders.id', '=', 'order_product.order_id')
+                ->where(['orders.is_beku' => 1, 'orders.user_id' => $userId])
+                ->first();
 
-	/**
-	 * Check order is confirmed
-	 *
-	 * @return boolean
-	 */
-	public function isConfirmed()
-	{
-		return $this->status == self::CONFIRMED;
-	}
+            $model = $productCost->product_cost + $shippingCost;
+        } else {
+            $model = 0;
+        }
 
-	/**
-	 * Check order is delivered
-	 *
-	 * @return boolean
-	 */
-	public function isDelivered()
-	{
-		return $this->status == self::DELIVERED;
-	}
+        return $model;
+    }
 
-	/**
-	 * Check order is completed
-	 *
-	 * @return boolean
-	 */
-	public function isCompleted()
-	{
-		return $this->status == self::COMPLETED;
-	}
 
-	/**
-	 * Check order is cancelled
-	 *
-	 * @return boolean
-	 */
-	public function isCancelled()
-	{
-		return $this->status == self::CANCELLED;
-	}
 
-	/**
-	 * Add full_name custom attribute to order object
-	 *
-	 * @return boolean
-	 */
-	public function getCustomerFullNameAttribute()
-	{
-		return "{$this->customer_first_name} {$this->customer_last_name}";
-	}
+    public static function getTotalPesananBaruSeller()
+    {
+        $storeId = Store::getStoreIdByUserLogin();
+        $model = Order::where(['store_id' => $storeId, 'status_id' => self::PESANAN_BARU])->count();
+
+        return $model;
+    }
 }

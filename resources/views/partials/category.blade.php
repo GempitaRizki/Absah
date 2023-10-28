@@ -6,8 +6,8 @@
             </div>
             <div class="row">
                 @foreach ($categories as $category)
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">
-                    <div class="ps-block--category" style="border: none; padding: 0px; text-align: center; margin-bottom: 10px;">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                    <div class="ps-block--category" style="border: none; text-align: center; margin-bottom: 10px; padding: 5px;">
                         <a class="ps-block__overlay" href="{{ url('products?category=' . $category->slug) }}"></a>
                         <a href="{{ url('products?category=' . $category->slug) }}">
                             <img src="{{ url('assets/img/product/' . $category->image) }}" style="max-width: 100%; height: auto;">
@@ -15,7 +15,6 @@
                         <div style="font-weight: bold; margin-top: 5px;">
                             <a href="{{ url('products?category=' . $category->slug) }}">{{ $category->name }}</a>
                         </div>
-                        {{-- <p>Jumlah Produk: {{ $category->products->count() }}</p> --}}
                     </div>
                 </div>                
                 @endforeach

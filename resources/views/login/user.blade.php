@@ -6,7 +6,7 @@
                 <h2>User</h2>
                 <div class="underline-title"></div>
             </div>
-            <form method="post" class="form" action={{ route ('user.store') }}>
+            <form method="post" class="form" action={{ route ('user.login.store') }}>
                 @csrf 
                 @if(session('login')) 
                     <div class="alert alert-danger">
