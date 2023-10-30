@@ -132,6 +132,7 @@ class ProductSellerController extends Controller
                 ->pluck('name', 'id');
         }
 
+
         $this->data['subCategories'] = $subCategories;
         $uniqueSKU = 'SKUDEFAULT' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
         $this->data['generatedSKU'] = $uniqueSKU;
@@ -144,12 +145,10 @@ class ProductSellerController extends Controller
             '2' => 'Ongkir Dari Depo',
             '5' => 'Produk Buku Nonteks E-Katalog',
         ];
-        $this->data['listStoreByLogin'] = ProductStore::listStoreByLogin();
         $this->data['listEtalase'] = Etalase::getListEtalase();
         $this->data['hasShipping'] = MasterStatus::getListShipping();
-
-
-
+        $this->data['listStoreByLogin'] = ProductStore::listStoreByLogin();
+        
         return view('seller.daftarproduk.info_umum', $this->data);
     }
 
@@ -202,9 +201,6 @@ class ProductSellerController extends Controller
 
 
         $store_id = Store::getStoreIdByUserLogin();
-        if (!$store_id) {
-            return redirect()->route('syntaxError');
-        }
 
         $iprProduct = IprProduct::find($iprProductId);
         $productSku = new ProductSku();
@@ -246,7 +242,7 @@ class ProductSellerController extends Controller
 
         $slug = Str::slug($name, '-') . '-' . $iprProduct->id;
         $productSku->slug = $slug;
-        $draftStatus = MasterStatus::where('id', ProductSku::DRAFT_STATUS_ID)->first();
+        $draftStatus = MasterStatus::where('id', ProductSku::PENDING_REVIEW_STATUS_ID)->first();
         $productSku->status()->associate($draftStatus);
         session(['default_status' => $draftStatus]);
         $productSku->save();
@@ -369,8 +365,6 @@ class ProductSellerController extends Controller
             return redirect()->route('upload.index')->with('success', 'Data Price berhasil disimpan.');
         }
     }
-
-
 
     public function indexFileUpload()
     {

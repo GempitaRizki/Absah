@@ -71,16 +71,19 @@ class Store extends Model
 
     public static function getStoreIdByUserLogin()
     {
-        $user = Auth::user(); 
-        if (!$user) {
-            return null;
+        $user = Auth::user();
+
+        if ($user) {
+            $storeUser = StoreUser::join('rbac_auth_assignment as raa', 'store_users.user_id', '=', 'raa.user_id')
+                ->whereIn('raa.item_name', [User::ROLE_OWNER_STORE, User::ROLE_USER_STORE])
+                ->where('store_users.user_id', $user->id)
+                ->first();
+
+            if ($storeUser) {
+                return $storeUser->store_id;
+            }
         }
-        $storeUser = StoreUser::where('user_id', $user->id)
-            ->first();
-        if ($storeUser) {
-            return $storeUser->store_id;
-        } else {
-            return null;
-        }
+
+        return null;
     }
 }

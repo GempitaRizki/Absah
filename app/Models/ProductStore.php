@@ -27,12 +27,8 @@ class ProductStore extends Model
     public static function listStoreByLogin()
     {
         $storeId = Store::getStoreIdByUserLogin();
-    
-        $listStoreAll = Store::where('id', $storeId)
-            ->orderBy('id')
-            ->pluck('store_name', 'id')
-            ->toArray();
-    
+        $listStoreAll = Store::where('id', $storeId)->orderBy('id')->pluck('store_name', 'id')->toArray();
+
         return $listStoreAll;
     }
 }

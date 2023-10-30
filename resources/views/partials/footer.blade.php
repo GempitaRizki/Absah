@@ -20,8 +20,6 @@
             </div>
           </div>
         </div>
-    
-
         <div class="col-md-3 col-sm-4">
           <div class="footer-widget">
             <div class="footer-menu">

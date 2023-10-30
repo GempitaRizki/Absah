@@ -9,7 +9,9 @@ class StoreUser extends Model
 {
     use HasFactory;
 
-    protected $table = 'store_user';
+    protected $table = 'store_users';
+
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'public_name',

@@ -11,6 +11,8 @@ use App\Models\ProductStock;
 use App\Models\AssignProductCat;
 use App\Models\IprProduct;
 use App\Models\Store;
+use App\Models\ProductStore;
+
 use Illuminate\Support\Facades\DB;
 
 
@@ -41,6 +43,8 @@ class ProductDetailController extends Controller
         $iprProduct = IprProduct::where('id', $product->id)->first();
         $conditionId = $iprProduct ? $iprProduct->condition_id : null;
 
+
+        $storeName = $this->getStoreName($product);
         $categories = $this->getProductCategories($product);
 
         return view('user.productDetail', [
@@ -57,6 +61,7 @@ class ProductDetailController extends Controller
             'garansi' => $garansi,
             'store' => $store,
             'categories' => $categories,
+            'storeName' => $storeName,
         ]);
     }
 
@@ -64,7 +69,7 @@ class ProductDetailController extends Controller
     {
         $categories = [];
 
-        $assignProductCat = AssignProductCat::with('Category')->where('product_sku', $product->sku)->first();
+        $assignProductCat = AssignProductCat::with('Category')->where('product_sku_id', $product->sku)->first();
 
         while ($assignProductCat) {
             $categories[] = $assignProductCat->Category->name;
@@ -79,4 +84,19 @@ class ProductDetailController extends Controller
 
         return array_reverse($categories);
     }
+
+
+    //Store IPR 
+    private function getStoreName($product)
+    {
+        $storeId = $product->store_id;
+        if ($storeId) {
+            $store = Store::find($storeId);
+            if ($store) {
+                return $store->store_name;
+            }
+        }
+        return null;
+    }
+
 }

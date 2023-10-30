@@ -36,10 +36,8 @@
 
         @yield('content')
 
-        @include('partials.footer');
-
         @include('themes.ezone.partials.modals');
-
+		
 		<!-- all js here -->
         <script src="{{ asset('themes/ezone/assets/js/vendor/jquery-1.12.0.min.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/popper.js') }}"></script>

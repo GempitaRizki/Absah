@@ -53,7 +53,7 @@ class IprProduct extends Model
 
     public function ProductSkuId()
     {
-        return $this->hasMany(ProductSku::class, 'product_sku_id');
+        return $this->belongsTo(ProductSku::class, 'product_sku_id');
     }
 
     public function iprProduct()

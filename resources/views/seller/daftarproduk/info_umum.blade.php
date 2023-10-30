@@ -403,11 +403,12 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                {!! Form::label('store_id', 'Store ID', ['class' => 'mb-1 h6']) !!}
-                                {!! Form::select('store_id', $listStoreByLogin, null, [
-                                    'class' => 'form-control',
-                                    'name' => 'store_id',
-                                ]) !!}
+                                <label for="store_id" class="mb-1 h6">Store ID:</label>
+                                <select name="store_id" class="form-control" id="store_id">
+                                    @foreach ($listStoreByLogin as $storeId => $storeName)
+                                        <option value="{{ $storeId }}">{{ $storeName }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

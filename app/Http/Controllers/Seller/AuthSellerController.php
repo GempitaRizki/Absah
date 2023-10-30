@@ -416,7 +416,7 @@ class AuthSellerController extends Controller
                 DB::commit();
 
                 session(['forgot' => true]);
-                return redirect()->route('DashboardSeller')->with('success', 'Data toko berhasil disimpan.');
+                return redirect()->route('dashboard.index')->with('success', 'Data toko berhasil disimpan. Silahkan melakukan Login');
             }
         } catch (\Exception $e) {
             DB::rollBack();

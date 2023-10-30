@@ -21,10 +21,17 @@ class AssignProductCat extends Model
         return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 
-
     public function productSku()
     {
-        return $this->belongsTo(ProductSku::class, 'product_sku', 'product_id');
+        return $this->belongsTo(ProductSku::class, 'product_sku_id', 'id');
     }
-    
+
+
+    public function setProductSkuAttribute($value)
+    {
+        $productSku = ProductSku::where('sku', $value)->first();
+        if ($productSku) {
+            $this->attributes['product_sku_id'] = $productSku->id;
+        }
+    }
 }

@@ -134,15 +134,13 @@ class ProductSku extends Model
 
     public function assignProductCats()
     {
-        if ($this->id) {
-            return $this->hasMany(AssignProductCat::class, 'product_sku_id', 'id');
-        }
-        return collect();
+        return $this->hasMany(AssignProductCat::class, 'product_sku_id', 'id');
     }
+
 
     public function iprProduct()
     {
-        return $this->belongsTo(IprProduct::class, 'product_id', 'id');
+        return $this->belongsTo(IprProduct::class, 'product_id_reference', 'id');
     }
 
     public function productPrice()
@@ -154,6 +152,4 @@ class ProductSku extends Model
     {
         return $this->belongsTo(Store::class, 'store_id');
     }
-    
-    
 }

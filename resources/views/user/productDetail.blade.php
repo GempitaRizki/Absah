@@ -1,126 +1,122 @@
 @extends('themes.ezone.layout')
 
 @section('content')
-    <div class="ps-page--product ps-page--product-box">
+    <div class="product-details ptb-100 pb-90">
         <div class="container">
-            <div class="ps-product--detail ps-product--box">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="ps-product__header ps-product__box">
-                            <div class="ps-product__thumbnail" data-vertical="true">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="product-details-large tab-content">
-                                                    <div class="tab-pane active show fade" id="pro-details1"
-                                                        role="tabpanel">
-                                                        <a href="{{ asset('images/' . $imagePath) }}"
-                                                            data-lightbox="image-1" data-title="{{ $productName }}">
-                                                            <img src="{{ asset('images/' . $imagePath) }}"
-                                                                alt="{{ $productName }}"
-                                                                style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5>{{ $store->store_name }}</h5>
-                                                <p>Alamat: {{ $store->address }}</p>
-
-                                            </div>
-                                        </div>
-                                    </div>
+            <div class="row">
+                <div class="col-md-12 col-12 col-lg-3">
+                    <div class="sidebar-active1 product-details7-content">
+                        <div class="product-details-content">
+                            <h3> {{ $product->name }} </h3>
+                            <div class="rating-number">
+                                <div class="quick-view-rating">
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                    <i class="pe-7s-star"></i>
+                                </div>
+                                <div class="quick-view-number">
+                                    <span>2 Ratting (S)</span>
                                 </div>
                             </div>
-                            <div class="ps-product__box">
-                                <div class="product-details-content w-100" style="padding: 0 10px;">
-                                    <h3>{{ $productName }}</h3>
-                                    <div class="details-price">
-                                        <span>Harga: Rp
-                                            {{ $price != 'Cie harganya tidak ada' ? number_format((float) $price, 0, ',', '.') : 'Harga tidak tersedia' }}</span>
-                                    </div>
-                                    <div class="quickview-plus-minus">
-                                        <input type="number" class="cart-plus-minus" value="1" min="1"
-                                            step="1">
-                                        <button type="button" class="submit contact-btn btn-hover">Add to Cart</button>
-                                    </div>
-                                    <span>(Tersedia {{ $stock }})</span>
-                                </div>
+                            <div class="details-price">
+                                <span> Rp.
+                                    {{ $price != 'Cie harganya tidak ada' ? number_format((float) $price, 0, ',', '.') : 'Harga tidak tersedia' }}</span>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="product-details-large tab-content">
-                                        <div class="tab-pane active show fade" id="pro-details1" role="tabpanel">
-                                            <a href="{{ asset('images/' . $imagePath) }}" data-lightbox="image-1"
-                                                data-title="{{ $productName }}">
-                                                <img src="{{ asset('images/' . $imagePath) }}" alt="{{ $productName }}"
-                                                    style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <p>{{ $product->descriptions }} </p>
+                            <div class="product-details5-social">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <i class="icofont icofont-social-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="icofont icofont-social-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="icofont icofont-social-pinterest"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="icofont icofont-social-flikr"></i>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <h5><b>Deskripsi</b></h5>
+                <div class="col-md-12 col-12 col-lg-6">
+                    <div class="product-details-6">
+                        <div class="scroll-single-product mb-30">
+                            <img src="{{ asset('images/' . $imagePath) }}" alt="">
+                            <a href="#" title="Wishlist"><i class="pe-7s-like"></i></a>
+                        </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h6><b>Info Produk</b></h6>
-                            <div class="card">
-                                <div class="card-body">
-                                    <p><strong>SKU:</strong> {{ $sku }}</p>
-                                    <p><strong>Kategori:</strong>
-                                        @foreach ($categories as $category)
-                                            {{ $category }}
-                                            @if (!$loop->last)
-                                                &gt;
-                                            @endif
-                                        @endforeach
-                                    </p>
-                                    <p><strong>Merek/Penerbit:</strong></p>
-                                    <p><strong>Garansi:</strong> {{ $garansi }} </p>
-                                    <p><strong>Dimensi (P x L x T):</strong></p>
-                                    <p><strong>Dimensi Packing:</strong></p>
-                                    <p><strong>Berat:</strong></p>
-                                    <p><strong>Berat Packing:</strong></p>
-                                    <p><strong>Cetakan:</strong></p>
-                                    <p><strong>SK:</strong></p>
-                                    <p><strong>Tanggal SK:</strong></p>
-                                    <p><strong>UMKM:</strong></p>
-                                    <p><strong>Buatan:</strong></p>
-                                    <p><strong>KBKI:</strong></p>
-                                    <p><strong>Waktu & Cara Pengiriman:</strong></p>
-                                    <p><strong>Jaminan Pengiriman : -</strong></p>
-                                    <p><strong>Status Ketersediaan:</strong></p>
-                                    <p><strong>Tag PPN:</strong></p>
-                                </div>
+                </div>
+                <div class="col-md-12 col-12 col-lg-3">
+                    <div class="sidebar-active3 product-details-content sidebar-details7">
+                        <div class="product-color-2">
+                            <h4 class="details-title">Color*</h4>
+                            <div class="product-color-style2">
+                                <ul>
+                                    <li class="orange"></li>
+                                    <li class="blue2"></li>
+                                    <li class="pink"></li>
+                                    <li class="yellow"></li>
+                                </ul>
                             </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Deskripsi</h5>
-                                    <p>
-                                        {{ $descriptions }}
-                                    </p>
-                                </div>
+                        </div>
+                        <div class="product-size-2">
+                            <h4 class="details-title">Size*</h4>
+                            <div class="product-size-style2">
+                                <ul>
+                                    <li><a href="#">xl</a></li>
+                                    <li><a href="#">ml</a></li>
+                                    <li><a href="#">m</a></li>
+                                    <li><a href="#">sl</a></li>
+                                    <li><a href="#">ls</a></li>
+                                </ul>
                             </div>
+                        </div>
+                        <div class="quickview-plus-minus">
+                            <div class="cart-plus-minus">
+                                <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
+                            </div>
+                            <div class="quickview-btn-cart">
+                                <a class="btn-hover-black" href="{{ route('cart.Index')}}">add to cart</a>
+                            </div>
+                        </div>
+                        <div class="product-details-cati-tag mt-35">
+                            <ul>
+                                <li class="categories-title">Categories :</li>
+                                <li><a href="#">fashion</a></li>
+                                <li><a href="#">toys</a></li>
+                                <li><a href="#">food</a></li>
+                            </ul>
+                        </div>
+                        <div class="product-details-cati-tag mtb-10">
+                            <ul>
+                                <li class="categories-title">Tags :</li>
+                                <li><a href="#">fashion</a></li>
+                                <li><a href="#">toys</a></li>
+                                <li><a href="#">food</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-    </div>
+        <div class="container">
+            <div class="section-title-7 text-center">
+                <h2>Deskripsi</h2>
+            </div>
+        </div>
     </div>
 @endsection
