@@ -1,6 +1,17 @@
 @extends('themes.ezone.layout')
 
 @section('content')
+<style>
+.custom-add-to-cart-button {
+    background-color: #FF0000; 
+    color: #FFF;
+    border: none;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: none;
+}
+
+</style>
     <div class="product-details ptb-100 pb-90">
         <div class="container">
             <div class="row">
@@ -90,11 +101,11 @@
                             <input type="hidden" name="qtybutton" value="02">
                             <div class="quickview-plus-minus">
                                 <div class="cart-plus-minus">
-                                    <input type="text" value="02" name="qty" class="cart-plus-minus-box">
+                                    <input type="text" value="1" name="qty" class="cart-plus-minus-box">
                                 </div>
                                 <div class="quickview-btn-cart">
-                                    <button type="submit" class="btn-hover-black">Add To Cart</button>
-                                </div>
+                                    <button type="submit" class="btn-hover-black custom-add-to-cart-button">Add To Cart</button>
+                                </div>                                
                             </div>
                         </form>                                                                                                                
                         <div class="product-details-cati-tag mt-35">

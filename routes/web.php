@@ -33,10 +33,14 @@ use App\Http\Controllers\Seller\ParentSellerController;
 use App\Http\Controllers\Seller\UserProfileController;
 use App\Http\Controllers\Seller\WizardController;
 use App\Http\Controllers\User\ProductDetailController;;
+use App\Http\Controllers\MiniCartController;
 
 
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+Route::get('/', [MiniCartController::class, 'show'])->name('mini-cart');
+
 //menampilkan gambar pertama pada database
 Route::get('image/{id}', [ImageController::class, 'show']);
 

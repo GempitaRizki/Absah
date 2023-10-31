@@ -1,28 +1,27 @@
 <div class="header-cart">
-    <a class="icon-cart-furniture" href="#">
+    <a class="icon-cart-furniture" href="{{ route('cart.Index.Banget') }}">
         <i class="ti-shopping-cart"></i>
-        <span class="shop-count-furniture green">02</span>
+        <span class="shop-count-furniture green">666</span>
     </a>
     @if (!empty($cartItems))
-        @php $subtotal = 0; @endphp
+        @php $qty = 0; @endphp
         <ul class="cart-dropdown">
             @foreach ($cartItems as $item)
                 @php
-                    $subtotal += $item['price'] * (isset($item['quantity']) ? $item['quantity'] : 0);
+                    $total = $item->price * $item->qty;
+                    $qty += $total;
                 @endphp
-                
                 <li class="single-product-cart">
                     <div class="cart-img">
-                        <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['product_name'] }}"
+                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->product_name }}"
                             style="width: 100px">
                     </div>
                     <div class="cart-title">
-                        <h5><a href="{{ url('product/' . (isset($item['slug']) ? $item['slug'] : '')) }}">{{ $item['product_name'] }}</a></h5>
-                        <span>{{ number_format($item['price']) }} x {{ isset($item['quantity']) ? $item['quantity'] : 0 }}</span>
+                        <h5><a href="{{ url('product/' . $item->slug) }}">{{ $item->product_name }}</a></h5>
+                        <span>{{ number_format($item->price) }} x {{ $item->quantity }}</span>
                     </div>
                     <div class="cart-delete">
-                        <a href="{{ url('carts/remove/' . (isset($item['item_id']) ? $item['item_id'] : '')) }}" class="delete"><i
-                                class="ti-trash"></i></a>
+                        <a href="{{ url('carts/remove/' . $item->item_id) }}" class="delete"><i class="ti-trash"></i></a>
                     </div>
                 </li>
             @endforeach
@@ -31,7 +30,7 @@
                     <h4>Subtotal</h4>
                 </div>
                 <div class="cart-price">
-                    <h4>{{ number_format($subtotal) }}</h4>
+                    <h4>{{ number_format($cartSubtotal) }}</h4>
                 </div>
             </li>
             <li class="cart-btn-wrapper">
