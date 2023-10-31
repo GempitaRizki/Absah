@@ -9,6 +9,8 @@ class CourierPartner extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['created_at', 'update_at'];
+
     protected $table = 'courier_partner';
     protected  $filllable = [
         'name', 'address', 'phone_number' , 'email', 'code' , 'province_id' , 'districts_id', 'subdistrict_id' , 'village_id' , 'aktif'

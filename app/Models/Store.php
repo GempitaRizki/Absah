@@ -46,7 +46,7 @@ class Store extends Model
 
     public function district()
     {
-        return $this->belongsTo(District::class, 'district_id');
+        return $this->belongsTo(Districts::class, 'district_id');
     }
 
     public function subdistrict()
@@ -85,5 +85,10 @@ class Store extends Model
         }
 
         return null;
+    }
+
+    public function cart()
+    {
+        return $this->hasMany(IprCart::class, 'store_id');
     }
 }

@@ -10,7 +10,7 @@
                         @if (isset($productSkus[$key]) && isset($productPrices[$key]) && $key < 2) 
                             <div class="product-wrapper">
                                 <div class="product-image">
-                                    <a href="{{ route('product.detail', ['slug' => $productSkus[$key]->slug]) }}">
+                                    <a href="{{ route('product.detail', ['slug' => $productSkus[$key]->slug, 'id' => $productSkus[$key]->id]) }}">
                                         <img src="{{ asset('images/' . $productImage->path) }}" alt="Product Image" style="max-width: 200px; height: auto;">
                                     </a>
                                     <div class="product-action">

@@ -35,17 +35,18 @@ use App\Http\Controllers\Seller\WizardController;
 use App\Http\Controllers\User\ProductDetailController;;
 
 
+
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-
-Route::get('/product/cart', [CartController::class, 'index'])->name('cart.Index');
-
-
 //menampilkan gambar pertama pada database
 Route::get('image/{id}', [ImageController::class, 'show']);
 
+//product detail controller
+Route::get('/product/{slug}/{id}', [ProductDetailController::class, 'index'])->name('product.detail');
+//save
+Route::post('/product/detail/save', [ProductDetailController::class, 'saveQtyToCartWithoutParams'])->name('product.detail.saveQtyToCartWithoutParams');
 
-Route::get('/product/{slug}', [ProductDetailController::class, 'index'])->name('product.detail');
-
+//keranjang GET NDAAAA
+Route::get('cart/product', [CartController::class, 'index'])->name('cart.Index.Banget');
 
 //Admin middleware
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {

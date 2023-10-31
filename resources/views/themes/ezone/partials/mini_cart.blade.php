@@ -1,9 +1,7 @@
 <div class="header-cart">
-    <a class an="icon-cart-furniture" href="{{ url('carts') }}">
+    <a class="icon-cart-furniture" href="#">
         <i class="ti-shopping-cart"></i>
-        @if (isset($cartTotalQuantity))
-            <span class="shop-count-furniture green">{{ $cartTotalQuantity }}</span>
-        @endif
+        <span class="shop-count-furniture green">02</span>
     </a>
     @if (!empty($cartItems))
         @php $subtotal = 0; @endphp

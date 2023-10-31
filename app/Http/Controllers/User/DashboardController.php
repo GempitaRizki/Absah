@@ -10,6 +10,7 @@ use App\Models\ProductImage;
 use App\Http\Controllers\CartController;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\IprCartItem;
 use App\Models\ProductPrice;
 use App\Models\ProductFile;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class DashboardController extends Controller
     {
         $user_id = Auth::id();
         $cart = Cart::firstOrCreate(['user_id' => $user_id, 'status' => 1]);
-        $items = CartItem::where('cart_id', $cart->id)->get();
+        $items = IprCartItem::where('cart_id', $cart->id)->get();
     
         $cartItems = [];
     

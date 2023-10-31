@@ -14,7 +14,9 @@ use App\Models\Districts;
 use App\Models\SubDistricts;
 use App\Models\Village;
 use App\Models\CourierPartner;
-use App\Models\BankMp; 
+use App\Models\BankMp;
+use App\Models\IprCart;
+use App\Models\IprCartItem;
 
 class CartController extends Controller
 {
@@ -26,6 +28,7 @@ class CartController extends Controller
 
     public function index()
     {
+
         $product = ProductSku::first();
         $productPrice = ProductPrice::where('product_sku_id', $product->id)->first();
         $productName = $product->name;
@@ -48,6 +51,14 @@ class CartController extends Controller
 
         $metodePembayaran = BankMp::getBankAvailableBuyer();
 
+        $cart = IprCart::first(); 
+        $cart_id = $cart ? $cart->id : null;
+        
+        $cartItem = IprCartItem::where('product_sku_id', $product->id)
+        ->where('cart_id', $cart_id)
+        ->first();
+
+        $qty = $cartItem ? $cartItem->qty : null;
 
         return view('user.cartDetail', [
             'price' => $price,
@@ -60,10 +71,11 @@ class CartController extends Controller
             'subdistricts' => $subdistricts,
             'villages' => $villages,
             'partnerCouriers' => $partnerCouriers,
-            'metodePembayaran' => $metodePembayaran
-
+            'metodePembayaran' => $metodePembayaran,
+            'qty' => $qty,
         ]);
     }
+
 
     private function getStoreName($product)
     {

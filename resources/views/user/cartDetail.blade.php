@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h1 class="cart-heading"><strong> {{ $storeName }} </strong></h1>
+                    <h1 class="cart-heading" style="font-size: 20px;"><b>{{ $storeName }}</b></h1>
                     <form action="#">
                         <div class="table-content table-responsive">
                             <table>
@@ -31,17 +31,20 @@
                                         <td class="product-price-cart"><span class="amount">Rp.
                                                 {{ number_format($price, 0, ',', '.') }} </span></td>
                                         <td class="product-quantity">
-                                            <input value="1" type="number">
+                                            <input value="{{ $qty }}" type="number" name="qty"
+                                                class="cart-plus-minus-box" id="qty"
+                                                style="margin: 0 auto; text-align: center;">
                                         </td>
-                                        <td class="product-subtotal">Rp. {{ number_format($price, 0, ',', '.') }}</td>
+                                        <td class="product-subtotal">Rp.
+                                            {{ number_format( $qty * $price, 0, ',', '.') }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div class="d-flex">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="name">Sumber Dana</label>
-                                        <select class="form-control" id="name" name="sumberDana">
+                                        <label for="sumber_dana_id">Sumber Dana</label>
+                                        <select class="form-control" id="sumber_dana_id" name="sumberDana">
                                             <option value="">Pilih Sumber Dana</option>
                                             @foreach ($sumberDanas as $sumberDana)
                                                 <option value="{{ $sumberDana->id }}">{{ $sumberDana->name }}</option>
@@ -51,11 +54,12 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="name">Metode Pengiriman</label>
-                                        <select class="form-control" id="name" name="partnerCourier">
+                                        <label for="shipping_method">Metode Pengiriman</label>
+                                        <select class="form-control" id="shipping_method" name="partnerCourier">
                                             <option value="">Pilih Metode Pengiriman</option>
                                             @foreach ($partnerCouriers as $partnerCourier)
-                                                <option value="{{ $partnerCourier->id }}">{{ $partnerCourier->name }}</option>
+                                                <option value="{{ $partnerCourier->id }}">{{ $partnerCourier->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -64,32 +68,32 @@
                             <div class="d-flex">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="name">Denda</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Sumber Dana"
-                                            name="sumberDana">
+                                        <label for="denda">Denda</label>
+                                        <input type="text" class="form-control" id="denda"
+                                            placeholder="Masukan Jumlah Denda" name="denda">
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="name">Estimasi Pembayaran</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Sumber Dana"
-                                            name="sumberDana">
+                                        <label for="etimasi_pebayaran">Estimasi Pembayaran</label>
+                                        <input type="text" class="form-control" id="etimasi_pebayaran"
+                                            placeholder="Masukan tanggal estimasi Pembayaran" name="etimasi_pebayaran">
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="name">Metode Pembayaran</label>
-                                        <select class="form-control" id="name" name="metodePembayaran"> 
-                                            <option value="">Pilih Metode Pembayaran</option> 
+                                        <label for="payment_method">Metode Pembayaran</label>
+                                        <select class="form-control" id="payment_method" name="payment_method">
+                                            <option value="">Pilih Metode Pembayaran</option>
                                             @foreach ($metodePembayaran as $id => $name)
                                                 <option value="{{ $id }}">{{ $name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
-                        <h1 class="cart-heading"><strong> Lengkapi Data Anda </strong> </h1>
+                        <h1 class="cart-heading" style="font-size: 20px;"><b>Lengkapi Data Anda</b></h1>
                         <div class="d-flex">
                             <div class="card-body">
                                 <div class="form-group">
@@ -130,7 +134,7 @@
                                             <option value="{{ $province->id }}">{{ $province->name }}</option>
                                         @endforeach
                                     </select>
-                                </div>                                
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">

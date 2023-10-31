@@ -15,5 +15,4 @@ class SumberDana extends Model
         'year',
         'closing_date',
     ];
-
 }

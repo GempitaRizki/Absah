@@ -85,14 +85,18 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="quickview-plus-minus">
-                            <div class="cart-plus-minus">
-                                <input type="text" value="02" name="qtybutton" class="cart-plus-minus-box">
+                        <form action="{{ route('product.detail.saveQtyToCartWithoutParams') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="qtybutton" value="02">
+                            <div class="quickview-plus-minus">
+                                <div class="cart-plus-minus">
+                                    <input type="text" value="02" name="qty" class="cart-plus-minus-box">
+                                </div>
+                                <div class="quickview-btn-cart">
+                                    <button type="submit" class="btn-hover-black">Add To Cart</button>
+                                </div>
                             </div>
-                            <div class="quickview-btn-cart">
-                                <a class="btn-hover-black" href="{{ route('cart.Index')}}">add to cart</a>
-                            </div>
-                        </div>
+                        </form>                                                                                                                
                         <div class="product-details-cati-tag mt-35">
                             <ul>
                                 <li class="categories-title">Categories :</li>
@@ -118,5 +122,5 @@
                 <h2>Deskripsi</h2>
             </div>
         </div>
-    </div>
+    </div> 
 @endsection

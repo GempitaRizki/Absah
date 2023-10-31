@@ -10,7 +10,6 @@ class IprCart extends Model
     use HasFactory;
 
     protected $table = 'ipr_cart';
-    
 
     protected $fillable = [
         'status_id', 
@@ -22,7 +21,7 @@ class IprCart extends Model
         'etimasi_pebayaran', 
         'shipping_estimate', 
         'shipping_note', 
-        'shipping_cos', 
+        'shipping_cost', 
         'sekolah_id', 
         'payment_method', 
         'shipping_method_code', 
@@ -38,6 +37,4 @@ class IprCart extends Model
     {
         $this->belongsTo(Store::class, 'store_id');
     }
-
-
 }
