@@ -39,40 +39,30 @@ class BankMp extends Model
     {
         $sekolahIdByUserLogin = Sekolah::getSekolahId();
         $userId = Auth::id();
-
         $userAddress = UserAddress::where('user_id', $userId)
             ->where('sekolah_id', $sekolahIdByUserLogin)
             ->first();
-
         $listBank = [];
-
+        
         if ($userAddress) {
             $bankMapping = BankMpMapping::where('province_id', $userAddress->province_id)
                 ->where('status_id', '1')
                 ->get();
-
+            
             foreach ($bankMapping as $bankMap) {
                 $bankMpName = BankMp::where('id', $bankMap->bank_mp_id)->first();
                 $bankMasterName = MasterBank::where('id', $bankMpName->bank_id)->first();
-                $listBank[] = [
-                    'id' => $bankMpName->id,
-                    'name' => $bankMasterName->name,
-                ];
+                
+                $listBank[$bankMpName->id] = $bankMasterName->name; 
             }
-
-            $dataArrayMap = collect($listBank)->pluck('name', 'id')->toArray();
         } else {
             $bankMasterName = MasterBank::where('id', '2')->first();
-            $listBank[] = [
-                'id' => '30',
-                'name' => $bankMasterName->name,
-            ];
-
-            $dataArrayMap = collect($listBank)->pluck('name', 'id')->toArray();
+            $listBank['30'] = $bankMasterName->name; 
         }
-
-        return $dataArrayMap;
+    
+        return $listBank;
     }
+    
 
     public static function getBankAvailableBuyerSelected($id)
     {

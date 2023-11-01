@@ -43,7 +43,6 @@ class Sekolah extends Model
     public static function getSekolahId()
     {
         $userId = Auth::id();
-
         $sekolahDetailUser = UserSekolah::where('user_id', $userId)
             ->where('status', 1)
             ->first();

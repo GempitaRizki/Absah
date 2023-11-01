@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 
-class Order extends Model
-{
 
+class IprOrder extends Model
+{
     const PESANAN_AKTIF = ['57', '58', '59', '60', '159', '61', '62', '63', '135', '72', '156', '157'];
     const PESANAN_BARU = '57';
     const PESANAN_KONFIRMASI_PENGIRIMAN = '58';
@@ -68,10 +69,8 @@ class Order extends Model
     const MSG_PENJUAL_TERIMA_NEGO = 'Nego di Terima';
     const TANGGAL_MULAI_PPN_SEBELAS_PERSEN = '2022-04-01';
 
-    protected $table = 'orders';
-    protected $primaryKey = 'id';
-    public $timestamps = true;
-
+    use HasFactory;
+    protected $table = 'ipr_order';
     protected $fillable = [
         'nomor_order',
         'nomor_invoice',
@@ -97,10 +96,11 @@ class Order extends Model
         'shipping_note',
         'bank_id',
         'is_beku',
+        'payment_numbers',
         'payment_note',
         'reorder',
         'gantung',
-        'tiba_disekolah',
+        'tiba_sekolah',
         'total_pesanan',
     ];
 
@@ -131,7 +131,7 @@ class Order extends Model
 
     public function sumberDana()
     {
-        return $this->belongsTo(MasterStatus::class, 'sumber_dana_id', 'id');
+        return $this->belongsTo(SumberDana::class, 'sumber_dana_id', 'id');
     }
 
     public static function getTotalOrderBuyerByStatus($status = null)
@@ -139,7 +139,7 @@ class Order extends Model
         $userId = auth()->user()->id;
         $sekolahId = UserSekolah::where(['user_id' => $userId, 'status' => 1])->first();
 
-        $query = Order::where('sekolah_id', $sekolahId ? $sekolahId->sekolah_id : null);
+        $query = IprOrder::where('sekolah_id', $sekolahId ? $sekolahId->sekolah_id : null);
 
         if ($status !== null) {
             $query->where('status_id', $status);
@@ -155,7 +155,7 @@ class Order extends Model
         $userSekolah = UserSekolah::where(['user_id' => $userId, 'status' => 1])->first();
 
         if ($userSekolah) {
-            return Order::where(['is_beku' => 1, 'sekolah_id' => $userSekolah->sekolah_id])->count();
+            return IprOrder::where(['is_beku' => 1, 'sekolah_id' => $userSekolah->sekolah_id])->count();
         } else {
             return 0;
         }
@@ -166,8 +166,8 @@ class Order extends Model
         $userId = auth()->user()->id;
 
         if (Schema::hasTable('order_product')) {
-            $shippingCost = Order::where(['is_beku' => 1, 'user_id' => $userId])->sum('shipping_cost');
-            $productCost = Order::selectRaw('SUM(order_product.qty * order_product.price) as product_cost')
+            $shippingCost = IprOrder::where(['is_beku' => 1, 'user_id' => $userId])->sum('shipping_cost');
+            $productCost = IprOrder::selectRaw('SUM(order_product.qty * order_product.price) as product_cost')
                 ->leftJoin('order_product', 'orders.id', '=', 'order_product.order_id')
                 ->where(['orders.is_beku' => 1, 'orders.user_id' => $userId])
                 ->first();
@@ -185,8 +185,19 @@ class Order extends Model
     public static function getTotalPesananBaruSeller()
     {
         $storeId = Store::getStoreIdByUserLogin();
-        $model = Order::where(['store_id' => $storeId, 'status_id' => self::PESANAN_BARU])->count();
+        $model = IprOrder::where(['store_id' => $storeId, 'status_id' => self::PESANAN_BARU])->count();
 
         return $model;
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            $order->nomor_order = 'ABS' . now()->format('Ym') . str_pad(IprOrder::count() + 1, 7, '0', STR_PAD_LEFT);
+        
+            $order->date_order = now();
+        });
     }
 }

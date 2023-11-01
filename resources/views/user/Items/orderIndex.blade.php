@@ -9,7 +9,7 @@
             </a>
         </li>
         <li class="page-item mr-2 text-center">
-            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_BARU]) }}">
+            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_BARU]) }}">
                 <p class="page-month mb-0"> Baru Order </p>
                 @if ($newOrder !== null)
                     {{ $newOrder }}
@@ -20,7 +20,7 @@
         </li>
         <li class="page-item mr-2 text-center">
             <a class="page-link"
-                href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_KONFIRMASI_PENGIRIMAN]) }}">
+                href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_KONFIRMASI_PENGIRIMAN]) }}">
                 <p class="page-month mb-0"> Konfirmasi / Proses </p>
                 @if ($konfirmasiOrder !== null)
                     {{ $konfirmasiOrder }}
@@ -31,7 +31,7 @@
         </li>
         <li class="page-item mr-2 text-center">
             <a class="page-link"
-                href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_KONFIRMASI_PEMBATALAN_PENJUAL]) }}">
+                href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_KONFIRMASI_PEMBATALAN_PENJUAL]) }}">
                 <p class="page-month mb-0"> Konfirmasi Batal </p>
                 @if ($konfirmasiBatal !== null)
                     {{ $konfirmasiBatal }}
@@ -42,7 +42,7 @@
         </li>
         <li class="page-item mr-2 text-center">
             <a class="page-link"
-                href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_DIBATALKAN_PEMBELI]) }}">
+                href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_DIBATALKAN_PEMBELI]) }}">
                 <p class="page-month mb-0"> Dibatalkan Pembeli </p>
                 @if ($dibatalkanPembeli !== null)
                     {{ $dibatalkanPembeli }}
@@ -52,7 +52,7 @@
             </a>
         </li>
         <li class="page-item mr-2 text-center">
-            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_DIKIRIM]) }}">
+            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_DIKIRIM]) }}">
                 <p class="page-month mb-0"> Dikirim </p>
                 @if ($dikirim !== null)
                     {{ $dikirim }}
@@ -62,7 +62,7 @@
             </a>
         </li>
         <li class="page-item mr-2 text-center">
-            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_DITERIMA]) }}">
+            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_DITERIMA]) }}">
                 <p class="page-month mb-0"> Diterima </p>
                 @if ($diterima !== null)
                     {{ $diterima }}
@@ -72,7 +72,7 @@
             </a>
         </li>
         <li class="page-item mr-2 text-center">
-            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_SUDAH_BAST]) }}">
+            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_SUDAH_BAST]) }}">
                 <p class="page-month mb-0"> Sudah BAST </p>
                 @if ($sudahBAST !== null)
                     {{ $sudahBAST }}
@@ -83,7 +83,7 @@
         </li>
         <li class="page-item mr-2 text-center">
             <a class="page-link"
-                href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_MENUNGGU_PEMBAYARAN]) }}">
+                href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_MENUNGGU_PEMBAYARAN]) }}">
                 <p class="page-month mb-0"> Menunggu Pembayaran </p>
                 @if ($menungguPembayaran !== null)
                     {{ $menungguPembayaran }}
@@ -93,7 +93,7 @@
             </a>
         </li>
         <li class="page-item mr-2 text-center">
-            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_TERBAYAR]) }}">
+            <a class="page-link" href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_TERBAYAR]) }}">
                 <p class="page-month mb-0"> Dibayar </p>
                 @if ($dibayar !== null)
                     {{ $dibayar }}
@@ -104,7 +104,7 @@
         </li>
         <li class="page-item mr-2 text-center">
             <a class="page-link"
-                href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_PESANAN_SELESAI]) }}">
+                href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_PESANAN_SELESAI]) }}">
                 <p class="page-month mb-0"> Selesai </p>
                 @if ($selesai !== null)
                     {{ $selesai }}
@@ -115,7 +115,7 @@
         </li>
         <li class="page-item mr-2 text-center">
             <a class="page-link"
-                href="{{ route('order.index', ['status' => \App\Models\Order::PESANAN_PESANAN_SELESAI]) }}">
+                href="{{ route('order.index', ['status' => \App\Models\IprOrder::PESANAN_PESANAN_SELESAI]) }}">
                 <p class="page-month mb-0"> Dalam Complain </p>
                 @if ($selesai !== null)
                     {{ $selesai }}

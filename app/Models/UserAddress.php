@@ -51,4 +51,10 @@ class UserAddress extends Model
     {
         return $this->belongsTo(MasterStatus::class, 'status_id');
     }
+
+    //jane ra eneng relasine 
+    public function sekolah()
+    {
+        return $this->belongsTo(Sekolah::class, 'sekolah_id');
+    }
 }

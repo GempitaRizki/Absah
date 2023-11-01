@@ -32,10 +32,3 @@
         </div>
     </div>
 @endif
-<style>
-    .product-item {
-        text-decoration: none;
-        color: #000;
-        display: block;
-    }
-</style>

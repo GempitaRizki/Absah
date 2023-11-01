@@ -28,31 +28,31 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('seller.dashboard') }}" class="nav-link">
+                    <a href=# class="nav-link">
                         <i class="fas fa-tachometer-alt" style="min-width: 2.5rem;"></i>
                         <p>Daftar Pengguna</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('seller.dashboard') }}" class="nav-link">
+                    <a href=#  class="nav-link">
                         <i class="fas fa-tachometer-alt" style="min-width: 2.5rem;"></i>
                         <p>Aktifitas Pengguna</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('product.index') }}" class="nav-link">
+                    <a href=#  class="nav-link">
                         <i class="fas fa-book" style="min-width: 2.5rem;"></i>
                         <p>PPBJ (RKAS)</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('nego.index') }}" class="nav-link">
+                    <a href=#  class="nav-link">
                         <i class="fas fa-hourglass" style="min-width: 2.5rem;"></i>
                         <p>Sumber Dana</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('chat.index') }}" class="nav-link">
+                    <a href=#  class="nav-link">
                         <i class="fas fa-phone-alt" style="min-width: 2.5rem;"></i>
                         <p>E-Meterai</p>
                     </a>

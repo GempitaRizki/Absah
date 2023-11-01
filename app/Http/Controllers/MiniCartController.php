@@ -12,6 +12,8 @@ use App\Models\IprCart;
 use App\Models\BankMp;
 use App\Models\Province;
 use App\Models\ProductPrice;
+use App\Models\Store;
+
 
 
 class MiniCartController extends Controller
@@ -19,23 +21,23 @@ class MiniCartController extends Controller
     public function show()
     {
         $product = ProductSku::first();
-    
+
         $productPrice = ProductPrice::where('product_sku_id', $product->id)->first();
         $price = $productPrice ? $productPrice->price : null;
-    
+
         $productFile = ProductFile::first();
         $imagePath = $productFile ? $productFile->path : 'default/path';
-    
+
         $storeName = $this->getStoreName($product);
-    
+
         $cart = IprCart::first();
         $cart_id = $cart ? $cart->id : null;
-    
+
         $cartItem = IprCartItem::where('product_sku_id', $product->id)
             ->where('cart_id', $cart_id)
             ->first();
         $qty = $cartItem ? $cartItem->qty : null;
-    
+
         $sumberDanas = SumberDana::all();
         $partnerCouriers = CourierPartner::all();
         $provinces = Province::all();
@@ -43,12 +45,12 @@ class MiniCartController extends Controller
         $subdistricts = [];
         $villages = [];
         $metodePembayaran = BankMp::getBankAvailableBuyer();
-    
+
         $cartItems = IprCartItem::where('cart_id', $cart_id)->get();
         $cartSubtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->qty;
         });
-    
+
         return $this->loadTheme('partials.mini_cart', compact(
             'price',
             'imagePath',
@@ -63,6 +65,16 @@ class MiniCartController extends Controller
             'qty',
             'cartSubtotal'
         ));
-    }    
+    }
+    private function getStoreName($product)
+    {
+        $storeId = $product->store_id;
+        if ($storeId) {
+            $store = Store::find($storeId);
+            if ($store) {
+                return $store->store_name;
+            }
+        }
+        return null;
+    }
 }
-

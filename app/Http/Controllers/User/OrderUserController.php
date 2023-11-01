@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Order;
+use App\Models\IprOrder;
 use App\Models\UserSekolah;
 
 class OrderUserController extends Controller
@@ -17,20 +17,20 @@ class OrderUserController extends Controller
     public function index()
     {
         $status = null;
-        $totalOrders = Order::getTotalOrderBuyerByStatus($status);
-        $newOrder = Order::getTotalPesananBaruSeller();
-        $konfirmasiOrder = Order::getTotalPesananBaruSeller();
-        $konfirmasiBatal = Order::getTotalPesananBaruSeller();
-        $dibatalkanPembeli = Order::getTotalPesananBaruSeller();
-        $dikirim = Order::getTotalPesananBaruSeller();
-        $diterima = Order::getTotalPesananBaruSeller();
-        $sudahBAST = Order::getTotalPesananBaruSeller();
-        $menungguPembayaran = Order::getTotalPesananBaruSeller();
-        $dibayar = Order::getTotalPesananBaruSeller();
-        $selesai = Order::getTotalPesananBaruSeller();
-        $dibekukan = Order::getTotalOrderStoreByStatusBuyerPembekuan();
+        $totalOrders = IprOrder::getTotalOrderBuyerByStatus($status);
+        $newOrder = IprOrder::getTotalPesananBaruSeller();
+        $konfirmasiOrder = IprOrder::getTotalPesananBaruSeller();
+        $konfirmasiBatal = IprOrder::getTotalPesananBaruSeller();
+        $dibatalkanPembeli = IprOrder::getTotalPesananBaruSeller();
+        $dikirim = IprOrder::getTotalPesananBaruSeller();
+        $diterima = IprOrder::getTotalPesananBaruSeller();
+        $sudahBAST = IprOrder::getTotalPesananBaruSeller();
+        $menungguPembayaran = IprOrder::getTotalPesananBaruSeller();
+        $dibayar = IprOrder::getTotalPesananBaruSeller();
+        $selesai = IprOrder::getTotalPesananBaruSeller();
+        $dibekukan = IprOrder::getTotalOrderStoreByStatusBuyerPembekuan();
 
-        $totalPayment = Order::getTotalAmountOrderStoreByStatusBuyerPembukuan();
+        $totalPayment = IprOrder::getTotalAmountOrderStoreByStatusBuyerPembukuan();
 
         return view('user.Items.orderIndex', compact('dibekukan', 'selesai', 'dibayar', 'totalOrders', 'newOrder', 'konfirmasiOrder', 'konfirmasiBatal', 'dibatalkanPembeli', 'dikirim', 'diterima', 'sudahBAST', 'menungguPembayaran', 'totalPayment'));
     }
@@ -42,9 +42,9 @@ class OrderUserController extends Controller
         $sekolah = UserSekolah::where(['user_id' => $userId, 'status' => 1])->first();
 
         if ($sekolah) {
-            $query = Order::where('sekolah_id', $sekolah->sekolah_id);
+            $query = IprOrder::where('sekolah_id', $sekolah->sekolah_id);
         } else {
-            $query = Order::query();
+            $query = IprOrder::query();
         }
         if ($status !== null) {
             $query->where('status_id', $status);

@@ -33,14 +33,14 @@ use App\Http\Controllers\Seller\ParentSellerController;
 use App\Http\Controllers\Seller\UserProfileController;
 use App\Http\Controllers\Seller\WizardController;
 use App\Http\Controllers\User\ProductDetailController;;
+
 use App\Http\Controllers\MiniCartController;
 
 
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
-Route::get('/', [MiniCartController::class, 'show'])->name('mini-cart');
-
+// Route::get('/', [MiniCartController::class, 'show'])->name('mini-cart');
 //menampilkan gambar pertama pada database
 Route::get('image/{id}', [ImageController::class, 'show']);
 
@@ -51,6 +51,7 @@ Route::post('/product/detail/save', [ProductDetailController::class, 'saveQtyToC
 
 //keranjang GET NDAAAA
 Route::get('cart/product', [CartController::class, 'index'])->name('cart.Index.Banget');
+Route::post('cart/product', [CartController::class, 'CheckoutStore'])->name('CheckoutStore');
 
 //Admin middleware
 Route::middleware(['auth', 'role:admin'])->namespace('Admin')->prefix('admin')->group(function () {
@@ -73,6 +74,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/order', [OrderUserController::class, 'index'])->name('order.user');
 
     //keranjang
+    //keranjang GET NDAAAA
+    Route::get('cart/product', [CartController::class, 'index'])->name('cart.Index.Banget');
+    Route::post('cart/product', [CartController::class, 'CheckoutStore'])->name('CheckoutStore');
 
     Route::get('/user/komplain', [KomplainSellerController::class, 'index'])->name('komplain.user');
 });

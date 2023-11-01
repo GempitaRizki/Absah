@@ -23,14 +23,15 @@ class LoginUserController extends Controller
     
         if (auth()->attempt($credentials)) {
             if (auth()->user()->role === 'user') {
-                return redirect()->route('handle403');
+                return redirect()->route('Dashboard.User');
             } else {
-                return redirect()->route('user.login.store');
+                return redirect()->route('Dashboard.User');
             }
         } else {
             return redirect()->route('user.login')->with('login', 'Email atau password salah.');
         }
     }
+    
 
     public function DashoardUser()
     {
