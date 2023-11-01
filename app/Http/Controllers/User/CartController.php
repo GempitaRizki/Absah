@@ -53,14 +53,14 @@ class CartController extends Controller
         $subdistricts = [];
         $villages = [];
 
-        $payment_method = BankMp::getBankAvailableBuyer();//iseh null pak 
+        $payment_method = BankMp::getBankAvailableBuyer(); //iseh null pak 
 
-        $cart = IprCart::first(); 
+        $cart = IprCart::first();
         $cart_id = $cart ? $cart->id : null;
-        
+
         $cartItem = IprCartItem::where('product_sku_id', $product->id)
-        ->where('cart_id', $cart_id)
-        ->first();
+            ->where('cart_id', $cart_id)
+            ->first();
 
         $qty = $cartItem ? $cartItem->qty : null;
 
@@ -92,7 +92,7 @@ class CartController extends Controller
             'phone_number' => 'required',
             'address' => 'required',
         ]);
-    
+
         $partnerCourier = $request->input('partnerCourier');
         $sumber_dana_id = $request->input('sumber_dana_id');
         $denda = $request->input('denda');
@@ -101,56 +101,76 @@ class CartController extends Controller
         $label = $request->input('label');
         $phone_number = $request->input('phone_number');
         $address = $request->input('address');
-        $province_id = $request->input('province_id'); 
-        $districts_id = $request->input('districts_id'); 
-        $subdistrict_id = $request->input('subdistrict_id'); 
-        $village_id = $request->input('village_id'); 
-    
+        $province_id = $request->input('province_id');
+        $districts_id = $request->input('districts_id');
+        $subdistrict_id = $request->input('subdistrict_id');
+        $village_id = $request->input('village_id');
+
         $village = Village::find($village_id);
         $village_name = $village->name;
 
-
-        $store_id = $request->user()->store->id; 
         $user_id = $request->user()->id;
         $statusBaru = MasterStatus::where('id', IprOrder::PESANAN_BARU)->first();
+    
         if ($statusBaru) {
             $status_id = $statusBaru->id;
-
-        $order = new IprOrder();
-        $order->sumber_dana_id = $sumber_dana_id;
-        $order->shipping_method = $partnerCourier;
-        $order->denda = $denda;
-        $order->estimasi_pembayaran = $estimasi_pembayaran;
-        $order->payment_method = $payment_method;
-        $order->user_id = $user_id; 
-        $order->status_id = $status_id; 
-        $order->store_id = $store_id; 
-        $order->save();
+            $sumber_dana_id = $request->input('sumber_dana_id');
+    
+            if (!empty($sumber_dana_id)) {
+                // $store_id = $request->user()->store->id;
+                $shippingStatus = MasterStatus::find(68); 
+    
+                $order = new IprOrder();
+                $order->sumber_dana_id = $sumber_dana_id;
+                // $order->store_id = $store_id;
+                $order->shipping_method = $partnerCourier;
+                $order->denda = $denda;
+                $order->estimasi_pembayaran = $estimasi_pembayaran;
+                $order->payment_method = $payment_method;
+                $order->user_id = $user_id; 
+                $order->status_id = $status_id;
+    
+                // Mengambil 'id' dari tabel 'IprCart' berdasarkan 'user_id'
+                $order->cart_id = IprCart::where('user_id', $user_id)->value('id');
+                
+                if ($shippingStatus) {
+                    $order->shippingStatus()->associate($shippingStatus);
+                }
+    
+                $items = IprCartItem::where('cart_id', $order->cart_id)->get();
+                $totalPesanan = $items->sum(function ($item) {
+                    return $item->qty * $item->price;
+                });
+                
+                $order->total_pesanan = $totalPesanan;
+                $order->save();
+            }
         }
 
-        $user_id = $request->user()->id; 
-    
+
+        $user_id = $request->user()->id;
+
         $userAddress = new UserAddress();
         $userAddress->label = $label;
         $userAddress->phone_number = $phone_number;
         $userAddress->address = $address;
-        $userAddress->province_id = $province_id; 
-        $userAddress->districts_id = $districts_id; 
-        $userAddress->subdistrict_id = $subdistrict_id; 
+        $userAddress->province_id = $province_id;
+        $userAddress->districts_id = $districts_id;
+        $userAddress->subdistrict_id = $subdistrict_id;
         $userAddress->village_id = $village_id;
         $userAddress->village_name = $village_name;
-        $userAddress->user_id = $user_id; 
-        $userAddress->status_id = 2; 
+        $userAddress->user_id = $user_id;
+        $userAddress->status_id = 2;
 
 
-    
+
         $userAddress->save();
-        
+
         return redirect()->route('dashboard.index');
     }
-    
-    
-    
+
+
+
 
     private function getStoreName($product)
     {
